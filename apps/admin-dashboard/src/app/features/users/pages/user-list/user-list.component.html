@@ -83,53 +83,56 @@
           <div class="mt-6 flex justify-end">
             <button
               class="bg-primary hover:bg-primary/90 focus:ring-primary/50 text-color-foreground transform rounded px-6 py-3 font-medium shadow-md transition-transform hover:scale-105 focus:ring-2 focus:outline-none"
-              (click)="toggleForm()"
+              (click)="showForm.set(true)"
             >
-              ➕ {{ showForm() ? t('users.hideForm') : t('users.addUser') }}
+              ➕ {{ t('users.addUser') }}
             </button>
           </div>
-          @if (showForm()) {
-            <div
-              #formSection
-              class="background mt-4 rounded border p-4 shadow-md"
-            >
-              <h2 class="text-color-foreground mb-2 text-lg font-semibold">
-                {{ t('users.addUserForm') }}
-              </h2>
 
-              <!-- Toggle Form Type -->
-              <div class="mb-4 flex gap-2">
-                <button
-                  (click)="useSignalForm.set(true)"
-                  [class.bg-primary]="useSignalForm()"
-                  [class.text-white]="useSignalForm()"
-                  class="rounded border px-3 py-1 text-sm transition-colors hover:bg-gray-100"
-                >
-                  Signals (Modern)
-                </button>
-                <button
-                  (click)="useSignalForm.set(false)"
-                  [class.bg-primary]="!useSignalForm()"
-                  [class.text-white]="!useSignalForm()"
-                  class="rounded border px-3 py-1 text-sm transition-colors hover:bg-gray-100"
-                >
-                  Reactive (Legacy)
-                </button>
-              </div>
-
-              @if (useSignalForm()) {
-                <app-user-form-signal
-                  class="block"
-                  (isSubmitted)="showForm.set(false)"
-                ></app-user-form-signal>
-              } @else {
-                <app-user-form
-                  class="block"
-                  (isSubmitted)="showForm.set(false)"
-                ></app-user-form>
-              }
+          <!-- PrimeNG Dialog -->
+          <p-dialog
+            [header]="t('users.addUserForm')"
+            [(visible)]="showForm"
+            [modal]="true"
+            [style]="{ 'max-width': '600px', width: '90vw' }"
+            [draggable]="false"
+            [resizable]="false"
+            [closable]="true"
+          >
+            <!-- Toggle Form Type -->
+            <div class="mb-4 flex gap-2">
+              <button
+                (click)="useSignalForm.set(true)"
+                [class.bg-primary]="useSignalForm()"
+                [class.text-white]="useSignalForm()"
+                [class.bg-muted]="!useSignalForm()"
+                class="focus:ring-primary/50 transform rounded px-4 py-2 text-sm font-medium shadow-sm transition-all hover:scale-105 hover:shadow-md focus:ring-2 focus:outline-none"
+              >
+                {{ t('users.form.signal') }}
+              </button>
+              <button
+                (click)="useSignalForm.set(false)"
+                [class.bg-primary]="!useSignalForm()"
+                [class.text-white]="!useSignalForm()"
+                [class.bg-muted]="useSignalForm()"
+                class="focus:ring-primary/50 transform rounded px-4 py-2 text-sm font-medium shadow-sm transition-all hover:scale-105 hover:shadow-md focus:ring-2 focus:outline-none"
+              >
+                {{ t('users.form.reactive') }}
+              </button>
             </div>
-          }
+
+            @if (useSignalForm()) {
+              <app-user-form-signal
+                class="block"
+                (isSubmitted)="showForm.set(false)"
+              ></app-user-form-signal>
+            } @else {
+              <app-user-form
+                class="block"
+                (isSubmitted)="showForm.set(false)"
+              ></app-user-form>
+            }
+          </p-dialog>
         }
       </div>
     } @else {

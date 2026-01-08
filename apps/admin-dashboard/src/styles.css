@@ -29,14 +29,15 @@ layer(base);
 @import "./assets/styles/layer/themes.css";
 
 /* ===== PRIMENG OVERRIDES ===== */
+@import "./assets/styles/components/primeng/primeng-dialog.css";
 
 /* ===== FORM ELEMENTS (Outside layers for PrimeNG compatibility) ===== */
 @import "./assets/styles/form/base.css";
 
 /* Table Styles */
-@import "./assets/styles/table/base.css";
-@import "./assets/styles/table/cell-editor.css";
-@import "./assets/styles/table/pagination.css";
+@import "./assets/styles/components/primeng/table/primeng-table.css";
+@import "./assets/styles/components/primeng/table/primeng-cell-editor.css";
+@import "./assets/styles/components/primeng/table/primeng-pagination.css";
 
 @plugin "daisyui";
 @plugin "@tailwindcss/forms";

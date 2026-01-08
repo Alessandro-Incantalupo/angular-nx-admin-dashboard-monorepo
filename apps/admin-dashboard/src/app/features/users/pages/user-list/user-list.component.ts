@@ -2,11 +2,8 @@ import { User } from '@admin-dashboard-nx-monorepo/models';
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
-  ElementRef,
   inject,
   signal,
-  viewChild,
 } from '@angular/core';
 import { AuthStore } from '@core/state/auth.store';
 import { RoleSelectorComponent } from '@features/users/components/role-selector/role-selector.component';
@@ -18,6 +15,7 @@ import { PrimeNgTableComponent } from '@shared/prime-ng-table/prime-ng-table.com
 import { toast } from 'ngx-sonner';
 
 import { PaginatorState } from 'primeng/paginator';
+import { Dialog } from 'primeng/dialog';
 import { UserFormSignalComponent } from '../../components/user-form-signal/user-form-signal.component';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
 @Component({
@@ -29,6 +27,7 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
     PrimeNgTableComponent,
     RoleSelectorComponent,
     UserAbilitiesComponent,
+    Dialog,
   ],
   templateUrl: './user-list.component.html',
   styles: `
@@ -41,7 +40,6 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
 export default class UserListComponent {
   protected userStore = inject(UsersStore);
   protected authStore = inject(AuthStore);
-  readonly formSection = viewChild<ElementRef<HTMLDivElement>>('formSection');
 
   readonly showForm = signal(false);
   readonly useSignalForm = signal(true);
@@ -73,23 +71,6 @@ export default class UserListComponent {
     { name: 'Tab 3', icon: HomeIcon },
   ]);
   readonly activeTab = signal<string>('Tab 1');
-
-  constructor() {
-    effect(() => {
-      if (this.showForm() && this.formSection()) {
-        this.formSection().nativeElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-          inline: 'nearest',
-        });
-        setTimeout(() => {
-          const button =
-            this.formSection().nativeElement.querySelector('button');
-          button?.focus();
-        }, 100);
-      }
-    });
-  }
 
   quickLogin(userType: 'admin' | 'user') {
     const credentials = this.demoCredentials.find(
