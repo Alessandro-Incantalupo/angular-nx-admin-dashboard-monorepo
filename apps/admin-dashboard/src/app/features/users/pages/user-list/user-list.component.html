@@ -3,13 +3,22 @@
     <h1 class="text-primary text-2xl font-bold">
       {{ t('users.title') }}
     </h1>
-    <button
-      class="bg-primary hover:bg-primary/90 focus:ring-primary/50 text-color-foreground transform rounded px-6 py-3 font-medium shadow-md transition-transform hover:scale-105 focus:ring-2"
-      (click)="userStore.resetDemoData()"
-      type="button"
-    >
-      ♻️ {{ t('users.reset-demo') }}
-    </button>
+    <div class="flex gap-3">
+      <button
+        class="bg-green-600 hover:bg-green-700 focus:ring-green-500/50 text-white transform rounded px-6 py-3 font-medium shadow-md transition-transform hover:scale-105 focus:ring-2"
+        (click)="navigateToFunction1()"
+        type="button"
+      >
+        🚀 Go to Function 1
+      </button>
+      <button
+        class="bg-primary hover:bg-primary/90 focus:ring-primary/50 text-color-foreground transform rounded px-6 py-3 font-medium shadow-md transition-transform hover:scale-105 focus:ring-2"
+        (click)="userStore.resetDemoData()"
+        type="button"
+      >
+        ♻️ {{ t('users.reset-demo') }}
+      </button>
+    </div>
   </div>
 
   <app-user-abilities
@@ -33,6 +42,63 @@
   } @else {
     @if (userStore.hasUsers()) {
       <div class="flex flex-col">
+        <!-- Active Filters and Sort Indicator -->
+        @if (userStore.isSorted() || userStore.isFiltered()) {
+          <div
+            class="mb-4 flex flex-wrap items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-950"
+          >
+            <span class="text-sm font-medium text-blue-900 dark:text-blue-100">
+              Active:
+            </span>
+
+            @if (userStore.isSorted()) {
+              <span
+                class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+              >
+                <i class="pi pi-sort-alt"></i>
+                {{ userStore.sort().field | titlecase }}
+                ({{ userStore.sort().order === 'asc' ? '↑' : '↓' }})
+                <button
+                  (click)="userStore.clearSort()"
+                  class="ml-1 hover:text-blue-600"
+                  type="button"
+                >
+                  <i class="pi pi-times text-xs"></i>
+                </button>
+              </span>
+            }
+
+            @if (userStore.isFiltered()) {
+              @for (
+                filter of userStore.filters() | keyvalue;
+                track filter.key
+              ) {
+                <span
+                  class="inline-flex items-center gap-1 rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                >
+                  <i class="pi pi-filter"></i>
+                  {{ filter.key | titlecase }}: {{ filter.value }}
+                  <button
+                    (click)="userStore.removeFilter(filter.key)"
+                    class="ml-1 hover:text-purple-600"
+                    type="button"
+                  >
+                    <i class="pi pi-times text-xs"></i>
+                  </button>
+                </span>
+              }
+            }
+
+            <button
+              (click)="userStore.clearAllFiltersAndSort()"
+              class="ml-auto text-xs font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              type="button"
+            >
+              Clear All
+            </button>
+          </div>
+        }
+
         <!-- Role-based description -->
 
         <!-- <app-role-description [hasError]="!!authStore.error()">
@@ -71,11 +137,14 @@
           [totalUsers]="userStore.totalItems()"
           [pageSize]="userStore.pageSize()"
           [currentPage]="userStore.currentPage()"
+          [sortField]="userStore.sort()?.field ?? null"
+          [sortOrder]="userStore.sort()?.order ?? null"
           (editAction)="onEdit($event)"
           (deleteAction)="onDelete($event)"
           (saveAction)="onRowEditSave($event)"
           (saveActionCancel)="onRowEditCancel($event)"
           (pageChangeAction)="onPageChange($event)"
+          (sortAction)="onSort($event)"
         ></app-prime-ng-table>
 
         <!-- Admin-only form - Only show if authenticated and admin -->

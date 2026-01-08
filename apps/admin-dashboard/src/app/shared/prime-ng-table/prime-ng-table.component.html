@@ -13,10 +13,60 @@
   >
     <ng-template #header>
       <tr>
-        <th style="width: 25%">Name</th>
-        <th style="width: 25%">Email</th>
-        <th style="width: 10%">Role</th>
-        <th style="width: 10%">Actions</th>
+        <th
+          class="w-1/4 cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-800"
+          (click)="onSort('name', sortField() === 'name' ? sortOrder() : null)"
+        >
+          <div class="flex items-center justify-between">
+            <span>Name</span>
+            @if (sortField() === 'name') {
+              @if (sortOrder() === 'asc') {
+                <i class="pi pi-sort-amount-up text-primary"></i>
+              } @else {
+                <i class="pi pi-sort-amount-down text-primary"></i>
+              }
+            } @else {
+              <i class="pi pi-sort-alt text-gray-400"></i>
+            }
+          </div>
+        </th>
+        <th
+          class="w-1/4 cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-800"
+          (click)="
+            onSort('email', sortField() === 'email' ? sortOrder() : null)
+          "
+        >
+          <div class="flex items-center justify-between">
+            <span>Email</span>
+            @if (sortField() === 'email') {
+              @if (sortOrder() === 'asc') {
+                <i class="pi pi-sort-amount-up text-primary"></i>
+              } @else {
+                <i class="pi pi-sort-amount-down text-primary"></i>
+              }
+            } @else {
+              <i class="pi pi-sort-alt text-gray-400"></i>
+            }
+          </div>
+        </th>
+        <th
+          class="w-1/10 cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-800"
+          (click)="onSort('role', sortField() === 'role' ? sortOrder() : null)"
+        >
+          <div class="flex items-center justify-between">
+            <span>Role</span>
+            @if (sortField() === 'role') {
+              @if (sortOrder() === 'asc') {
+                <i class="pi pi-sort-amount-up text-primary"></i>
+              } @else {
+                <i class="pi pi-sort-amount-down text-primary"></i>
+              }
+            } @else {
+              <i class="pi pi-sort-alt text-gray-400"></i>
+            }
+          </div>
+        </th>
+        <th class="w-1/10">Actions</th>
       </tr>
     </ng-template>
     <ng-template #body let-user let-editing="editing" let-ri="rowIndex">

@@ -1,4 +1,5 @@
 import { User } from '@admin-dashboard-nx-monorepo/models';
+import { KeyValuePipe, TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,16 +9,13 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthStore } from '@core/state/auth.store';
-import { RoleDescriptionComponent } from '@features/users/components/role-description/role-description.component';
 import { RoleSelectorComponent } from '@features/users/components/role-selector/role-selector.component';
 import { UserAbilitiesComponent } from '@features/users/components/user-abilities/user-abilities.component';
 import { UsersStore } from '@features/users/state/user.store';
-import { HugeiconsIconComponent } from '@hugeicons/angular';
-import { AppleIcon, HomeIcon } from '@hugeicons/core-free-icons/index';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PrimeNgTableComponent } from '@shared/prime-ng-table/prime-ng-table.component';
-import { TabComponent } from '@shared/tab/tab.component';
 import { toast } from 'ngx-sonner';
 
 import { PaginatorState } from 'primeng/paginator';
@@ -32,9 +30,8 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
     PrimeNgTableComponent,
     RoleSelectorComponent,
     UserAbilitiesComponent,
-    RoleDescriptionComponent,
-    HugeiconsIconComponent,
-    TabComponent,
+    KeyValuePipe,
+    TitleCasePipe,
   ],
   templateUrl: './user-list.component.html',
   styles: `
@@ -47,6 +44,7 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
 export default class UserListComponent {
   protected userStore = inject(UsersStore);
   protected authStore = inject(AuthStore);
+  private readonly router = inject(Router);
   readonly formSection = viewChild<ElementRef<HTMLDivElement>>('formSection');
 
   readonly showForm = signal(false);
@@ -72,13 +70,6 @@ export default class UserListComponent {
       description: 'Can view and edit users',
     },
   ] as const;
-
-  readonly tabs = signal([
-    { name: 'Tab 1', icon: HomeIcon },
-    { name: 'Tab 2', icon: AppleIcon },
-    { name: 'Tab 3', icon: HomeIcon },
-  ]);
-  readonly activeTab = signal<string>('Tab 1');
 
   constructor() {
     effect(() => {
@@ -179,5 +170,17 @@ export default class UserListComponent {
 
   onPageChange(event: PaginatorState) {
     this.userStore.loadUsers(event);
+  }
+
+  onSort(event: { field: string; order: 'asc' | 'desc' }) {
+    this.userStore.sortBy(event.field);
+  }
+
+  navigateToFunction1() {
+    this.router.navigate(['/users/function1']);
+  }
+
+  navigateToUserDetail(userId: number) {
+    this.router.navigate(['/users/detail', userId]);
   }
 }

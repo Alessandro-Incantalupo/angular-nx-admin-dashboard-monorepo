@@ -40,11 +40,14 @@ export class PrimeNgTableComponent {
   readonly totalUsers = input<number>(0);
   readonly currentPage = input<number>(1);
   readonly pageSize = input<number>(5);
+  readonly sortField = input<string | null>(null);
+  readonly sortOrder = input<'asc' | 'desc' | null>(null);
   readonly editAction = output<User>();
   readonly deleteAction = output<{ user: User; index: number }>();
   readonly saveAction = output<User>();
   readonly saveActionCancel = output<{ user: User; index: number }>();
   readonly pageChangeAction = output<PaginatorState>();
+  readonly sortAction = output<{ field: string; order: 'asc' | 'desc' }>();
 
   onPage({ page, first, rows, pageCount }: PaginatorState) {
     this.pageChangeAction.emit({
@@ -53,5 +56,21 @@ export class PrimeNgTableComponent {
       page: page + 1,
       pageCount,
     });
+  }
+
+  onSort(field: string, currentOrder: 'asc' | 'desc' | null) {
+    let newOrder: 'asc' | 'desc' | null;
+
+    if (!currentOrder) {
+      newOrder = 'asc';
+    } else if (currentOrder === 'asc') {
+      newOrder = 'desc';
+    } else {
+      newOrder = null;
+    }
+
+    if (newOrder) {
+      this.sortAction.emit({ field, order: newOrder });
+    }
   }
 }

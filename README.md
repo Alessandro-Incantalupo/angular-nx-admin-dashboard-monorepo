@@ -236,6 +236,12 @@ export class ProfileInfoComponent {
 - ⚙️ **Accessibility Audit** - WCAG compliance testing and improvements
 - ⚙️ **Documentation** - Component documentation and API docs
 
+## 📚 **Documentation**
+
+### Angular Injection Context
+- **[Quick Reference](./docs/QUICK_REFERENCE_INJECTION_CONTEXT.md)** - Fast lookup for valid/invalid injection contexts
+- **[Complete Guide](./docs/ANGULAR_INJECTION_CONTEXT.md)** - Comprehensive documentation with examples and debugging tips
+
 ---
 
 **This project demonstrates enterprise-level Angular development skills, modern architecture patterns, and full-stack development capabilities suitable for senior frontend developer positions.**

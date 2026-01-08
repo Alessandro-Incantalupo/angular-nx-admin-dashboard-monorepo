@@ -1,5 +1,9 @@
-import { PaginatedResponse, User } from '@admin-dashboard-nx-monorepo/models';
-import { HttpClient, HttpContext } from '@angular/common/http';
+import {
+  PaginatedResponse,
+  TableRequest,
+  User,
+} from '@admin-dashboard-nx-monorepo/models';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { injectBaseUrl } from '@core/CIF/inject-base-url';
 import { WHITELISTED_API } from '@core/interceptors/base-response.interceptor';
@@ -22,9 +26,44 @@ export class UsersService {
     true
   );
 
+  // ✅ APPROACH 1: GET with Query Parameters (Simple, RESTful)
   getUsers(page: number = 1, size: number = 5) {
     return this.http.get<PaginatedResponse<User>>(
       `${this.usersUrl}?page=${page}&size=${size}`
+    );
+  }
+
+  // ✅ APPROACH 1 Enhanced: GET with sorting/filtering via query params
+  getUsersWithFilters(
+    page: number = 1,
+    size: number = 5,
+    sortBy?: string,
+    sortOrder?: 'asc' | 'desc',
+    filterField?: string,
+    filterValue?: string
+  ) {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (sortBy && sortOrder) {
+      params = params.set('sortBy', sortBy).set('sortOrder', sortOrder);
+    }
+
+    if (filterField && filterValue) {
+      params = params
+        .set('filterField', filterField)
+        .set('filterValue', filterValue);
+    }
+
+    return this.http.get<PaginatedResponse<User>>(this.usersUrl, { params });
+  }
+
+  // ✅ APPROACH 2: POST with Request Body (Complex filters, more flexible)
+  searchUsers(request: TableRequest<User>) {
+    return this.http.post<PaginatedResponse<User>>(
+      `${this.usersUrl}/search`,
+      request
     );
   }
 

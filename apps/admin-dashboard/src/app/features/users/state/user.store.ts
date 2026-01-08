@@ -23,6 +23,7 @@ import { toast } from 'ngx-sonner';
 import { PaginatorState } from 'primeng/paginator';
 import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 import { withPagination } from './features/withPagination';
+import { withSortingAndFiltering } from './features/withSortingAndFiltering';
 import {
   setUsersAddError,
   setUsersAddLoaded,
@@ -54,6 +55,7 @@ const initialState: State = {
 export const UsersStore = signalStore(
   withState(initialState),
   withPagination({ initialPage: 1, initialPageSize: 5 }),
+  withSortingAndFiltering(),
   withDevtools('Users Store'),
   withComputed(({ users }) => ({
     hasUsers: computed(() => users().length > 0),
@@ -67,29 +69,46 @@ export const UsersStore = signalStore(
         }),
         debounceTime(300),
         switchMap(({ page = 1, rows = 5 }: Partial<PaginatorState> = {}) => {
-          return userService.getUsers(page, rows).pipe(
-            tapResponse({
-              next: response => {
-                updateState(state, 'Users: Load Success', {
-                  users: response.data,
-                  currentPage: page,
-                  pageSize: rows,
-                  totalItems: response.meta.totalItems,
-                });
+          // Get current sort and filter state
+          const sort = state.sort();
+          const filters = state.filters();
 
-                setUsersLoaded();
-              },
-              error: err => {
-                const message = getHttpErrorMessage(
-                  err,
-                  'Failed to load users'
-                );
-                toast.error(message);
-                updateState(state, 'Users: Load Error');
-                setUsersError(message);
-              },
-            })
-          );
+          // Build filter params for API
+          const filterField = Object.keys(filters)[0];
+          const filterValue = filterField ? filters[filterField] : undefined;
+
+          return userService
+            .getUsersWithFilters(
+              page,
+              rows,
+              sort?.field,
+              sort?.order,
+              filterField,
+              filterValue
+            )
+            .pipe(
+              tapResponse({
+                next: response => {
+                  updateState(state, 'Users: Load Success', {
+                    users: response.data,
+                    currentPage: page,
+                    pageSize: rows,
+                    totalItems: response.meta.totalItems,
+                  });
+
+                  setUsersLoaded();
+                },
+                error: err => {
+                  const message = getHttpErrorMessage(
+                    err,
+                    'Failed to load users'
+                  );
+                  toast.error(message);
+                  updateState(state, 'Users: Load Error');
+                  setUsersError(message);
+                },
+              })
+            );
         })
       )
     );
@@ -103,14 +122,14 @@ export const UsersStore = signalStore(
             tapResponse({
               next: user => {
                 setUsersAddLoaded();
+                // Refetch to maintain proper pagination
+                const { currentPage, pageSize } = state;
+                loadUsers({ page: currentPage(), rows: pageSize() });
                 toast.success('User created!', {
                   description: 'The user has been added to the system.',
                   duration: 4000,
                   position: 'top-right',
                 });
-                // Refetch to maintain proper pagination
-                const { currentPage, pageSize } = state;
-                loadUsers({ page: currentPage(), rows: pageSize() });
               },
               error: err => {
                 const message = getHttpErrorMessage(err, 'Failed to add user');
@@ -169,14 +188,14 @@ export const UsersStore = signalStore(
                 updateState(state, 'Users: Delete', {
                   users: state.users().filter(u => u.id !== userId),
                 });
+                setUsersDeleteLoaded();
+                const { currentPage, pageSize } = state;
+                loadUsers({ page: currentPage(), rows: pageSize() });
                 toast.success('User deleted!', {
                   description: `User "${user?.name ?? userId}" has been removed from the system.`,
                   duration: 4000,
                   position: 'top-right',
                 });
-                setUsersDeleteLoaded();
-                const { currentPage, pageSize } = state;
-                loadUsers({ page: currentPage(), rows: pageSize() });
               },
               error: err => {
                 const message = getHttpErrorMessage(
@@ -267,6 +286,57 @@ export const UsersStore = signalStore(
       startEditing,
       cancelEditing,
       restoreUser,
+      // Sorting methods
+      sortBy: (field: string) => {
+        const currentSort = state.sort();
+        let newSort: { field: string; order: 'asc' | 'desc' } | null = null;
+
+        if (!currentSort || currentSort.field !== field) {
+          newSort = { field, order: 'asc' };
+        } else if (currentSort.order === 'asc') {
+          newSort = { field, order: 'desc' };
+        }
+        // else: leave as null (clear sort)
+
+        updateState(state, 'Toggle sort', { sort: newSort });
+        loadUsers({ page: 1, rows: state.pageSize() });
+      },
+      clearSort: () => {
+        updateState(state, 'Clear sort', { sort: null });
+        loadUsers({ page: 1, rows: state.pageSize() });
+      },
+      // Filtering methods
+      filterBy: (field: string, value: string) => {
+        updateState(state, 'Apply filter', {
+          filters: { ...state.filters(), [field]: value },
+          currentPage: 1, // Reset to first page
+        });
+        loadUsers({ page: 1, rows: state.pageSize() });
+      },
+      removeFilter: (field: string) => {
+        const newFilters = { ...state.filters() };
+        delete newFilters[field];
+        updateState(state, 'Remove filter', {
+          filters: newFilters,
+          currentPage: 1,
+        });
+        loadUsers({ page: 1, rows: state.pageSize() });
+      },
+      clearFilters: () => {
+        updateState(state, 'Clear filters', {
+          filters: {},
+          currentPage: 1,
+        });
+        loadUsers({ page: 1, rows: state.pageSize() });
+      },
+      clearAllFiltersAndSort: () => {
+        updateState(state, 'Clear all filters and sort', {
+          sort: null,
+          filters: {},
+          currentPage: 1,
+        });
+        loadUsers({ page: 1, rows: state.pageSize() });
+      },
     };
   }),
 

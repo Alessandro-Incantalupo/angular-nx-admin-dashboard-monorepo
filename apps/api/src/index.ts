@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { rateLimiter } from 'hono-rate-limiter';
 import { cors } from 'hono/cors';
 import auth from './routes/auth';
-import usersRoute from './routes/users';
+import usersRoute from './routes/users/index';
 
 const allowedOrigin = Bun.env['FRONTEND_ORIGIN'] ?? 'http://localhost:4300';
 
