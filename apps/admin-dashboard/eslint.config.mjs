@@ -22,18 +22,16 @@ export default [
       // Optional: Prettier squiggles in TS
       'prettier/prettier': 'error',
       // Optional: Angular best practices
-        '@angular-eslint/prefer-on-push-component-change-detection': 'error',
-        '@angular-eslint/sort-lifecycle-methods': 'error',
-        'import/order': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/member-ordering': 'off',
-        '@typescript-eslint/naming-convention': 'off',
-        '@angular-eslint/no-host-metadata-property': 'off',
-        '@angular-eslint/no-output-on-prefix': 'off',
-        '@typescript-eslint/ban-types': 'off',
-        '@typescript-eslint/no-inferrable-types': 'off',
-      
-      
+      '@angular-eslint/prefer-on-push-component-change-detection': 'error',
+      '@angular-eslint/sort-lifecycle-methods': 'error',
+      'import/order': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/member-ordering': 'off',
+      '@typescript-eslint/naming-convention': 'off',
+      '@angular-eslint/no-host-metadata-property': 'off',
+      '@angular-eslint/no-output-on-prefix': 'off',
+      '@typescript-eslint/ban-types': 'off',
+      '@typescript-eslint/no-inferrable-types': 'off',
     },
   },
 

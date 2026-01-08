@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "analyze:admin-dashboard": "nx build admin-dashboard --stats-json --named-chunks && npx -y @angular-experts/hawkeye dist/apps/admin-dashboard/stats.json"
   },
   "private": true,

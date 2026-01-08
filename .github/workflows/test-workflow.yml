@@ -1,7 +1,6 @@
 name: Browser Runnable Workflow
 
-on:
-  workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   deploy:
