@@ -9,15 +9,12 @@ import {
   viewChild,
 } from '@angular/core';
 import { AuthStore } from '@core/state/auth.store';
-import { RoleDescriptionComponent } from '@features/users/components/role-description/role-description.component';
 import { RoleSelectorComponent } from '@features/users/components/role-selector/role-selector.component';
 import { UserAbilitiesComponent } from '@features/users/components/user-abilities/user-abilities.component';
 import { UsersStore } from '@features/users/state/user.store';
-import { HugeiconsIconComponent } from '@hugeicons/angular';
 import { AppleIcon, HomeIcon } from '@hugeicons/core-free-icons/index';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PrimeNgTableComponent } from '@shared/prime-ng-table/prime-ng-table.component';
-import { TabComponent } from '@shared/tab/tab.component';
 import { toast } from 'ngx-sonner';
 
 import { PaginatorState } from 'primeng/paginator';
@@ -32,9 +29,6 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
     PrimeNgTableComponent,
     RoleSelectorComponent,
     UserAbilitiesComponent,
-    RoleDescriptionComponent,
-    HugeiconsIconComponent,
-    TabComponent,
   ],
   templateUrl: './user-list.component.html',
   styles: `
