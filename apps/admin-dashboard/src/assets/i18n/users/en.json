@@ -15,7 +15,8 @@
     "status-active": "Active",
     "status-inactive": "Inactive",
     "signal": "Signals (Experimental)",
-    "reactive": " Reactive"
+    "reactive": "Reactive",
+    "add-user": "Add User"
   },
 
   "login-button": {

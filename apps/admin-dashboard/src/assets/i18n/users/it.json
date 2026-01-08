@@ -1,24 +1,25 @@
 {
-  "title": "User List",
-  "loading": "Loading users...",
-  "error": "Failed to load users",
-  "empty": "No users found.",
-  "addUser": "Add User",
-  "hideForm": "Hide Form",
-  "addUserForm": "Add User Form",
-  "reset-demo": "Reset Demo Data",
-  "abilitiesTitle": "User Abilities",
+  "title": "Lista Utenti",
+  "loading": "Caricamento utenti...",
+  "error": "Errore nel caricamento degli utenti",
+  "empty": "Nessun utente trovato.",
+  "addUser": "Aggiungi Utente",
+  "hideForm": "Nascondi Form",
+  "addUserForm": "Modulo Aggiungi Utente",
+  "reset-demo": "Reimposta Dati Demo",
+  "abilitiesTitle": "Abilità Utente",
   "form": {
-    "namePlaceholder": "Nome",
-    "emailPlaceholder": "esempio@esempio.com",
-    "statusActive": "Attivo",
-    "statusInactive": "Inattivo",
-    "signalsModern": "⚡ Signals (Moderno)",
-    "reactiveLegacy": "🔄 Reactive (Legacy)"
+    "name-placeholder": "Nome",
+    "email-placeholder": "esempio@esempio.com",
+    "status-active": "Attivo",
+    "status-inactive": "Inattivo",
+    "signal": "Signals (Sperimentale)",
+    "reactive": "Reattivo",
+    "add-user": "Aggiungi Utente"
   },
   "role-selector": {
       "guest": "👁️ Guest {{mobile}}",
-      "user": "👤 User {{mobile}}",
+      "user": "👤 Utente {{mobile}}",
       "admin": "👑 Admin {{mobile}}"
     }
   }
