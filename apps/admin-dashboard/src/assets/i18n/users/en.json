@@ -9,6 +9,13 @@
     "reset-demo": "Reset Demo Data",
     "abilitiesTitle": "User Abilities",
 
+  "form": {
+    "namePlaceholder": "Name",
+    "emailPlaceholder": "example@example.com",
+    "statusActive": "Active",
+    "statusInactive": "Inactive"
+  },
+
   "login-button": {
     "user": "👤 Login as User",
     "admin": "👑 Login as Admin",
@@ -21,4 +28,3 @@
       "admin": "Admin"
     }
   }
-  

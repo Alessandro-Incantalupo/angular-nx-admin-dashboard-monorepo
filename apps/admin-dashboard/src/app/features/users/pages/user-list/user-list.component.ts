@@ -21,12 +21,14 @@ import { TabComponent } from '@shared/tab/tab.component';
 import { toast } from 'ngx-sonner';
 
 import { PaginatorState } from 'primeng/paginator';
+import { UserFormSignalComponent } from '../../components/user-form-signal/user-form-signal.component';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
 @Component({
   selector: 'app-user-list',
   imports: [
     TranslocoDirective,
     UserFormComponent,
+    UserFormSignalComponent,
     PrimeNgTableComponent,
     RoleSelectorComponent,
     UserAbilitiesComponent,
@@ -48,6 +50,7 @@ export default class UserListComponent {
   readonly formSection = viewChild<ElementRef<HTMLDivElement>>('formSection');
 
   readonly showForm = signal(false);
+  readonly useSignalForm = signal(true);
   clonedUsers: { [s: string]: User } = {};
   readonly roles = [
     { label: 'Guest', value: 'guest' },

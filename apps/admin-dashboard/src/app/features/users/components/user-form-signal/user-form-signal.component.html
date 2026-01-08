@@ -1,0 +1,37 @@
+<ng-container *transloco="let t; prefix: 'users'">
+  <form (submit)="onSubmit($event)" class="space-y-4">
+    <input
+      class="w-full rounded border px-3 py-2"
+      [field]="userForm.name"
+      [placeholder]="t('form.namePlaceholder')"
+      type="text"
+      [class.border-red-500]="
+        userForm.name().touched() && userForm.name().invalid()
+      "
+    />
+    <input
+      class="w-full rounded border px-3 py-2"
+      [field]="userForm.email"
+      [placeholder]="t('form.emailPlaceholder')"
+      type="email"
+      [class.border-red-500]="
+        userForm.email().touched() && userForm.email().invalid()
+      "
+    />
+    <select class="w-full rounded border px-3 py-2" [field]="userForm.role">
+      <option value="user">{{ t('role-selector.user') }}</option>
+      <option value="admin">{{ t('role-selector.admin') }}</option>
+      <option value="guest">{{ t('role-selector.guest') }}</option>
+    </select>
+    <select class="w-full rounded border px-3 py-2" [field]="userForm.status">
+      <option value="active">{{ t('form.statusActive') }}</option>
+      <option value="inactive">{{ t('form.statusInactive') }}</option>
+    </select>
+    <button
+      type="submit"
+      class="bg-primary hover:bg-primary/90 rounded px-4 py-2 text-white"
+    >
+      {{ t('addUser') }}
+    </button>
+  </form>
+</ng-container>

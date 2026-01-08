@@ -1,4 +1,4 @@
-{  
+{
   "title": "User List",
   "loading": "Loading users...",
   "error": "Failed to load users",
@@ -8,10 +8,15 @@
   "addUserForm": "Add User Form",
   "reset-demo": "Reset Demo Data",
   "abilitiesTitle": "User Abilities",
+  "form": {
+    "namePlaceholder": "Nome",
+    "emailPlaceholder": "esempio@esempio.com",
+    "statusActive": "Attivo",
+    "statusInactive": "Inattivo"
+  },
   "role-selector": {
       "guest": "👁️ Guest {{mobile}}",
       "user": "👤 User {{mobile}}",
       "admin": "👑 Admin {{mobile}}"
     }
   }
-  
