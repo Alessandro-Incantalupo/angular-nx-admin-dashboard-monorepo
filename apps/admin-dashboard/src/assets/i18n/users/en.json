@@ -10,10 +10,12 @@
     "abilitiesTitle": "User Abilities",
 
   "form": {
-    "namePlaceholder": "Name",
-    "emailPlaceholder": "example@example.com",
-    "statusActive": "Active",
-    "statusInactive": "Inactive"
+    "name-placeholder": "Name",
+    "email-placeholder": "example@example.com",
+    "status-active": "Active",
+    "status-inactive": "Inactive",
+    "signal": "Signals (Experimental)",
+    "reactive": " Reactive"
   },
 
   "login-button": {

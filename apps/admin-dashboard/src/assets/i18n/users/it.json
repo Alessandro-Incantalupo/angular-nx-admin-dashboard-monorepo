@@ -12,7 +12,9 @@
     "namePlaceholder": "Nome",
     "emailPlaceholder": "esempio@esempio.com",
     "statusActive": "Attivo",
-    "statusInactive": "Inattivo"
+    "statusInactive": "Inattivo",
+    "signalsModern": "⚡ Signals (Moderno)",
+    "reactiveLegacy": "🔄 Reactive (Legacy)"
   },
   "role-selector": {
       "guest": "👁️ Guest {{mobile}}",

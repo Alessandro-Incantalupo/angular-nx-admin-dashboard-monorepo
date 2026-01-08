@@ -15,12 +15,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { UsersStore } from '@features/users/state/user.store';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { toast } from 'ngx-sonner';
 import { map } from 'rxjs';
 
 @Component({
   selector: 'app-user-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslocoDirective],
   templateUrl: './user-form.component.html',
   styles: `
     :host {

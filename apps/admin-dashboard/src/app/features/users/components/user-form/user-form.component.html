@@ -1,31 +1,36 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="space-y-4"
+  *transloco="let t; prefix: 'users'"
+>
   <input
     class="w-full rounded border px-3 py-2"
     formControlName="name"
-    placeholder="Name"
+    [placeholder]="t('form.name-placeholder')"
     type="text"
     [class.border-red-500]="submitted() && form.get('name')?.invalid"
   />
   <input
     class="w-full rounded border px-3 py-2"
     formControlName="email"
-    placeholder="example@example.com"
+    [placeholder]="t('form.email-placeholder')"
     type="email"
     [class.border-red-500]="submitted() && form.get('email')?.invalid"
   />
   <select class="w-full rounded border px-3 py-2" formControlName="role">
-    <option value="user">User</option>
-    <option value="admin">Admin</option>
-    <option value="guest">Guest</option>
+    <option value="user">{{ t('role-selector.user') }}</option>
+    <option value="admin">{{ t('role-selector.admin') }}</option>
+    <option value="guest">{{ t('role-selector.guest') }}</option>
   </select>
   <select class="w-full rounded border px-3 py-2" formControlName="status">
-    <option value="active">Active</option>
-    <option value="inactive">Inactive</option>
+    <option value="active">{{ t('form.status-active') }}</option>
+    <option value="inactive">{{ t('form.status-inactive') }}</option>
   </select>
   <button
     type="submit"
     class="bg-primary hover:bg-primary/90 rounded px-4 py-2 text-white"
   >
-    Add User
+    {{ t('form.add-user') }}
   </button>
 </form>

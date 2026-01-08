@@ -3,7 +3,7 @@
     <input
       class="w-full rounded border px-3 py-2"
       [field]="userForm.name"
-      [placeholder]="t('form.namePlaceholder')"
+      [placeholder]="t('form.name-placeholder')"
       type="text"
       [class.border-red-500]="
         userForm.name().touched() && userForm.name().invalid()
@@ -12,7 +12,7 @@
     <input
       class="w-full rounded border px-3 py-2"
       [field]="userForm.email"
-      [placeholder]="t('form.emailPlaceholder')"
+      [placeholder]="t('form.email-placeholder')"
       type="email"
       [class.border-red-500]="
         userForm.email().touched() && userForm.email().invalid()
@@ -24,14 +24,14 @@
       <option value="guest">{{ t('role-selector.guest') }}</option>
     </select>
     <select class="w-full rounded border px-3 py-2" [field]="userForm.status">
-      <option value="active">{{ t('form.statusActive') }}</option>
-      <option value="inactive">{{ t('form.statusInactive') }}</option>
+      <option value="active">{{ t('form.status-active') }}</option>
+      <option value="inactive">{{ t('form.status-inactive') }}</option>
     </select>
     <button
       type="submit"
       class="bg-primary hover:bg-primary/90 rounded px-4 py-2 text-white"
     >
-      {{ t('addUser') }}
+      {{ t('form.add-user') }}
     </button>
   </form>
 </ng-container>
