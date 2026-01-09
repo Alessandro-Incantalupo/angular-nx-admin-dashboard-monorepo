@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npx nx build admin-dashboard --prod",
+  "buildCommand": "NX_DAEMON=false npx nx build admin-dashboard --prod --maxWorkers=1",
   "outputDirectory": "dist/apps/admin-dashboard/browser",
   "framework": "angular",
   "installCommand": "pnpm install"
