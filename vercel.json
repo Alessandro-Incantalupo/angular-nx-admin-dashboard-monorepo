@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "buildCommand": "npx nx build admin-dashboard --prod",
+  "outputDirectory": "dist/apps/admin-dashboard/browser",
+  "framework": "angular",
+  "installCommand": "pnpm install"
+}
