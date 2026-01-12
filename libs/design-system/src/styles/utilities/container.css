@@ -4,27 +4,27 @@
   margin-inline: auto;
   padding-inline: var(--spacing-md);
 
-  @media (width >= var(--breakpoint-sm)) {
+  @media (width >= theme(--breakpoint-sm)) {
     padding-inline: var(--spacing-lg);
     max-width: var(--breakpoint-sm);
   }
 
-  @media (width >= var(--breakpoint-md)) {
+  @media (width >= theme(--breakpoint-md)) {
     padding-inline: var(--spacing-xl);
     max-width: var(--breakpoint-md);
   }
 
-  @media (width >= var(--breakpoint-lg)) {
+  @media (width >= theme(--breakpoint-lg)) {
     padding-inline: var(--spacing-2xl);
     max-width: var(--breakpoint-lg);
   }
 
-  @media (width >= var(--breakpoint-xl)) {
+  @media (width >= theme(--breakpoint-xl)) {
     padding-inline: var(--spacing-3xl);
     max-width: var(--breakpoint-xl);
   }
 
-  @media (width >= var(--breakpoint-2xl)) {
+  @media (width >= theme(--breakpoint-2xl)) {
     padding-inline: var(--spacing-3xl);
     max-width: var(--breakpoint-2xl);
   }
@@ -34,15 +34,15 @@
   width: 100%;
   padding-inline: var(--spacing-md);
 
-  @media (width >= var(--breakpoint-sm)) {
+  @media (width >= theme(--breakpoint-sm)) {
     padding-inline: var(--spacing-lg);
   }
 
-  @media (width >= var(--breakpoint-lg)) {
+  @media (width >= theme(--breakpoint-lg)) {
     padding-inline: var(--spacing-2xl);
   }
 
-  @media (width >= var(--breakpoint-xl)) {
+  @media (width >= theme(--breakpoint-xl)) {
     padding-inline: var(--spacing-3xl);
   }
 }
