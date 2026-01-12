@@ -3,53 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap")
 layer(base);
 
-@import "tailwindcss";
-@source "../**";
-@import "tailwindcss-primeui";
-
-/** Plugins **/
-@import "./assets/styles/apexchart.css";
-@import "primeicons/primeicons.css";
-
-/* ===== DESIGN SYSTEM ===== */
-@import "./assets/styles/design-system/base.css";
-
-/* ===== ANIMATIONS & KEYFRAMES ===== */
-@import "./assets/styles/animation/keyframes.css";
-
-/* ===== UTILITIES ===== */
-@import "./assets/styles/utilities/container.css";
-
-/* ===== BASE LAYER ===== */
-@import "./assets/styles/layer/base.css";
-
-/* ===== UTILITIES LAYER ===== */
-@import "./assets/styles/layer/utilities.css";
-
-/* ===== THEME DEFINITIONS ===== */
-@import "./assets/styles/layer/themes.css";
-
-/* ===== PRIMENG OVERRIDES ===== */
-@import "./assets/styles/components/prime-ng/primeng-dialog.css";
-
-/* ===== FORM ELEMENTS (Outside layers for PrimeNG compatibility) ===== */
-@import "./assets/styles/form/base.css";
-
-/* Table Styles */
-@import "./assets/styles/components/prime-ng/table/base.css";
-@import "./assets/styles/components/prime-ng/table/cell-editor.css";
-@import "./assets/styles/components/prime-ng/table/pagination.css";
-
-@plugin "daisyui";
-@plugin "@tailwindcss/forms";
-@plugin "@tailwindcss/typography";
-@plugin "@tailwindcss/aspect-ratio";
-@plugin "tailwind-scrollbar";
-
-/* ===== CUSTOM VARIANTS ===== */
-@custom-variant dark (&:where(.dark, .dark *));
-@custom-variant mobile (max-width: 768px);
-@custom-variant tablet (min-width: 769px) and (max-width: 1024px);
-@custom-variant desktop (min-width: 1025px);
-@custom-variant reduced-motion (@media (prefers-reduced-motion: reduce));
-@custom-variant high-contrast (@media (prefers-contrast: high));
+/*
+  The main design system is now imported from the pre-compiled library:
+  libs/design-system/src/styles/theme.css -> dist/libs/design-system/styles.css
+*/

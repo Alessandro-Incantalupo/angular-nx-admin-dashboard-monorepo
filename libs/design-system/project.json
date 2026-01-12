@@ -1,0 +1,16 @@
+{
+  "name": "design-system",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/design-system/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project design-system --web",
+  "targets": {
+    "build-styles": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx @tailwindcss/cli -i libs/design-system/src/styles/theme.css -o dist/libs/design-system/styles.css --minify && mkdir -p dist/libs/design-system/fonts && cp -r node_modules/primeicons/fonts/* dist/libs/design-system/fonts/"
+      }
+    }
+  }
+}

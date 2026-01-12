@@ -92,7 +92,8 @@
           <!-- PrimeNG Dialog -->
           <p-dialog
             [header]="t('users.addUserForm')"
-            [(visible)]="showForm"
+            [visible]="showForm()"
+            (visibleChange)="showForm.set($event)"
             [modal]="true"
             [style]="{ 'max-width': '600px', width: '90vw' }"
             [draggable]="false"

@@ -2,6 +2,7 @@ import { User } from '@admin-dashboard-nx-monorepo/models';
 import {
   ChangeDetectionStrategy,
   Component,
+  CUSTOM_ELEMENTS_SCHEMA,
   inject,
   signal,
 } from '@angular/core';
@@ -9,13 +10,13 @@ import { AuthStore } from '@core/state/auth.store';
 import { RoleSelectorComponent } from '@features/users/components/role-selector/role-selector.component';
 import { UserAbilitiesComponent } from '@features/users/components/user-abilities/user-abilities.component';
 import { UsersStore } from '@features/users/state/user.store';
-import { AppleIcon, HomeIcon } from '@hugeicons/core-free-icons/index';
+
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PrimeNgTableComponent } from '@shared/prime-ng-table/prime-ng-table.component';
 import { toast } from 'ngx-sonner';
 
-import { PaginatorState } from 'primeng/paginator';
 import { Dialog } from 'primeng/dialog';
+import { PaginatorState } from 'primeng/paginator';
 import { UserFormSignalComponent } from '../../components/user-form-signal/user-form-signal.component';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
 @Component({
@@ -36,6 +37,7 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export default class UserListComponent {
   protected userStore = inject(UsersStore);
@@ -66,9 +68,9 @@ export default class UserListComponent {
   ] as const;
 
   readonly tabs = signal([
-    { name: 'Tab 1', icon: HomeIcon },
-    { name: 'Tab 2', icon: AppleIcon },
-    { name: 'Tab 3', icon: HomeIcon },
+    { name: 'Tab 1' },
+    { name: 'Tab 2' },
+    { name: 'Tab 3' },
   ]);
   readonly activeTab = signal<string>('Tab 1');
 

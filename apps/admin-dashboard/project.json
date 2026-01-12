@@ -32,7 +32,10 @@
             "output": "/"
           }
         ],
-        "styles": ["apps/admin-dashboard/src/styles.css"],
+        "styles": [
+          "apps/admin-dashboard/src/styles.css",
+          "dist/libs/design-system/styles.css"
+        ],
         "scripts": []
       },
       "configurations": {
