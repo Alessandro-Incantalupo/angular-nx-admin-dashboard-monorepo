@@ -9,6 +9,12 @@
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
+      "dependsOn": [
+        {
+          "projects": "design-system",
+          "target": "build-styles"
+        }
+      ],
       "options": {
         "outputPath": "dist/apps/admin-dashboard",
         "index": "apps/admin-dashboard/src/index.html",
