@@ -33,50 +33,26 @@
   } @else {
     @if (userStore.hasUsers()) {
       <div class="flex flex-col">
-        <!-- Role-based description -->
-
-        <!-- <app-role-description [hasError]="!!authStore.error()">
-          @if (!authStore.error()) {
-            <span class="text-primary">{{ authStore.roleDescription() }}</span>
-          } @else {
-            <span class="text-primary">Error loading role description</span>
-          }
-        </app-role-description> -->
-
-        <!-- <app-tab
-          [tabs]="tabs()"
-          [activeTab]="activeTab()"
-          (tabChange)="activeTab.set($event)"
-        >
-          @if (activeTab() === 'Tab 1') {
-            <div class="p-4">
-              <p>Content for Tab 1 goes here...</p>
-            </div>
-          }
-          @if (activeTab() === 'Tab 2') {
-            <div class="p-4">
-              <p>Content for Tab 2 goes here...</p>
-            </div>
-          }
-          @if (activeTab() === 'Tab 3') {
-            <div class="p-4">
-              <p>Content for Tab 3 goes here...</p>
-            </div>
-          }
-        </app-tab> -->
-        <app-prime-ng-table
-          [users]="userStore.users()"
-          [roles]="roles"
-          [readOnly]="!authStore.canEdit()"
-          [totalUsers]="userStore.totalItems()"
-          [pageSize]="userStore.pageSize()"
-          [currentPage]="userStore.currentPage()"
-          (editAction)="onEdit($event)"
-          (deleteAction)="onDelete($event)"
-          (saveAction)="onRowEditSave($event)"
-          (saveActionCancel)="onRowEditCancel($event)"
-          (pageChangeAction)="onPageChange($event)"
-        ></app-prime-ng-table>
+        @defer (on viewport) {
+          <app-prime-ng-table
+            [users]="userStore.users()"
+            [roles]="roles"
+            [readOnly]="!authStore.canEdit()"
+            [totalUsers]="userStore.totalItems()"
+            [pageSize]="userStore.pageSize()"
+            [currentPage]="userStore.currentPage()"
+            (editAction)="onEdit($event)"
+            (deleteAction)="onDelete($event)"
+            (saveAction)="onRowEditSave($event)"
+            (saveActionCancel)="onRowEditCancel($event)"
+            (pageChangeAction)="onPageChange($event)"
+          ></app-prime-ng-table>
+        } @placeholder {
+          <div class="space-y-4">
+            <div class="h-10 w-full animate-pulse rounded bg-gray-200"></div>
+            <div class="h-64 w-full animate-pulse rounded bg-gray-100"></div>
+          </div>
+        }
 
         <!-- Admin-only form - Only show if authenticated and admin -->
         @if (authStore.canCreate()) {
