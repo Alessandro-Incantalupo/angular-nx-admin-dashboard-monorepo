@@ -5,7 +5,8 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "analyze:admin-dashboard": "nx build admin-dashboard --stats-json --named-chunks && npx -y @angular-experts/hawkeye dist/apps/admin-dashboard/stats.json"
+    "analyze:admin-dashboard": "nx build admin-dashboard --stats-json --named-chunks && npx -y @angular-experts/hawkeye dist/apps/admin-dashboard/stats.json",
+    "build:clean": "rm -rf dist && nx run-many -t build --skip-nx-cache"
   },
   "private": true,
   "dependencies": {
