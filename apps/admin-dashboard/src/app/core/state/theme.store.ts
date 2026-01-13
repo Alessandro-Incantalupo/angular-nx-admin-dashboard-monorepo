@@ -29,6 +29,7 @@ const themeColors = [
 ];
 
 export const ThemeStore = signalStore(
+  { providedIn: 'root' },
   withState<State>(initialState),
   withComputed(state => ({
     isDark: computed(() => state.mode() === 'dark'),

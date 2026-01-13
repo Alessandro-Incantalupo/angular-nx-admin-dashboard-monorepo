@@ -27,6 +27,7 @@ const initialState: UserState = {
 };
 
 export const AuthStore = signalStore(
+  { providedIn: 'root' },
   withState<UserState>(initialState),
   withComputed(state => {
     const isGuest = computed(() => state.userData()?.role === 'guest');

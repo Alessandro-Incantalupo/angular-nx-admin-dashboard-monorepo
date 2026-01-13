@@ -11,8 +11,7 @@ import { provideTransloco } from '@jsverse/transloco';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { BaseResponseInterceptor } from '@core/interceptors/base-response.interceptor';
 import { LoadingInterceptor } from '@core/interceptors/loading.interceptor';
-import { AuthStore } from '@core/state/auth.store';
-import { ThemeStore } from '@core/state/theme.store';
+
 import { provideAngularSvgIcon } from 'angular-svg-icon';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
@@ -64,7 +63,5 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
-    ThemeStore,
-    AuthStore,
   ],
 };
