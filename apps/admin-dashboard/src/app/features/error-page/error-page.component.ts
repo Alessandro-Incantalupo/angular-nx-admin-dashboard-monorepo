@@ -10,7 +10,7 @@ import { ButtonComponent } from '../../shared/button/button.component';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ErrorPageComponent {
+export default class ErrorPageComponent {
   router = inject(Router);
   // location = inject(Location);
   // navigation = inject(NgxNavigateBackService);

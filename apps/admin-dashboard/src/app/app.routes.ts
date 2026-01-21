@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { PATHS } from './core/constants/routes';
 import { AuthGuard } from './core/guards';
-import { ErrorPageComponent } from './features/error-page/error-page.component';
 
 export const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -21,6 +20,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    component: ErrorPageComponent,
+    loadComponent: () => import('./features/error-page/error-page.component'),
   },
 ];
