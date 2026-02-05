@@ -11,6 +11,7 @@ import { RoleSelectorComponent } from '@features/users/components/role-selector/
 import { UserAbilitiesComponent } from '@features/users/components/user-abilities/user-abilities.component';
 import { UsersStore } from '@features/users/state/user.store';
 
+import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PrimeNgTableComponent } from '@shared/prime-ng-table/prime-ng-table.component';
 import { toast } from 'ngx-sonner';
@@ -19,6 +20,7 @@ import { Dialog } from 'primeng/dialog';
 import { PaginatorState } from 'primeng/paginator';
 import { UserFormSignalComponent } from '../../components/user-form-signal/user-form-signal.component';
 import { UserFormComponent } from '../../components/user-form/user-form.component';
+
 @Component({
   selector: 'app-user-list',
   imports: [
@@ -29,6 +31,7 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
     RoleSelectorComponent,
     UserAbilitiesComponent,
     Dialog,
+    RouterLink,
   ],
   templateUrl: './user-list.component.html',
   styles: `

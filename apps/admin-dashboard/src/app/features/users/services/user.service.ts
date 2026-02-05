@@ -40,6 +40,10 @@ export class UsersService {
     return this.http.delete<void>(`${this.usersUrl}/${userId}`);
   }
 
+  getUserStats() {
+    return this.http.get<{ [key: string]: number }>(`${this.usersUrl}/stats`);
+  }
+
   resetDemoData() {
     return this.http.post<void>(
       this.usersUrl + '/reset',

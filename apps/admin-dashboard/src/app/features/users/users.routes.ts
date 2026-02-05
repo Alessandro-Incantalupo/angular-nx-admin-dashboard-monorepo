@@ -24,6 +24,11 @@ export default [
     // Here, we are providing the UsersStore for state management and the Transloco scope for translations.
     providers: [UsersStore, provideTranslocoScope('users')],
   },
+  {
+    path: 'stats',
+    loadComponent: () => import('./pages/user-stats/user-stats-page.component'),
+    providers: [UsersStore, provideTranslocoScope('users')],
+  },
   // The `satisfies` keyword ensures that this array conforms to the Angular `Routes` type.
   // It validates the structure of the array while preserving the specific inferred types of the objects.
 ] satisfies Routes;

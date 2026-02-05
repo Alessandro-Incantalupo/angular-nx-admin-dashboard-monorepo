@@ -21,5 +21,10 @@
       "guest": "👁️ Guest {{mobile}}",
       "user": "👤 Utente {{mobile}}",
       "admin": "👑 Admin {{mobile}}"
+    },
+    "stats": {
+      "user-roles-distribution": "Distribuzione Ruoli Utente",
+      "view-stats": "Vedi Statistiche",
+      "title": "Statistiche Utente"
     }
   }

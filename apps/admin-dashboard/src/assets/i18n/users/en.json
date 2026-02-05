@@ -29,5 +29,10 @@
       "guest": "Guest",
       "user": "User",
       "admin": "Admin"
+    },
+    "stats": {
+      "user-roles-distribution": "User Roles Distribution",
+      "view-stats": "View Statistics",
+      "title": "User Statistics"
     }
   }

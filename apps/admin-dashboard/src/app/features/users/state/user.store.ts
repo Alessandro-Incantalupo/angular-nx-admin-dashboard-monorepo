@@ -1,4 +1,8 @@
 import { computed, inject } from '@angular/core';
+import { PaginatorState } from 'primeng/paginator';
+import { pipe, tap } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators'; // Explicit imports might help? No.
+
 import { tapResponse } from '@ngrx/operators';
 import {
   signalStore,
@@ -20,8 +24,6 @@ import { getNextResetMs } from '@app-info';
 import { getHttpErrorMessage } from '@core/utils/http-error-message.util';
 import { UsersService } from '@features/users/services/user.service';
 import { toast } from 'ngx-sonner';
-import { PaginatorState } from 'primeng/paginator';
-import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 import { withPagination } from './features/withPagination';
 import {
   setUsersAddError,
@@ -44,11 +46,13 @@ import {
 type State = {
   users: User[];
   clonedUsers: { [id: string]: User };
+  stats: { [key: string]: number };
 };
 
 const initialState: State = {
   users: [],
   clonedUsers: {},
+  stats: {},
 };
 
 export const UsersStore = signalStore(
@@ -108,9 +112,10 @@ export const UsersStore = signalStore(
                   duration: 4000,
                   position: 'top-right',
                 });
-                // Refetch to maintain proper pagination
+                // Refetch to maintain proper pagination and stats
                 const { currentPage, pageSize } = state;
                 loadUsers({ page: currentPage(), rows: pageSize() });
+                loadStats();
               },
               error: err => {
                 const message = getHttpErrorMessage(err, 'Failed to add user');
@@ -177,6 +182,7 @@ export const UsersStore = signalStore(
                 setUsersDeleteLoaded();
                 const { currentPage, pageSize } = state;
                 loadUsers({ page: currentPage(), rows: pageSize() });
+                loadStats();
               },
               error: err => {
                 const message = getHttpErrorMessage(
@@ -257,8 +263,35 @@ export const UsersStore = signalStore(
       });
     };
 
+    const loadStats = rxMethod<void>(
+      pipe(
+        tap(() => updateState(state, 'Stats: Loading')),
+        switchMap(() =>
+          userService.getUserStats().pipe(
+            tapResponse({
+              next: (stats: { [key: string]: number }) => {
+                console.log('Store: Stats Loaded from API', stats);
+                updateState(state, 'Stats: Loaded', {
+                  stats,
+                });
+              },
+              error: err => {
+                const message = getHttpErrorMessage(
+                  err,
+                  'Failed to load user stats'
+                );
+                toast.error(message);
+                updateState(state, 'Stats: Error');
+              },
+            })
+          )
+        )
+      )
+    );
+
     return {
       loadUsers,
+      loadStats,
       reset,
       addUser,
       updateUser,
@@ -270,9 +303,10 @@ export const UsersStore = signalStore(
     };
   }),
 
-  withHooks(({ loadUsers }) => ({
+  withHooks(({ loadUsers, loadStats }) => ({
     onInit: () => {
       loadUsers();
+      loadStats();
     },
   })),
   withCallState({ collection: 'users' })

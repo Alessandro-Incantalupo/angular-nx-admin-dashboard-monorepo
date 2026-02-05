@@ -50,6 +50,22 @@ usersRoute.get('/', c => {
   }
 });
 
+usersRoute.get('/stats', c => {
+  try {
+    const stats = users.reduce(
+      (acc, user) => {
+        acc[user.role] = (acc[user.role] || 0) + 1;
+        return acc;
+      },
+      {} as { [key: string]: number }
+    );
+
+    return c.json(stats);
+  } catch (err) {
+    return c.json({ error: 'Failed to fetch user stats' }, 500);
+  }
+});
+
 usersRoute.post('/', async c => {
   try {
     const body = await c.req.json();
