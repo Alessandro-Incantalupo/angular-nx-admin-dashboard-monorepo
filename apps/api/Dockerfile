@@ -1,8 +1,12 @@
 # Stage 1: Dependencies
 FROM oven/bun:1.2.12-alpine AS deps
 WORKDIR /app
-COPY package.json bun.lockb* ./
-RUN bun install --frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN bun install
+
+# Accept Nx Cloud Token for caching
+ARG NX_CLOUD_ACCESS_TOKEN
+ENV NX_CLOUD_ACCESS_TOKEN=$NX_CLOUD_ACCESS_TOKEN
 
 # Stage 2: Builder
 FROM oven/bun:1.2.12-alpine AS builder
