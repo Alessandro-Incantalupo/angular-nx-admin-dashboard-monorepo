@@ -2,43 +2,118 @@
 
 ---
 
-## RxJS
+## ⏱️ MORNING STUDY PLAN — ~3 hours before lunch
+
+> **Rule:** Don't try to re-read everything. Read ONE block, close the file, say the answer out loud from memory, reopen and check. Then move on.
+
+---
+
+### 🔴 BLOCK 1 — 20 min | RxJS Core (highest ROI, most likely questions)
+
+These will definitely come up. Know them cold.
+
+| #   | Topic                                                     | Section to read                       |
+| --- | --------------------------------------------------------- | ------------------------------------- |
+| 1   | **Observable vs Promise** — why not just use Promises?    | [→ jump](#observable-vs-promise)      |
+| 2   | **Subject vs BehaviorSubject** — initial value is the key | [→ jump](#subject-vs-behaviorsubject) |
+
+After each one: close file → say it out loud → check.
+
+---
+
+### 🟠 BLOCK 2 — 50 min | NgRx / Redux / State ⚠️ WEAK POINT — spend the most time here
+
+They explicitly asked about this. Read slowly, say each answer out loud before moving on.
+
+| #   | Topic                                                                     | Section to read                                                   |
+| --- | ------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| 6   | **Redux pattern** — 3 rules + unidirectional flow diagram                 | [→ jump](#what-is-redux)                                          |
+| 7   | **Action/Effect lifecycle** — 8-step sequence                             | [→ jump](#lifecycle-of-actions-and-effects-in-ngrx)               |
+| 8   | **Main actors table** — NgRx classic vs your SignalStore                  | [→ jump](#main-actors-in-store-updates)                           |
+| 9   | **RxJS operators** — your 1-sentence list (switchMap, debounceTime, etc.) | [→ jump](#operators-you-have-used)                                |
+| 10  | **NgRx Classic vs SignalStore code** — side-by-side real code             | [→ jump](#ngrx-classic-vs-your-signalstore--real-code-comparison) |
+
+---
+
+### 🟡 BLOCK 3 — 30 min | JavaScript Fundamentals
+
+Lighter, but they asked every single one.
+
+| #   | Topic                                                           | Section to read                                            |
+| --- | --------------------------------------------------------------- | ---------------------------------------------------------- |
+| 11  | **Event loop** — chef analogy, microtask vs macrotask           | [→ jump](#event-loop--what-is-it)                          |
+| 12  | **JS threads** — 1 thread, then Web Workers + no DOM constraint | [→ jump](#how-many-threads-can-javascript-use)             |
+| 13  | **Deferral / async pattern** — 4-era timeline, advantages       | [→ jump](#deferral--old-js-pattern-before-asyncawait)      |
+| 14  | **Closures** — backpack mental model, Angular examples          | [→ jump](#what-is-a-closure)                               |
+| 15  | **TypeScript compilation** — tsc → Ivy → esbuild, AOT vs JIT    | [→ jump](#how-does-typescript-compilation-work-in-angular) |
+
+---
+
+### 🟢 BLOCK 4 — 40 min | Everything Else (all remaining questions from the list)
+
+**Browser / Network / Internet fundamentals:**
+
+| #   | Topic                                                                         | Section to read / what to say                                                                                                                                             |
+| --- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 14  | **google.com → press Enter** — HTTP, DNS, Domain, Hosting, Browser all in one | [→ jump](#how-does-the-internet-work--what-happens-when-you-type-googlecom)                                                                                               |
+| 15  | **Prima di caricare la pagina** — browser does DNS prefetch + preconnect      | _Say: "DNS prefetch resolves the domain early, preconnect opens the TCP/TLS connection before the user clicks. You hint at this with `<link rel='preconnect'>` in HTML."_ |
+| 16  | **CORS** — 1-sentence + evil.com threat + 3 must-say points                   | [→ jump](#cors--what-is-it)                                                                                                                                               |
+| 17  | **Page doesn't load / domain error** — outside-in debug order                 | [→ jump](#se-digiti-wwwgoogleit-nel-browser-e-la-pagina-non-si-carica-cosa-controlleresti----page-doesnt-load)                                                            |
+
+**Angular:**
+
+| # | Topic | Section to read | |
+| 22 | **Memoization** — computed() + createSelector, same concept | [→ jump](#do-you-know-memoization) |
+
+---
 
 ### Subject vs BehaviorSubject?
 
-Both are **multicast Observables** — they let you push values to multiple subscribers. The difference is about **initial value and replay**:
+**The single most important difference: BehaviorSubject requires an initial value. Subject does not.**
 
-**Subject** — no initial value, no replay. Subscribers only get values emitted _after_ they subscribe.
+That one requirement has three consequences:
+
+|                        | Subject                      | BehaviorSubject                    |
+| ---------------------- | ---------------------------- | ---------------------------------- |
+| Initial value          | ❌ none — starts empty       | ✅ required at creation            |
+| Late subscriber gets   | nothing (missed past values) | the last emitted value immediately |
+| Readable synchronously | ❌                           | ✅ `.getValue()`                   |
+
+> **Why does the initial value matter so much?**
+> Because it guarantees the subject **always has a current value**. A late subscriber never gets "nothing" — it always gets _something_ (the last known state). That's why BehaviorSubject is used for **state** and Subject is used for **events**.
+
+**Mental model:**
+
+> Think of **Subject** as a doorbell — it fires once when pressed, and if you weren't at the door, you missed it.
+>
+> Think of **BehaviorSubject** as a **whiteboard** — it always shows the latest value written on it. Anyone who walks in the room right now can read it immediately. If nothing new has been written, it still shows the initial value.
 
 ```ts
+// Subject — no initial value, late subscriber misses past emissions
 const subject = new Subject<number>();
 subject.subscribe(v => console.log('A:', v));
 subject.next(1); // A: 1
 subject.next(2); // A: 2
-subject.subscribe(v => console.log('B:', v)); // B subscribes late
+subject.subscribe(v => console.log('B:', v)); // B subscribes late — gets nothing yet
 subject.next(3); // A: 3, B: 3  — B missed 1 and 2
-```
 
-**BehaviorSubject** — requires an initial value, replays the _last emitted value_ to any new subscriber immediately.
-
-```ts
-const bs = new BehaviorSubject<number>(0); // initial: 0
-bs.subscribe(v => console.log('A:', v)); // A: 0 immediately
+// BehaviorSubject — MUST have initial value, late subscriber gets last value
+const bs = new BehaviorSubject<number>(0); // ← initial value required
+bs.subscribe(v => console.log('A:', v)); // A: 0 — immediately gets initial value
 bs.next(1); // A: 1
 bs.next(2); // A: 2
-bs.subscribe(v => console.log('B:', v)); // B: 2 ← gets last value right away
+bs.subscribe(v => console.log('B:', v)); // B: 2 ← gets LAST value right away
 bs.next(3); // A: 3, B: 3
 
-// You can also read the current value synchronously:
-console.log(bs.getValue()); // 3
+console.log(bs.getValue()); // 3 — readable synchronously, anytime
 ```
 
 > **When to use which:**
 >
-> - `Subject` → event bus, fire-and-forget events (e.g. "user clicked save")
-> - `BehaviorSubject` → state that must always have a current value (e.g. current user, loading flag)
+> - `Subject` → one-time events, fire-and-forget ("user clicked save", "dialog closed")
+> - `BehaviorSubject` → state that must always have a value (current user, loading flag, selected tab)
 
-> **In modern Angular:** both are replaced by `signal()`. `signal(0)` is basically a BehaviorSubject — it has a current value, you can read it synchronously with `mySignal()`, and consumers (computed, templates) update automatically. No `.subscribe()`, no manual cleanup needed.
+> **In modern Angular:** `signal(0)` replaces BehaviorSubject entirely — same guarantee (always has a value, readable synchronously), but no `.subscribe()`, no cleanup needed, and template reads are automatic.
 
 ---
 
@@ -101,6 +176,38 @@ Observable:  ────●──────●──────●───�
 
 > _"A single `this.http.get()` actually emits ONE value, like a Promise. The Observable power comes from the pipeline around it — `debounceTime`, `switchMap`, `takeUntilDestroyed`. These let me react to a continuous stream of user actions (typing, clicking pages, navigating) and automatically cancel previous in-flight requests."_
 
+**"But each HTTP call only returns one value — why not just use Promises?"**
+
+This is the right question. For the HTTP call itself in isolation? A Promise would work. **The problem is everything _around_ it:**
+
+```ts
+// With Promises — you must implement cancellation, debounce, cleanup yourself:
+let latestId = 0;
+async function onSearch(term: string) {
+  const id = ++latestId;
+  // debounce? You'd need setTimeout/clearTimeout manually
+  const result = await this.service.search(term);
+  if (id !== latestId) return; // cancel stale — you track this manually
+  this.results = result;
+  // cleanup on destroy? You'd need to track and abort() manually
+}
+
+// With Observable — same guarantees, one pipeline:
+this.searchControl.valueChanges
+  .pipe(
+    debounceTime(300), // rate limiting: 1 line
+    switchMap(
+      (
+        term // cancels the previous request automatically
+      ) => this.service.search(term)
+    ),
+    takeUntilDestroyed() // cleanup when component destroys: 1 line
+  )
+  .subscribe(r => this.results.set(r));
+```
+
+> The advantage isn't the single HTTP call — it's that **Observables let you compose multiple async concerns into one pipeline**. Cancellation, debouncing, error isolation, and cleanup each need separate manual logic with Promises. `switchMap` alone replaces ~15 lines of manual cancellation tracking.
+
 ---
 
 ## Angular
@@ -156,57 +263,202 @@ const activeCount = computed(() => users().filter(u => u.status === 'active').le
 
 ### "Deferral" — old JS pattern before async/await
 
-This is the **old way to handle async** before `Promise` and `async/await` existed. Libraries like jQuery used `$.Deferred()` to create a manually-resolved promise-like object.
+**The three things are NOT the same — here's the timeline:**
+
+```
+ERA 1: ~2006-2013  →  Callbacks         (the original, painful way)
+ERA 2: ~2011-2015  →  Deferred pattern  (jQuery's fix — a library pattern)
+ERA 3: ~2015       →  Promise           (native language feature, built into the browser)
+ERA 4: ~2017       →  async/await       (syntactic sugar on top of Promise, same thing underneath)
+```
+
+They solve the **same problem** (async code) but each generation made it simpler. The interviewer asked about "deferral" — they mean ERA 2.
+
+---
+
+**ERA 1 — Callbacks (the problem)**
 
 ```js
-// OLD pattern (jQuery era, ~2010-2015)
-function fetchData() {
-  const deferred = $.Deferred();
-  setTimeout(() => {
-    deferred.resolve('data ready'); // manually signal success
-  }, 1000);
-  return deferred.promise(); // return the "promise"
-}
-fetchData().then(data => console.log(data));
+// You pass the "what to do next" function INTO the async call
+login(user, function (err, session) {
+  // ← you hand the callback in
+  fetchProfile(session.id, function (err, profile) {
+    // ← nested
+    loadSettings(profile.id, function (err, settings) {
+      // ← nested again
+      // finally usable — but 3 levels deep, and error handling at every level
+    });
+  });
+});
+```
 
-// MODERN equivalent — you don't need deferred anymore:
-async function fetchData() {
-  const data = await someApiCall();
-  return data;
+Problem: nesting gets infinite, error handling is repeated at every level, and you can't reuse or compose results.
+
+---
+
+**ERA 2 — Deferred (jQuery's library solution)**
+
+Instead of passing a callback IN, you get a **handle** (the deferred/promise) back OUT. The caller can decide what to do with it later.
+
+```js
+function fetchData() {
+  const deferred = $.Deferred(); // create the handle
+
+  setTimeout(() => {
+    deferred.resolve('data ready'); // when done: signal success
+    // or: deferred.reject('error'); // signal failure
+  }, 1000);
+
+  return deferred.promise(); // give the caller a "ticket" — they .then() on this
+}
+
+// Caller — no callback needed upfront, chain flat instead of nesting:
+fetchData()
+  .then(data => processIt(data))
+  .then(result => display(result))
+  .catch(err => handleError(err)); // one catch covers the whole chain
+```
+
+The "deferred" object has TWO sides:
+
+- `.promise()` — what you hand to the caller (read-only, subscribe to it)
+- `.resolve()` / `.reject()` — what YOU call internally when the work finishes
+
+---
+
+**ERA 3 — Promise (native, browser built-in, ES2015)**
+
+Same concept as Deferred, but the browser does it natively — no jQuery needed.
+
+```js
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    // browser gives you resolve/reject directly
+    setTimeout(() => resolve('data ready'), 1000);
+  });
+}
+
+fetchData()
+  .then(data => processIt(data))
+  .catch(err => handleError(err));
+```
+
+Deferred and Promise are **the same idea** — the difference is Deferred is a jQuery library object, Promise is a native language feature. Promise replaced Deferred entirely.
+
+---
+
+**ERA 4 — async/await (ES2017, syntactic sugar over Promise)**
+
+Does NOT introduce a new mechanism. It's just a cleaner way to write Promise chains:
+
+```js
+// Promise chain:
+fetchData()
+  .then(data => processIt(data))
+  .catch(handleError);
+
+// async/await — exactly the same thing underneath, just looks synchronous:
+async function run() {
+  try {
+    const data = await fetchData(); // "wait here, then continue"
+    processIt(data);
+  } catch (err) {
+    handleError(err);
+  }
 }
 ```
 
-> **Why it's obsolete:** Native `Promise` + `async/await` (ES2017) replaced it entirely. Deferred was a workaround for the lack of language-level async support. You'd only see it in legacy codebases.
+`await` is just `.then()` in different clothes. The JS engine still uses Promises under the hood.
 
-> **Interview answer:** _"That's the old pre-Promise pattern from libraries like jQuery. You'd create a Deferred object, manually call `.resolve()` or `.reject()`, and return its `.promise()`. It's fully replaced by `async/await` and native Promises today. I've never needed it in modern Angular."_
+---
 
-### "Che vantaggi puoi avere?" — follow-up: what advantages does the async/deferred pattern give you?
+**The one-sentence answer per ERA:**
 
-The interviewer is asking: what do you gain by using async patterns (Deferred/Promise/async-await) instead of raw callbacks?
+- Callback: _"pass the handler in, get nothing back"_
+- Deferred: _"get a ticket back, attach your handler to the ticket"_ (jQuery)
+- Promise: _"same as Deferred but native to the browser"_
+- async/await: _"Promise but written like normal synchronous code"_
 
-> **1. Escape callback hell** — callbacks nest infinitely, async chains stay flat:
+> **Interview answer:** _"Deferred is jQuery's pre-native solution from ~2011. Instead of passing a callback into the function, you get a handle back — a 'promise' — and attach your `.then()` to it later. That separation means you can chain operations flat instead of nesting, and handle errors in one place. Native `Promise` (ES2015) replaced it — same idea, built into the browser. Then `async/await` (ES2017) gave us cleaner syntax on top of Promises — `await` is just `.then()` written to look synchronous. All three solve the same callback hell problem, each generation just made it simpler."_
+
+### "Che vantaggi puoi avere?" — advantages over raw callbacks
+
+> **1. Flat chains instead of nesting** — `.then().then().catch()` vs infinite nesting
+> **2. One error handler** — `.catch()` at the end covers the whole chain vs `if(err)` at every callback level
+> **3. Composability** — `Promise.all([a, b])` waits for multiple async operations in parallel; impossible with callbacks
+
+---
+
+```js
+// Callback hell — hard to read, hard to handle errors
+login(user, function (err, session) {
+  if (err) handleError(err);
+  fetchProfile(session.id, function (err, profile) {
+    if (err) handleError(err);
+    loadSettings(profile.id, function (err, settings) {
+      if (err) handleError(err);
+      // finally do something...
+    });
+  });
+});
+```
+
+**What a Deferred IS — the mental model:**
+
+> Imagine you go to a deli counter and they give you a **numbered ticket** while your sandwich is being made. You don't wait at the counter — you go sit down. When your number is called, you come back and get the sandwich.
 >
-> ```js
-> // Callback hell ❌
-> login(user, () =>
->   fetchProfile(id, () =>
->     loadSettings(id, () => {
->       /* ... */
->     })
->   )
-> );
+> A **Deferred** is that ticket. It's an object you create and hand back to the caller **before the async work is done**. It has two sides:
 >
-> // Promise chain ✅
-> login(user).then(fetchProfile).then(loadSettings).catch(handleError);
->
-> // async/await ✅✅
-> const profile = await login(user);
-> await loadSettings(profile.id);
-> ```
->
-> **2. Centralized error handling** — one `.catch()` handles errors from the entire chain. Callbacks need error params at every level.
->
-> **3. Composability** — `Promise.all([a, b, c])` to wait for multiple, `Promise.race()` for first-to-resolve. Can't do that with pure callbacks.
+> - The **promise** (the ticket) — what you give to the caller, so they can `.then()` on it
+> - The **resolve/reject methods** (the deli worker's call) — what YOU call later when the work is done
+
+```js
+// STEP 1: You create the Deferred — like printing the ticket
+function fetchData() {
+  const deferred = $.Deferred(); // creates the ticket + the controls
+
+  // STEP 2: Start the async work, but DON'T wait — return immediately
+  setTimeout(() => {
+    // STEP 3: When work is done, "call the number" to notify anyone waiting
+    deferred.resolve('data ready'); // success path
+    // OR: deferred.reject('something went wrong'); // error path
+  }, 1000);
+
+  // STEP 4: Return the "ticket" — the caller can .then() on this
+  return deferred.promise();
+}
+
+// The caller gets the ticket and registers what to do when it's done
+fetchData()
+  .then(data => console.log(data)) // called when resolved
+  .catch(err => console.error(err)); // called when rejected
+```
+
+**Why this was an improvement over raw callbacks:**
+
+1. **Flat chain** — `.then().then().catch()` instead of nested callbacks
+2. **Centralized error handling** — one `.catch()` handles anything in the chain
+3. **Return values** — you can store the promise and call `.then()` later, anywhere
+
+**Why it's now obsolete:**
+
+The browser (and Node.js) adopted `Promise` natively in ES2015, then `async/await` in ES2017. No ticket system needed — the language handles the waiting:
+
+```js
+// Modern equivalent — no Deferred, no callbacks, just await
+async function fetchData() {
+  const data = await someApiCall(); // JS engine pauses HERE and resumes when done
+  return data; // no callbacks, no resolve/reject
+}
+
+try {
+  const data = await fetchData();
+} catch (err) {
+  handleError(err);
+}
+```
+
+> **Interview answer:** _"Deferred is the pre-Promise pattern from jQuery (~2010). You'd manually create a deferred object, hand back its `.promise()` to the caller, then call `.resolve()` or `.reject()` when your async work finished. The key insight is that it separates the 'ticket' (what you hand the caller) from the 'control' (what you use to complete it). Native Promises and async/await replaced it entirely — the language now does that separation automatically. I'd only encounter it in legacy jQuery codebases."_
 
 ---
 
@@ -232,82 +484,218 @@ then takes ONE order from the table, then back to the counter, repeat.
 
 ---
 
-### How many threads can JavaScript use + Web Workers?
+### How many threads can JavaScript use?
 
-**One thread.** If you run a heavy loop (sorting 100,000 records), the UI freezes — nothing can update because the single thread is busy.
+**One.** JavaScript has a single main thread. If you run a heavy synchronous operation (sorting 100,000 records, parsing a large file), the entire UI freezes — no clicks, no animations, nothing can happen while that thread is busy.
 
-**Web Workers = extra threads.**
+> _"JavaScript is single-threaded by design. The event loop processes one thing at a time — that's why blocking the main thread with heavy computation causes the page to freeze completely."_
+
+---
+
+### How can you increase the number of threads? (Web Workers)
+
+**Web Workers** give you real parallel threads outside the main thread.
 
 ```ts
-// Give heavy work to a background thread:
+// Main thread — spin up a worker
 const worker = new Worker('./heavy.worker.js');
-worker.postMessage(largeDataset); // send data to worker thread
-worker.onmessage = e => console.log(e.data); // get result back
-// Meanwhile, the UI stays responsive — the worker runs in parallel
+worker.postMessage(largeDataset); // send data TO the worker thread
+worker.onmessage = e => console.log(e.data); // receive result BACK
+
+// The worker runs in parallel — main thread stays responsive
+// Worker thread (heavy.worker.js):
+self.onmessage = e => {
+  const result = processHeavyData(e.data); // runs in background thread
+  self.postMessage(result); // send result back
+};
 ```
 
-**When would YOU use this as a coder?**
+**Important constraints:**
 
-- Processing a large CSV the user uploads
-- Running a complex sort/filter on 10k+ items
-- Real-time data transformation (telemetry, charts)
-- Image processing in-browser
+- Workers have **no access to the DOM** — they can't touch the UI directly
+- Communication is via `postMessage()` only — data is copied (not shared) between threads
+- For shared memory you can use `SharedArrayBuffer` + `Atomics` (advanced)
 
-_"I haven't used Web Workers in production, but I know they're the solution when a JS operation is blocking the UI thread. You offload the heavy work to a Worker thread and get the result back via postMessage."_\_
+**When would you actually use this — and why not just use a Map/HashMap?**
+
+First, the key question to ask: **is the data already in memory, or does computation itself take long?**
+
+- **If data is already loaded** → a `Map` with O(1) lookup solves it instantly. Synchronous, no Worker needed.
+- **If the computation is what's slow** (parsing, transforming, sorting 100k rows) → a `Map` doesn't help because you still have to _build_ it, and building it blocks the main thread. That's when you need a Worker.
+
+**Concrete example — user uploads a 100,000-row CSV:**
+
+```ts
+// ❌ No Worker — UI freezes for 2-3 seconds while parsing
+const parsed = parseHugeCSV(rawText); // blocks main thread: no clicks, no animations
+this.rows.set(parsed);
+
+// ✅ With Worker — UI stays completely responsive
+// In the component:
+const worker = new Worker(new URL('./csv.worker.ts', import.meta.url));
+worker.postMessage(rawText); // send raw text to background thread
+worker.onmessage = ({ data }) => {
+  this.rows.set(data); // Worker finished — update UI with result
+};
+
+// csv.worker.ts (separate thread, NO DOM access)
+self.onmessage = ({ data: rawText }) => {
+  const rows = rawText.split('\n').map(line => line.split(','));
+  // This heavy loop runs in background — main thread is free the entire time
+  self.postMessage(rows); // send result back
+};
+
+// After the Worker finishes, you can build a Map for O(1) lookups:
+// const index = new Map(rows.map(r => [r[0], r])); // id → row
+// Worker did the heavy lifting, Map gives you fast access afterward.
+```
+
+**The mental model:**
+
+> `Map`/`HashMap` solves **lookup speed** — O(1) vs O(n) access to data already in memory.
+> Web Worker solves **computation blocking the UI** — moves expensive work off the main thread.
+> They solve different problems. The best solution often uses **both**: Worker to build the data, Map to query it fast.
+
+> _"I haven't used Web Workers in production, but I understand when they're needed. A Map with O(1) lookup is great once data is ready — but if building that data (parsing, sorting, transforming) takes 2 seconds, it still freezes the UI. That's when you offload to a Worker. Map and Worker aren't alternatives — they complement each other."_
+
+---
+
+### What is a closure?
+
+**One sentence:** A closure is a function that **remembers the variables from the scope where it was created**, even after that outer function has finished running.
+
+```ts
+function makeCounter() {
+  let count = 0; // this variable lives in makeCounter's scope
+
+  return function increment() {
+    count++; // increment() closes over 'count' — it remembers it
+    return count;
+  };
+}
+
+const counter = makeCounter(); // makeCounter() is done — but count is NOT gone
+counter(); // → 1
+counter(); // → 2  ← count is still there, captured in the closure
+```
+
+**Mental model:** Think of a backpack. When `increment` is created inside `makeCounter`, it packs `count` into its backpack and carries it everywhere. Even after `makeCounter` exits, `increment` still has its backpack.
+
+**Where you use them without realizing:**
+
+- Every Angular service is a closure — it captures injected dependencies in its constructor scope
+- `setTimeout(() => console.log(value), 1000)` — the arrow function closes over `value`
+- RxJS operators like `switchMap(term => this.service.search(term))` — closes over `this`
+
+> _"A closure is a function that captures the variables of its surrounding scope at the time it's created. You use them constantly in Angular — any arrow function that references `this.service` or a component property is a closure."_
+
+---
+
+### How does TypeScript compilation work in Angular?
+
+**Two-step process: TypeScript compiler → Angular compiler**
+
+```
+Your .ts / .html files
+       ↓
+  [tsc — TypeScript compiler]
+  Checks types, strips type annotations → plain JavaScript
+       ↓
+  [Angular Compiler (ngc / Ivy)]
+  Compiles templates (.html) into JS instructions
+  Converts @Component, @Injectable decorators into factory functions
+       ↓
+  [Bundler — esbuild / webpack]
+  Tree-shakes, minifies, splits into chunks → dist/ folder
+       ↓
+  Browser downloads and runs plain JavaScript
+```
+
+**Key points:**
+
+- **TypeScript** only handles types — it has no idea what `@Component` or `*ngIf` means
+- **Angular's Ivy compiler** is what understands Angular-specific syntax — it turns your HTML template into JavaScript that creates and updates DOM nodes
+- **AOT (Ahead-of-Time)** compilation (production default) — templates compiled at build time. Faster startup, catches template errors at build time
+- **JIT (Just-in-Time)** — templates compiled in the browser at runtime. Used in dev mode historically, mostly gone now
+
+> _"TypeScript strips types and becomes JavaScript — that's tsc. Then Angular's Ivy compiler processes the templates and decorators, turning `@Component` and HTML templates into efficient JavaScript factory functions. In production, AOT compiles everything at build time so the browser gets pre-compiled code, which is faster and catches template errors before they ship."_
 
 ---
 
 ## Browser Internals
 
-### What happens when you type `google.com` and press Enter?
+### How does the internet work? / What happens when you type `google.com`?
 
-**Simple 5-step answer** (memorise this sequence):
+**The full picture — all the layers involved:**
+
+**1. Domain Name** — `google.com` is a human-friendly address. The browser can't use it directly — it needs an IP address.
+
+**2. DNS (Domain Name System)** — translates `google.com` → a numeric IP address. Global network of servers. Browser checks cache first, then asks ISP's DNS if not found.
+
+**3. Hosting** — the server at that IP. Where the actual website files live. Types: shared (cheap, many sites on one server), dedicated (one site, whole server), cloud (e.g. Vercel, AWS).
+
+**4. HTTP** — the language browser and server use to talk. Browser sends a request (`GET /`), server sends back HTML. Stateless — each request is independent. HTTPS = HTTP with encryption.
+
+**5. Browser** — receives the HTML and renders it. Parses HTML → builds the DOM, applies CSS, runs JavaScript, draws pixels on screen.
+
+**Full flow:**
 
 ```
-1. DNS     — "google.com" → browser asks DNS: what's the IP? → 142.250.x.x
-2. Connect — browser opens a TCP connection to that IP (+ TLS handshake for HTTPS)
-3. Request — browser sends HTTP GET request: "give me the homepage"
+1. DNS      — google.com → IP address
+2. Connect  — browser connects to that server
+3. Request  — browser asks: "give me the page" (HTTP GET)
 4. Response — server sends back HTML
-5. Render  — browser parses HTML, loads CSS/JS, draws pixels on screen
+5. Render   — browser parses HTML/CSS/JS and draws the page
 ```
 
-That's the full journey: **name → address → connect → ask → receive → show**.
-
-### Before loading the page, does the browser do anything to speed up?
-
-Yes — **prefetching/preconnecting:**
-
-- **DNS prefetch** — browser pre-resolves a domain name before you click a link
-- **Preconnect** — opens the TCP+TLS connection early (saves ~100-300ms)
-- **Preload** — downloads a critical resource (font, main JS) immediately
-- **Browser prediction** — Chrome pre-renders pages from your history in the background
-
-As a dev you add hints in HTML:
-
-```html
-<link rel="preconnect" href="https://fonts.googleapis.com" /> <link rel="preload" href="main.js" as="script" />
-```
+> _"DNS translates the domain to an IP, the browser connects to that server and sends an HTTP request, the hosting server responds with HTML, and the browser renders it — parsing the HTML, applying styles, running JavaScript, and painting the page."_
 
 ---
 
 ### CORS — what is it?
 
-> **Cross-Origin Resource Sharing.** A browser security mechanism that blocks JavaScript from reading responses from a different origin (domain/port/protocol) unless the server explicitly allows it.
+**One sentence:** CORS is a browser rule that says: _"if your page is on domain A, you can't read data from domain B — unless domain B explicitly gives permission."_
+
+**Why it exists:** Your browser stores cookies and session tokens for every site you're logged into. Without CORS, any website you visit could make requests to those other sites in the background — authenticated as you, without you knowing. Imagine you're logged into your bank and you open some random page: that page's JavaScript could silently call `yourbank.com/api/transfer`, and since your bank cookies are in the browser, the request would go through as if it were you. CORS stops that — the browser won't give the response to a page's JavaScript unless the server explicitly says _"I trust requests from this origin."_
+
+**Our app as the example:**
+
+Your Angular app runs on `localhost:4200`. Your API runs on `localhost:3100`. Different ports = different origin. When the app calls `http://localhost:3100/api/users`, the browser checks: _"did the server say it's OK for port 4200 to read this?"_
+
+If the API doesn't send back this header:
 
 ```
-Origin: https://myapp.com
-Fetches: https://api.otherdomain.com/users  ← different origin → CORS check
-
-Server must respond with:
-  Access-Control-Allow-Origin: https://myapp.com  ← allow this origin
-  Access-Control-Allow-Methods: GET, POST          ← allow these methods
+Access-Control-Allow-Origin: http://localhost:4200
 ```
 
-> **The most important thing about CORS (= "Cos'è la cosa più importante?" follow-up):**
->
-> - CORS is **browser enforcement only** — `curl` and Postman are unaffected
-> - The browser sends a **preflight OPTIONS request** for non-simple requests (PUT, DELETE, custom headers) before the real one
-> - **It's a server-side fix** — the backend must set the headers. The Angular app can't fix CORS by itself.
+→ the browser **blocks the response**. The request still reached the server, the server still processed it and replied 200 — but the browser throws it away and shows a CORS error in the console.
+
+**The fix is always on the server.** In our Hono API, you'd add a CORS middleware:
+
+```ts
+app.use('*', cors({ origin: 'http://localhost:4200' }));
+```
+
+Angular can't do anything about it. The browser enforces it, the server solves it.
+
+**The three things to say:**
+
+1. **Browser-only** — CORS is a rule the browser invented and enforces. The server doesn't know about it. If you make the same request from anywhere other than a browser, there is no CORS.
+2. **Fix is on the server** — add `Access-Control-Allow-Origin`. Angular can't fix it.
+3. **Blocks reading, not sending** — the request goes through, the browser just refuses to give the response to your JS
+
+> _"CORS is a browser security rule. Our Angular app on port 4200 calling our API on port 3100 — different ports mean different origins, so the browser checks for permission headers. If the server doesn't include `Access-Control-Allow-Origin`, the browser blocks the response even if the server returned 200. The fix is always a server-side header — Angular can't do anything about it."_
+
+**Angular-side note (HttpClient headers):**
+You can pass custom headers per-request in `HttpClient` — e.g. the `Authorization` token:
+
+```ts
+this.http.get('/api/users', {
+  headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+});
+```
+
+This doesn't fix CORS. It just sends credentials. If the server isn't configured to allow the `Authorization` header, you'll still get a CORS error.
 
 ---
 
@@ -342,62 +730,83 @@ Work **outside-in**: start from the network, end at the code.
 
 ### "Se ricevi un errore legato al dominio ('MS Prompt Domain'), da cosa potrebbe dipendere?" — Domain-related error?
 
-> They're describing a browser error related to a domain mismatch. Most likely causes:
+> **This is a Windows / Active Directory question, not a web question.**
+> "MS Prompt Domain" means the Windows machine **cannot find or connect to the Active Directory domain controller**.
 
-| Cause                       | What it looks like                                                                    |
-| --------------------------- | ------------------------------------------------------------------------------------- |
-| **CORS**                    | `Access to fetch blocked by CORS policy` — API domain doesn't allow your app's origin |
-| **Mixed content**           | HTTPS page loading an HTTP resource — browser blocks it                               |
-| **Wrong API domain in env** | Environment config points to wrong URL (staging vs prod, HTTP vs HTTPS)               |
-| **Expired SSL certificate** | `NET::ERR_CERT_DATE_INVALID` — HTTPS fails                                            |
-| **DNS mismatch**            | Domain resolves to wrong IP — old DNS cache or misconfigured record                   |
+| Cause                         | What happens                                                                         |
+| ----------------------------- | ------------------------------------------------------------------------------------ |
+| **DNS failure**               | Machine can't resolve the domain controller's hostname — most common cause           |
+| **Network issue**             | Machine is offline or can't reach the internal network (VPN not connected, etc.)     |
+| **Domain controller is down** | The AD server itself is unavailable                                                  |
+| **Stale/wrong cached creds**  | Windows has cached credentials that no longer match — forces re-authentication       |
+| **Machine account expired**   | The computer's account in Active Directory has become untrusted after a long offline |
 
-> _"First thing I'd do: open the browser console and Network tab. The browser always tells you the exact error type — whether it's CORS, a certificate problem, or a connection failure. Then I'd verify the API base URL in the Angular environment config matches where the backend actually is."_
-
----
-
-## Personal / Soft Questions
-
-### What is the most important thing you've worked on?
-
-> Prep a 2-minute answer: pick your best project, say what problem it solved, what role you played, what was the technical challenge. Practice it out loud.
-
-### What is the most difficult thing you've faced technically?
-
-> Prep an honest answer: describe the problem, your debugging approach, the solution, what you learned. "Managing complex async state with race conditions across pagination, add, delete operations — solved by moving to NgRx SignalStore with `rxMethod` and `switchMap` to cancel in-flight requests automatically."
+> _"MS Prompt Domain is a Windows sign-in error — the machine can't locate a domain controller. The most common cause is DNS: if the machine can't resolve the DC's hostname, Windows can't authenticate. You'd check DNS settings, whether the machine is on the right network or VPN, and whether the domain controller itself is reachable."_
 
 ---
 
-## Practical Exercise — What to Expect
+## Redux Pattern
 
-Almost certainly one of:
+### What is Redux?
 
-1. **Search component** with Observable pipeline (debounce + switchMap + error handling)
-2. **Reactive form** with custom validator
-3. **Simple store** or service with signal state
-4. **@for loop** or `@if` block with data from a service
+**The problem Redux solves:**
 
-**Your strongest answer is the search pipeline from ex02.** If they give you a blank component, start with:
+As apps grow, components start mutating shared state in unpredictable ways. Component A changes user data, Component B reads stale data, Component C doesn't know who changed what. Debugging is a nightmare.
 
-```ts
-readonly form = inject(NonNullableFormBuilder).group({ search: [''] });
-readonly results = signal<string[]>([]);
+Redux enforces three simple rules to make state changes **predictable and traceable**:
 
-ngOnInit() {
-  this.form.get('search')!.valueChanges.pipe(
-    takeUntilDestroyed(this.destroyRef),
-    debounceTime(300),
-    distinctUntilChanged(),
-    switchMap(term => this.service.search(term).pipe(catchError(() => of([]))))
-  ).subscribe(r => this.results.set(r));
-}
+```
+Rule 1: Single source of truth
+        → All app state lives in ONE store object. No scattered local state.
+
+Rule 2: State is read-only
+        → You NEVER mutate state directly. The only way to change it is to dispatch an action.
+
+Rule 3: Changes are made with pure functions (reducers)
+        → A reducer takes (currentState, action) → returns NEW state. It never mutates.
 ```
 
-> That covers: Observables, operators, signals, reactive forms, cleanup — in ~10 lines.
+**The core data flow \u2014 always one direction:**
+
+```
+User does something
+       │
+       ▼
+  DISPATCH ACTION          store.dispatch(loadUsers({ page: 1 }))
+  (a plain object          { type: '[Users] Load Users', page: 1 }
+   describing WHAT happened)
+       │
+       ▼
+  EFFECT (optional)        listens for the action, does async HTTP
+  (for async work)         dispatches a result action when done
+       │
+       ▼
+  REDUCER                  pure function: (state, action) => newState
+  (the only thing that     returns a NEW object \u2014 never mutates
+   can update state)
+       │
+       ▼
+  STORE STATE UPDATES      new state stored
+       │
+       ▼
+  SELECTORS RE-COMPUTE     memoized, only run if their input changed
+       │
+       ▼
+  COMPONENTS RE-RENDER     get the new value from the selector
+```
+
+**Why this is powerful:**
+
+- Every state change is **logged** (DevTools shows every action + before/after state)
+- State changes are **reproducible** \u2014 same actions → same state, always
+- You can **time-travel** in DevTools \u2014 replay or undo actions
+- Pure reducers are **easy to test**: give them state + action, assert output
+
+> _"Redux is the pattern. NgRx is Angular's implementation of that pattern. The core idea is: no component can silently mutate shared state \u2014 every change is an explicit, logged, replayable action."_
 
 ---
 
-## NgRx — Actions, Effects, Store
+## NgRx \u2014 Actions, Effects, Store
 
 ### Projects + NgRx experience?
 
@@ -434,7 +843,213 @@ ngOnInit() {
 
 ---
 
-### When/why is RxJS used in Angular?
+### NgRx Classic vs Your SignalStore \u2014 Real Code Comparison
+
+Both implement the exact same feature (user CRUD with pagination). Here's what each concept looks like in your actual files.
+
+**1. Defining state**
+
+```ts
+// ─── NgRx Classic (users.reducer.ts) ───────────────────────────────────────
+export interface UsersState {
+  users: User[];
+  clonedUsers: Record<string, User>;
+  stats: Record<string, number>;
+  currentPage: number; pageSize: number; totalItems: number;
+  usersLoading: boolean; usersError: string | null;
+  addLoading: boolean; addError: string | null;
+  // ... one loading+error flag per operation, manually maintained
+}
+
+// ─── Your SignalStore (user.store.ts) ───────────────────────────────────────
+type State = { users: User[]; clonedUsers: { [id: string]: User }; stats: {...} };
+withState(initialState),
+withPagination({ initialPage: 1, initialPageSize: 5 }),  // plugin handles pagination fields
+withCallState({ collection: 'users' })                    // plugin handles all loading/error flags
+```
+
+SignalStore uses plugins to avoid repeating boilerplate state fields for every operation.
+
+---
+
+**2. Triggering an operation**
+
+```ts
+// ─── NgRx Classic ───────────────────────────────────────────────────────────
+// In users.actions.ts:
+export const loadUsers = createAction('[Users] Load Users', props<{ page?: number; size?: number }>());
+
+// In component:
+this.store.dispatch(loadUsers({ page: 1, size: 5 }));
+
+// ─── Your SignalStore ────────────────────────────────────────────────────────
+// In component:
+this.store.loadUsers({ page: 1, rows: 5 });
+// loadUsers IS the method directly \u2014 no action object needed
+```
+
+---
+
+**3. Handling async work (the most important part)**
+
+```ts
+// ─── NgRx Classic (users.effects.ts) ───────────────────────────────────────
+loadUsers$ = createEffect(() =>
+  this.actions$.pipe(           // listen to ALL dispatched actions globally
+    ofType(UsersActions.loadUsers),
+    debounceTime(300),
+    switchMap(({ page = 1, size = 5 }) =>
+      this.usersService.getUsers(page, size).pipe(
+        map(response => UsersActions.loadUsersSuccess({ ...response })), // dispatch success action
+        catchError(err => of(UsersActions.loadUsersFailure({ error })))  // dispatch failure action
+      )
+    )
+  )
+);
+
+// ─── Your SignalStore (user.store.ts) ────────────────────────────────────────
+const loadUsers = rxMethod<PaginatorState | void>(
+  pipe(                         // same operators, but self-contained in the method
+    tap(() => setUsersLoading()),
+    debounceTime(300),
+    switchMap(({ page = 1, rows = 5 } = {}) =>
+      userService.getUsers(page, rows).pipe(
+        tapResponse({
+          next: response => { updateState(...); setUsersLoaded(); }, // update state directly
+          error: err => { toast.error(...); setUsersError(...); }    // no action dispatch needed
+        })
+      )
+    )
+  )
+);
+```
+
+Key difference: In NgRx classic, the effect dispatches **action objects** and the reducer handles the state. In your store, `rxMethod` updates state **directly** via `updateState()` \u2014 no middleman.
+
+---
+
+**4. Updating state**
+
+```ts
+// ─── NgRx Classic (users.reducer.ts) ───────────────────────────────────────
+(on(UsersActions.loadUsersSuccess, (state, { users, totalItems, currentPage, pageSize }) => ({
+  ...state, // spread old state (NEVER mutate directly \u2014 Redux rule)
+  users,
+  totalItems,
+  currentPage,
+  pageSize,
+  usersLoading: false,
+  usersError: null,
+})),
+  // ─── Your SignalStore (user.store.ts) ────────────────────────────────────────
+  updateState(state, 'Users: Load Success', {
+    users: response.data,
+    currentPage: page,
+    pageSize: rows,
+    totalItems: response.meta.totalItems,
+  }));
+setUsersLoaded(); // sets the loading flag via withCallState
+```
+
+Same concept \u2014 different syntax. Both produce a new state object.
+
+---
+
+**5. Derived/computed state**
+
+```ts
+// ─── NgRx Classic (users.selectors.ts) ─────────────────────────────────────
+export const selectHasUsers = createSelector(
+  selectAllUsers,
+  users => users.length > 0 // memoized: only re-runs if selectAllUsers changes
+);
+
+// In component: this.store.select(selectHasUsers) → Observable<boolean>
+
+// ─── Your SignalStore (user.store.ts) ────────────────────────────────────────
+withComputed(({ users }) => ({
+  hasUsers: computed(() => users().length > 0), // memoized: only re-runs if users() changes
+}));
+
+// In component: this.store.hasUsers() → boolean  (synchronous, no subscribe needed)
+```
+
+---
+
+**6. Sync operations (no HTTP)**
+
+```ts
+// ─── NgRx Classic ───────────────────────────────────────────────────────────
+// Action in users.actions.ts:
+export const startEditing = createAction('[Users] Start Editing', props<{ user: User }>());
+
+// Reducer handles it directly (NO effect \u2014 pure sync, no async needed):
+on(UsersActions.startEditing, (state, { user }) => ({
+  ...state,
+  clonedUsers: { ...state.clonedUsers, [user.id]: structuredClone(user) },
+})),
+
+// ─── Your SignalStore (user.store.ts) ────────────────────────────────────────
+// Just a regular method \u2014 no rxMethod, no action, no reducer:
+const startEditing = (user: User) => {
+  updateState(state, 'User: Start Editing', {
+    clonedUsers: { ...state.clonedUsers(), [user.id]: structuredClone(user) },
+  });
+};
+```
+
+---
+
+**The big picture summary:**
+
+| Concept           | NgRx Classic                                   | Your SignalStore                   |
+| ----------------- | ---------------------------------------------- | ---------------------------------- |
+| State shape       | `interface` + `initialState` + `createReducer` | `withState()` + plugins            |
+| Trigger operation | `store.dispatch(action)`                       | call method directly               |
+| Async/HTTP        | `createEffect` in separate class               | `rxMethod` inside store            |
+| Update state      | `on(action, reducer fn)` → new object          | `updateState(state, label, patch)` |
+| Derived state     | `createSelector` → Observable                  | `withComputed` → Signal            |
+| Read in component | `store.select(selector).subscribe()`           | `store.signalName()`               |
+| Boilerplate       | High — 4 files per feature                     | Low — 1 file                       |
+| DevTools          | Redux DevTools                                 | `withDevtools('Users Store')`      |
+| Debugging         | Every action logged by name                    | Every `updateState` label logged   |
+
+> _"Both implement the same Redux unidirectional data flow: trigger → async work → state update → UI re-renders. SignalStore just collapses the 4-file structure into one, and replaces Observable subscriptions with signals you read directly."_
+
+---
+
+### Redux DevTools — browser debugging
+
+**Install:** Chrome/Firefox extension → "Redux DevTools"
+
+Once installed, open DevTools → "Redux" tab.
+
+**What you see with NgRx Classic:**
+
+- Every dispatched action appears in the left panel by name: `[Users] Load Users`, `[Users] Load Users Success`
+- Click any action → see the **exact state diff** (what changed)
+- **Time-travel**: click any past action → the state rewinds to that point
+- See the full state tree at any moment
+
+**What you see with SignalStore + `withDevtools('Users Store')`:**
+
+- Every `updateState(state, 'label', patch)` call appears as an action by its label: `Users Store/User: Load Users Success`
+- Same state diff and time-travel — same DevTools experience
+- The string in `withDevtools('Users Store')` is the namespace prefix you see in the panel
+
+**In your project:**
+
+```ts
+// user.store.ts — this line wires up the DevTools:
+(withDevtools('Users Store'),
+  // Then every updateState call becomes a logged action:
+  updateState(state, 'User: Load Users Success', { users: result.content }));
+// → shows as: "Users Store/User: Load Users Success" in DevTools
+```
+
+> _"I use Redux DevTools to debug state transitions. If a user list isn't updating, I open the Redux tab, find the last dispatched action, and check the state diff — I can see immediately whether the state was actually updated or whether the component isn't reading from the right signal."_
+
+---
 
 > RxJS is everywhere in Angular because async operations return Observables:
 >
@@ -486,15 +1101,15 @@ ngOnInit() {
 
 ### "You receive a domain-related error — what could cause it?"
 
-> This likely means one of:
+> **Browser-side Windows Integrated Auth failure.** The server expects NTLM/Kerberos (`401 WWW-Authenticate: Negotiate`) and the browser can't complete the handshake.
 
-1. **CORS** — your app is on `app.example.com`, API is on `api.other.com` → browser blocks it. Fix: server adds `Access-Control-Allow-Origin` header.
-2. **Mixed content** — HTTPS page loading HTTP resource. Browser blocks it.
-3. **Wrong base URL** — API URL in environment config points to wrong domain.
-4. **Expired SSL cert** — HTTPS fails because certificate is invalid.
-5. **DNS mismatch** — domain doesn't resolve to expected IP (misconfigured DNS, old cache).
+1. **Off VPN / wrong network** — machine can't reach the domain controller to get a Kerberos ticket
+2. **DNS failure** — browser can't resolve the corporate API hostname
+3. **Stale cached credentials** — browser presents wrong domain creds, server rejects them
+4. **Machine not domain-joined** — no domain identity to present
+5. **Ticket expired** — Kerberos session expired, re-auth required
 
-> _"First I'd check the browser console — it usually tells you exactly which domain caused the error and whether it's CORS, mixed content, or a certificate issue. Then I'd check the network tab to see the full request/response."_
+> _"It's a Windows Integrated Auth error in the browser — the server demands NTLM or Kerberos but the browser can't complete it. First check VPN, then clear cached credentials."_
 
 ---
 
@@ -519,91 +1134,10 @@ effect(() => console.log(count())); // side effect when signal changes
 
 ---
 
-### New control flow structures (Angular 17+)?
-
-> Before: structural directives (`*ngIf`, `*ngFor`, `*ngSwitch`)
-> After: built-in block syntax — faster, no imports needed, better type narrowing
-
-```html
-<!-- @if / @else if / @else — replaces *ngIf -->
-@if (user.role === 'admin') {
-<app-admin-panel />
-} @else if (user.role === 'user') {
-<app-dashboard />
-} @else {
-<app-login />
-}
-
-<!-- @for — replaces *ngFor, track is MANDATORY -->
-@for (user of users(); track user.id) {
-<app-user-card [user]="user" />
-} @empty {
-<p>No users found.</p>
-<!-- built-in empty state — no extra *ngIf needed! -->
-}
-
-<!-- @switch — replaces *ngSwitch -->
-@switch (status) { @case ('active') { <span class="green">Active</span> } @case ('inactive') { <span class="red">Inactive</span> } @default { <span>Unknown</span> } }
-
-<!-- @defer — replaces manual lazy loading -->
-@defer (on viewport) {
-<app-heavy-chart />
-} @placeholder { <app-skeleton /> }
-```
-
-> **Key advantage of `@for` over `*ngFor`:** `@empty` block is built in — no need for a separate `*ngIf="users.length === 0"`. Also `track` is required, which enforces performance best practice.
-
----
-
-## ❓ Remaining Questions (Not Yet Covered)
-
-### "Ha usato anche altri linguaggi?" — Other languages?
-
-> _"My main language is TypeScript, which is a superset of JavaScript — so yes, JavaScript daily. For the backend API in my project I use Node.js with Hono (a lightweight HTTP framework), so I'm comfortable with server-side JS too. I've read C# and .NET code but haven't written production .NET."_
-
----
-
-### "Hai visto la parte del JDx?" — Have you seen the JD / tech spec?
-
-> This is asking if you've read the **job description** carefully (JD = Job Description).
-> _"Yes, I've read the requirements carefully. The parts that align most with my experience are [mention 2-3 specific things from the JD — Angular, NgRx, RxJS, TypeScript]."_
-
----
-
-### "Usavate la stessa versione di Angular?" — Same Angular version in the team?
-
-> They want to know if your team had a consistent Angular version or if you worked across versions.
-> _"Yes, we kept the project on a consistent version. We are currently on Angular 21. I've also seen projects on Angular 16-17 during the transition period to standalone components and signals. Version alignment matters for consistent APIs — for example, control flow syntax (`@if`, `@for`) requires Angular 17+."_
-
----
-
-### "Hai usato JavaScript?" — Have you used JavaScript?
-
-> _"TypeScript is my primary language, which compiles to JavaScript. So yes — everything I write is JavaScript at runtime. I understand closures, prototypes, the event loop, and async patterns (Promises, async/await). The browser runs JavaScript, not TypeScript."_
-
----
-
 ### "Cos'è la cosa più importante?" — What is the most important thing?
 
 > This question **follows after CORS** in the list, so they're asking: what's the most important thing to know about CORS?
 >
-> _"The most important thing is that **CORS is enforced by the browser, not the server**. That means if you get a CORS error, the fix is always on the **server side** — adding the right `Access-Control-Allow-Origin` headers. The Angular app itself cannot fix a CORS error. And `curl`/Postman will never show CORS errors because they're not browsers."_
+> _"The most important thing is that **CORS is enforced by the browser, not the server**. That means if you get a CORS error, the fix is always on the **server side** — adding the right `Access-Control-Allow-Origin` headers. The Angular app itself cannot fix a CORS error. Non-browser tools never show CORS errors because they're not subject to browser security policies."_
 
 ---
-
-### "Ti è mai capitato di vedere applicativi .NET?" — Ever seen .NET applications?
-
-> _"Yes — I've worked alongside .NET backends. The Angular app consumed REST APIs built in ASP.NET Core. I could read C# code to understand the API contracts and data models, and I've debugged integration issues between the Angular frontend and .NET backend (mostly CORS config and authentication token handling). I haven't written .NET myself."_
-
----
-
-### "Cos'è la cosa più difficile che hai dovuto affrontare?" — Hardest technical challenge?
-
-> Prep your own answer — but a strong template:
-> _"Managing complex async state with race conditions: when a user rapidly changes pagination, multiple HTTP requests were in-flight simultaneously. I solved it by using NgRx SignalStore with `rxMethod` + `switchMap`, which automatically cancels the previous request when a new one starts. I also added per-operation loading/error state (`withCallState`) so any operation failure doesn't affect the others."_
-
----
-
-### "Dove risiedi?" — Where do you live?
-
-> Personal — just answer honestly.
