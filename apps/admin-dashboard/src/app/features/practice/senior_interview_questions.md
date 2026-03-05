@@ -241,3 +241,116 @@ A leaked `Subscription` often has a large **retained size** because it holds ref
 | `DeepReadonly` or recursive types | _"Three-branch conditional type: array check with `infer`, object check with mapped type, primitive passthrough."_ Draw it if you have a whiteboard. |
 | Big-O / HashMap                   | _"Map.get is O(1) vs Array.find O(n). I cache pages in a Map keyed by page number."_                                                                 |
 | Memory/performance debugging      | _"Heap snapshot comparison in DevTools Memory tab. I look at retained size delta after destroying the component."_                                   |
+| URL not loading                   | _"I follow a layered protocol: network → server → app → code — starting from the outside."_                                                          |
+| NgRx SignalStore vs Classical     | _"Same Redux principles, different API. SignalStore reduces boilerplate with signals; classical NgRx separates Actions/Reducer/Effects/Selectors."_  |
+
+---
+
+## 5. "You go to a URL and the page doesn't load" — Debugging Protocol
+
+> This question tests systematic thinking. They want a layered, outside-in approach, not random guessing.
+
+### The 5-layer protocol (say this out loud in order)
+
+```
+Layer 1 — NETWORK
+  □ Is the device online? Can I ping another site?
+  □ Open DevTools → Network tab → is the request being made at all?
+  □ HTTP status code? (404 / 500 / 502 / CORS error / pending/cancelled?)
+  □ DNS issue? Try the IP directly, or flush DNS cache.
+
+Layer 2 — SERVER / PROXY
+  □ Is the backend running? Check server logs.
+  □ Is nginx/proxy correctly routing to the app?
+  □ If 502 Bad Gateway → the server is up but the app behind it is down.
+  □ If 504 Gateway Timeout → the app is responding too slowly.
+
+Layer 3 — ANGULAR APP (if the request reaches the server)
+  □ Is the Angular router matching the URL? Check app.routes.ts.
+  □ Is the route lazy-loaded? Is the chunk loading (check Network tab for .js files)?
+  □ Did a route guard block navigation? Add console logs to the guard.
+  □ Is there an error in the browser console? (Usually the fastest clue)
+
+Layer 4 — CODE
+  □ Does the component exist and is it imported?
+  □ Is there a JavaScript error in ngOnInit or the constructor?
+  □ Is an HTTP call failing and crashing the component?
+  □ Check the console for unhandled promise rejections or Observable errors.
+
+Layer 5 — ENVIRONMENT
+  □ Is this prod/staging only? Could be a build-time env variable missing.
+  □ Base href wrong? (Angular routing on refresh often fails without base href)
+  □ Server not configured for HTML5 routing? (nginx must redirect all paths to index.html)
+```
+
+### The specific Angular/SPA issue they usually want to hear
+
+```
+Problem: User navigates to /users/42 directly in the browser.
+         Works when navigating from within the app, but NOT on hard refresh.
+
+Cause:   The server returns 404 for /users/42 because that path doesn't
+         exist on disk — it's an Angular client-side route.
+
+Fix (nginx):
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+  ↑ "If the file doesn't exist, serve index.html instead"
+  Angular's router then handles the URL client-side.
+```
+
+### One-line answer for interviews
+
+> _"I work from the outside in: network → server → Angular router → code. I start with the DevTools Network tab to see if the request is even being made and what status it returns, then work inward from there. For Angular specifically I check the router config, lazy-loaded chunks, and guards."_
+
+---
+
+## 6. NgRx SignalStore (your code) vs Classical NgRx (Redux)
+
+> Your project uses **NgRx SignalStore** (modern). Classical NgRx uses the Redux pattern. Same library family — different API. Know both.
+
+### Concept mapping
+
+| Classical NgRx             | Your SignalStore                    | What it does           |
+| -------------------------- | ----------------------------------- | ---------------------- |
+| `createAction()`           | calling `withMethods()` fn directly | Describes an event     |
+| `createReducer()` + `on()` | `withState()` + `updateState()`     | Updates state          |
+| `createEffect()`           | `rxMethod()`                        | Async side effects     |
+| `createSelector()`         | `withComputed()` + `computed()`     | Derived/cached state   |
+| `store.dispatch(action)`   | `store.methodName(payload)`         | Trigger a state change |
+| `store.select(selector)`   | `store.signalName()`                | Read state             |
+
+### Classical NgRx data flow (Redux)
+
+```
+Component → store.dispatch(loadUsers({page:1}))
+                ↓
+          Effect listens (ofType(loadUsers))
+                ↓
+          HTTP call → success/failure
+                ↓
+          dispatch(loadUsersSuccess({ users }))
+                ↓
+          Reducer: on(loadUsersSuccess) → return { ...state, users }
+                ↓
+          Selector re-computes → Component re-renders
+```
+
+### SignalStore data flow (your project)
+
+```
+Component → store.loadUsers({ page: 1, rows: 5 })
+                ↓
+          rxMethod pipe runs (debounceTime, switchMap)
+                ↓
+          HTTP call → tapResponse (next/error)
+                ↓
+          updateState(state, 'Load Success', { users: [...] })
+                ↓
+          Signals update → Component re-renders automatically
+```
+
+### The interview answer
+
+> _"Both implement unidirectional data flow — components trigger an action/method, state updates, the component re-renders. Classical NgRx separates this into four explicit concepts: Actions, Reducers, Effects, and Selectors — more boilerplate, but very explicit about what's happening at each step. NgRx SignalStore is the modern evolution: `rxMethod` replaces Actions + Effects for most cases, `withComputed` replaces Selectors, and signals eliminate the need for `store.select()` + async pipe in templates. I chose SignalStore for my project because it's less boilerplate and integrates naturally with Angular's signal system, but I can explain the Redux pattern because the principles are identical."_
