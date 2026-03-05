@@ -127,6 +127,19 @@ export class Ex05FormApisComponent implements OnInit {
       bio: 'Frontend developer',
     };
 
+    this.form.setValue({
+      id: userFromApi.id,
+      name: userFromApi.name,
+      email: userFromApi.email,
+      role: userFromApi.role,
+      bio: userFromApi.bio,
+    });
+    this.form.patchValue({
+      role: userFromApi.role,
+    });
+
+    this.form.get('id')!.disable();
+
     // TODO 2a: Use setValue() to populate the form with the full user.
     // setValue requires ALL fields to be provided.
     /* TODO: this.form.setValue({ ... }) */
