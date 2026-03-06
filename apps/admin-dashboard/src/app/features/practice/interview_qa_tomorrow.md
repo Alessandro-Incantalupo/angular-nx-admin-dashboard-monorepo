@@ -814,6 +814,117 @@ User does something
 
 ---
 
+### Is SignalStore using the Redux pattern?
+
+> **No. It uses the Service / Repository pattern (Facade).**
+
+Here is the key difference you should explain:
+
+**1. Wait, what does `dispatch` actually do then?**
+
+- **Redux (Event Bus):** Calling `store.dispatch(loadUsers())` does **NOT** contain an HTTP call. It does absolutely nothing except shout a message on a global loudspeaker: `{"type": "[Users] Load Users"}`. The component doesn't know who will answer. Somewhere else, an _Effect_ is listening, hears the shout, and does the actual HTTP call.
+- **SignalStore (Direct Method):** When you call `store.loadUsers()`, that method _contains the service call directly_ inside `rxMethod`. You are giving a direct order, not shouting on a loudspeaker.
+
+**2. The Missing Reducer**
+
+- **Redux:** Uses isolated "pure functions" (Reducers) that listen to the global event stream and return a new state object.
+- **SignalStore:** Imperatively mutates state inside the method itself using `patchState`. There is no separate reducer file.
+
+> _"SignalStore removes the heavy boilerplate of Actions and Reducers while keeping the reactivity benefits via Signals. I prefer it because keeping everything co-located in one file is much faster to write and easier to read, even though you sacrifice the global event timeline of Redux DevTools where every `dispatch` is logged."_
+
+---
+
+### What is a Pure Function? (And why does Redux use them?)
+
+> A pure function has two absolute rules:
+>
+> 1. **Same input = same output:** It always returns the exact same result for the same arguments.
+> 2. **No side effects:** It doesn't modify anything outside itself (no API calls, no DOM changes, no mutating the arguments).
+
+```ts
+// ❌ IMPURE: Modifies external state (side effect)
+let total = 0;
+function add(x) {
+  total += x;
+  return total;
+}
+
+// ❌ IMPURE: Output changes even if input is the same
+function getRandom(x) {
+  return x + Math.random();
+}
+
+// ✅ PURE: Always predictable, no side effects
+function multiply(a, b) {
+  return a * b;
+}
+```
+
+> **Why does Redux (Classical NgRx) care?**
+> Reducers **must** be pure functions. They take `(oldState, action)` and return `newState`. Because they are pure, they are perfectly predictable and incredibly easy to unit test — you don't need to mock services or HTTP calls to test a reducer.
+
+---
+
+### Imperative vs Declarative programming?
+
+> **Imperative = HOW to do it.** You write step-by-step instructions.
+> **Declarative = WHAT to do.** You describe the desired result, and the language/framework figures out the _how_.
+
+**Example 1: Vanilla JavaScript vs Array Methods**
+
+```ts
+const numbers = [1, 2, 3, 4, 5];
+
+// ❌ Imperative (HOW: create empty array, loop i=0, check if even, push)
+const evens = [];
+for (let i = 0; i < numbers.length; i++) {
+  if (numbers[i] % 2 === 0) {
+    evens.push(numbers[i]);
+  }
+}
+
+// ✅ Declarative (WHAT: just give me the filtered even numbers)
+const evensDecl = numbers.filter(n => n % 2 === 0);
+```
+
+**Example 2: Angular DOM manipulation**
+
+```ts
+// ❌ Imperative (HOW: grab the element by ID, change its style property)
+document.getElementById('btn').style.display = 'none';
+
+// ✅ Declarative (WHAT: the button should be shown ONLY if isActive is true)
+@if (isActive) {
+  <button>Click me</button>
+}
+```
+
+> _"In Angular and RxJS, we strive to write declarative code. Instead of manually showing/hiding spinners (imperative), we declare `withCallState()` and bind `@if(store.loading())` in the template (declarative). Instead of manually subscribing to HTTP and updating arrays (imperative), we use `switchMap` and `rxMethod` pipelines (declarative)."_
+
+---
+
+### What is ofType? (And why do I need it?)
+
+> `ofType` is the bouncer at the door of the club.
+
+In Redux, every time _any_ component dispatches _any_ action (Loading users, Opening a modal, Logging out), that message goes onto a **single, massive, global stream** called `actions$`.
+
+An Effect is constantly listening to that stream. Without `ofType`, the Effect would accidentally react to **every single action** in the app.
+
+`ofType` is an RxJS `filter()` specifically designed for NgRx actions. It checks the type of the action on the loudspeaker, and only lets it through if it matches the one you asked for.
+
+```ts
+// ✅ WITH ofType: Only reacts to the loudpeaker shout: "loadUsers"
+this.actions$.pipe(
+  ofType(loadUsers), // The Bouncer: "Only loadUsers actions get past this line."
+  switchMap(() => this.usersService.getUsers())
+);
+```
+
+> _"Redux needs `ofType` because everything happens on exactly one global stream (`actions$`), and you have to filter out the noise to find the specific message you care about. SignalStore doesn't need `ofType` because you don't have a global stream — you just call a single specific method (`rxMethod`), so there is no noise to filter out."_
+
+---
+
 ### Lifecycle of Actions and Effects in NgRx?
 
 ```
