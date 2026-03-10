@@ -1,11 +1,13 @@
+package com.admindashboard.config;
+
 import com.admindashboard.domain.User;
 import com.admindashboard.domain.enumeration.Role;
 import com.admindashboard.domain.enumeration.Status;
-
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.transaction.Transactional;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 public class DataInitializer {
