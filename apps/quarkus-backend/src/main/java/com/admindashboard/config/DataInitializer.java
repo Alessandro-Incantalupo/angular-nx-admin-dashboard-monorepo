@@ -1,10 +1,6 @@
-package com.admindashboard.config;
-
-import java.util.logging.Logger;
-
-import javax.management.relation.Role;
-
 import com.admindashboard.domain.User;
+import com.admindashboard.domain.enumeration.Role;
+import com.admindashboard.domain.enumeration.Status;
 
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
