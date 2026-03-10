@@ -1,63 +1,123 @@
+// =============================================================================
+// 1. PLUGINS: The "Special Powers" (Level 1b)
+// =============================================================================
+// Plugins add new abilities to your build system.
 plugins {
-	id 'java'
-    id 'io.quarkus'
-    id 'maven-publish'
-    id 'com.diffplug.spotless' version '8.3.0'
+    id 'java'             // Compiles and tests Java code.
+    id 'io.quarkus'       // The heart of the app: handles live coding and packaging.
+    id 'maven-publish'    // Allows packaging the app for deployment.
+    // Spotless: The perfectionist formatter. Ensures everyone's code looks identical.
+    id 'com.diffplug.spotless' version "${spotlessVersion}"
 }
 
+// =============================================================================
+// 2. REPOSITORIES: The "Shopping Mall"
+// =============================================================================
+// Where Gradle downloads the libraries you ask for.
 repositories {
-    mavenCentral()
-    mavenLocal()
+    mavenCentral()        // The world's largest store for Java libraries.
+    mavenLocal()          // Your computer's private pantry for local testing.
 }
 
+// =============================================================================
+// 3. DEPENDENCIES: The "Toolbelt"
+// =============================================================================
+// These are the actual building blocks of your application.
 dependencies {
+    // --- 🏛️ BOMs (Bill of Materials) ---
+    // These ensure all Quarkus tools use matching, compatible versions.
     implementation enforcedPlatform("${quarkusPlatformGroupId}:quarkus-mcp-server-bom:${quarkusPlatformVersion}")
-    implementation 'io.quarkus:quarkus-hibernate-orm-panache'
-    implementation 'io.quarkus:quarkus-smallrye-openapi'
-    implementation 'io.quarkus:quarkus-rest-jackson'
-    implementation 'io.quarkus:quarkus-jackson'
-    implementation 'io.quarkus:quarkus-jdbc-postgresql'
-    implementation 'io.quarkiverse.mcp:quarkus-mcp-server-http:1.10.2'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    implementation 'io.quarkus:quarkus-arc'
-    implementation 'io.quarkus:quarkus-rest'
-    testImplementation 'io.quarkus:quarkus-junit'
-    testImplementation 'io.rest-assured:rest-assured'
+
+    // --- 🗃️ Database & Data Access ---
+    implementation 'io.quarkus:quarkus-hibernate-orm-panache' // Natural Java-to-DB talk.
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'      // The driver for Postgres.
+    
+    // --- ✅ Validation ---
+    implementation 'io.quarkus:quarkus-hibernate-validator'  // Catch bad data early.
+
+    // --- 🗺️ MapStruct ---
+    // Automatically copies data between Entities and DTOs (The "Masks").
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    // --- 📞 Web & API ---
+    implementation 'io.quarkus:quarkus-rest-jackson'        // Handles JSON data.
+    implementation 'io.quarkus:quarkus-jackson'
+    implementation 'io.quarkus:quarkus-arc'                 // Dependency Injection.
+    implementation 'io.quarkus:quarkus-rest'                // The REST API engine.
+    
+    // --- 🩺 Observability ---
+    implementation 'io.quarkus:quarkus-smallrye-health'     // Monitoring: /management/health
+    implementation 'io.quarkus:quarkus-micrometer-registry-prometheus' // Metrics dashboard.
+
+    // --- 📖 Documentation ---
+    implementation 'io.quarkus:quarkus-smallrye-openapi'    // Auto-generates Swagger docs.
+
+    // --- 🤖 MCP (Model Context Protocol) ---
+    implementation "io.quarkiverse.mcp:quarkus-mcp-server-http:${mcpServerHttpVersion}"
+
+    // --- 🧪 Testing ---
+    testImplementation 'io.quarkus:quarkus-junit'           // The basic testing tool.
+    testImplementation 'io.rest-assured:rest-assured'       // Tests API calls specifically.
 }
 
+// =============================================================================
+// 4. PROJECT IDENTITY
+// =============================================================================
 group = 'com.admindashboard'
 version = '1.0.0-SNAPSHOT'
 
+// =============================================================================
+// 5. JAVA CONFIGURATION: The Foundation
+// =============================================================================
 java {
+    // Using Java 25: Bleeding-edge and high performance.
     sourceCompatibility = JavaVersion.VERSION_25
     targetCompatibility = JavaVersion.VERSION_25
 }
 
+// =============================================================================
+// 6. COMPILER RULES
+// =============================================================================
 compileJava {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << '-parameters'
+    options.encoding = 'UTF-8'                  // Supports all characters/emojis.
+    options.compilerArgs << '-parameters'       // Helps Quarkus "see" your variable names.
 }
 
 compileTestJava {
     options.encoding = 'UTF-8'
 }
 
+// =============================================================================
+// 7. PUBLISHING: The "Shipping Department"
+// =============================================================================
+// This section is for "The Library Scenario."
+// It handles packaging your app so other Java projects can use it as a tool.
+// NOTE: Since this is a standalone app in a monorepo, you might not use this 
+// daily, but it's kept here as a "State of the Art" standard for completeness.
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact jar
-		}
-	}
-}
-tasks.withType(GenerateModuleMetadata).configureEach {
-	suppressedValidationErrors.add('enforced-platform')
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
 }
 
+// 🛡️ Handles version conflicts between BOMs.
+tasks.withType(GenerateModuleMetadata).configureEach {
+    suppressedValidationErrors.add('enforced-platform')
+}
+
+// =============================================================================
+// 8. SPOTLESS: The Code Perfectionist
+// =============================================================================
 spotless {
     java {
         target 'src/*/java/**/*.java'
-        googleJavaFormat('1.28.0').aosp().reflowLongStrings()
-        removeUnusedImports()
+        // Enforces the official Google formatting style automatically.
+        googleJavaFormat(googleJavaFormatVersion).aosp().reflowLongStrings()
+        removeUnusedImports()                   // Cleans up unused lines at the top.
         trimTrailingWhitespace()
         endWithNewline()
     }
