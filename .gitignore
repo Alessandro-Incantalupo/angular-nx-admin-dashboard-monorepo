@@ -55,4 +55,4 @@ Thumbs.db
 vitest.config.*.timestamp*
 
 # JHipster Reference
-jhipster-reference/
+jhipster-quarkus-reference/
