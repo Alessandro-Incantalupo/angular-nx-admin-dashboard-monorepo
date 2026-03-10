@@ -36,7 +36,8 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "java.configuration.updateBuildConfiguration": "interactive"
 
   // Windows-specific performance optimizations
   // "files.watcherExclude": {

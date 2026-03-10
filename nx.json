@@ -68,6 +68,24 @@
         "ciTargetName": "test-ci",
         "testMode": "watch"
       }
+    },
+    {
+      "plugin": "@nxrocks/nx-quarkus",
+      "options": {
+        "buildTargetName": "build",
+        "installTargetName": "install",
+        "testTargetName": "test",
+        "cleanTargetName": "clean",
+        "formatTargetName": "format",
+        "applyFormatTargetName": "apply-format",
+        "checkFormatTargetName": "check-format",
+        "devTargetName": "dev",
+        "serveTargetName": "serve",
+        "remoteDevTargetName": "remote-dev",
+        "packageTargetName": "package",
+        "addExtensionTargetName": "add-extension",
+        "listExtensionsTargetName": "list-extensions"
+      }
     }
   ],
   "generators": {

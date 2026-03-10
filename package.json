@@ -71,6 +71,7 @@
     "@nx/vitest": "22.3.3",
     "@nx/web": "22.3.3",
     "@nx/workspace": "22.3.3",
+    "@nxrocks/nx-quarkus": "^9.0.1",
     "@playwright/test": "^1.57.0",
     "@schematics/angular": "21.0.0",
     "@swc-node/register": "~1.11.1",

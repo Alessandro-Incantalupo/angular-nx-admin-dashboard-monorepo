@@ -270,7 +270,6 @@ export const UsersStore = signalStore(
           userService.getUserStats().pipe(
             tapResponse({
               next: (stats: { [key: string]: number }) => {
-                console.log('Store: Stats Loaded from API', stats);
                 updateState(state, 'Stats: Loaded', {
                   stats,
                 });
