@@ -2,7 +2,9 @@ package com.admindashboard.web.rest;
 
 import com.admindashboard.service.UserService;
 import com.admindashboard.service.dto.UserDTO;
+import com.admindashboard.web.rest.errors.BadRequestAlertException;
 import com.admindashboard.web.rest.vm.PaginatedResponse;
+import com.admindashboard.web.rest.vm.ResponseWrapper;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -26,7 +28,8 @@ public class UserResource {
             @QueryParam("size") @DefaultValue("5") int size) {
 
         if (page < 1 || size < 1) {
-            throw new BadRequestException("Invalid pagination parameters");
+            throw new BadRequestAlertException(
+                    "Invalid pagination parameters", "user", "pagination");
         }
 
         long totalItems = userService.count();
@@ -56,7 +59,7 @@ public class UserResource {
     public Response getUser(@PathParam("id") UUID id) {
         return userService
                 .findOne(id)
-                .map(user -> Response.ok(user).build())
+                .map(user -> Response.ok(new ResponseWrapper<>(user)).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
@@ -65,7 +68,9 @@ public class UserResource {
         // We allow the client to send an ID (common in some SPAs),
         // but our service will ensure a clean persistence.
         UserDTO result = userService.save(userDTO);
-        return Response.status(Response.Status.CREATED).entity(result).build();
+        return Response.status(Response.Status.CREATED)
+                .entity(new ResponseWrapper<>(result))
+                .build();
     }
 
     @PUT
@@ -73,7 +78,7 @@ public class UserResource {
     public Response updateUser(@PathParam("id") UUID id, @Valid UserDTO userDTO) {
         return userService
                 .update(id, userDTO)
-                .map(result -> Response.ok(result).build())
+                .map(result -> Response.ok(new ResponseWrapper<>(result)).build())
                 .orElse(
                         Response.status(Response.Status.NOT_FOUND)
                                 .entity(Map.of("error", "User not found", "id", id))
@@ -85,7 +90,8 @@ public class UserResource {
     public Response deleteUser(@PathParam("id") UUID id) {
         boolean deleted = userService.delete(id);
         if (deleted) {
-            return Response.ok(Map.of("id", id, "status", "deleted")).build();
+            return Response.ok(new ResponseWrapper<>(Map.of("id", id, "status", "deleted")))
+                    .build();
         } else {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(Map.of("error", "User not found", "id", id))

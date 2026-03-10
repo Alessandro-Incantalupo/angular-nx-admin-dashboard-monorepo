@@ -34,10 +34,10 @@ dependencies {
     implementation 'io.quarkus:quarkus-jdbc-postgresql'      // The driver for Postgres.
 
     // --- 🗄️ Database Migrations (Level 3) ---
-    // Liquibase is "Git for your Database." 
+    // Liquibase is "Git for your Database."
     // It tracks every change to your tables so you can roll back or deploy safely.
     implementation 'io.quarkus:quarkus-liquibase'
-    
+
     // --- ✅ Validation ---
     implementation 'io.quarkus:quarkus-hibernate-validator'  // Catch bad data early.
 
@@ -51,7 +51,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-jackson'
     implementation 'io.quarkus:quarkus-arc'                 // Dependency Injection.
     implementation 'io.quarkus:quarkus-rest'                // The REST API engine.
-    
+
     // --- 🩺 Observability ---
     implementation 'io.quarkus:quarkus-smallrye-health'     // Monitoring: /management/health
     implementation 'io.quarkus:quarkus-micrometer-registry-prometheus' // Metrics dashboard.
@@ -61,6 +61,10 @@ dependencies {
 
     // --- 🤖 MCP (Model Context Protocol) ---
     implementation "io.quarkiverse.mcp:quarkus-mcp-server-http:${mcpServerHttpVersion}"
+
+    // --- 🚨 Error Handling (Level 3) ---
+    // RFC 7807 (Problem Details) using the JHipster-standard extension (Quarkiverse version).
+    implementation "io.quarkiverse.resteasy-problem:quarkus-resteasy-problem:${resteasyProblemVersion}"
 
     // --- 🧪 Testing ---
     testImplementation 'io.quarkus:quarkus-junit'           // The basic testing tool.
@@ -99,7 +103,7 @@ compileTestJava {
 // =============================================================================
 // This section is for "The Library Scenario."
 // It handles packaging your app so other Java projects can use it as a tool.
-// NOTE: Since this is a standalone app in a monorepo, you might not use this 
+// NOTE: Since this is a standalone app in a monorepo, you might not use this
 // daily, but it's kept here as a "State of the Art" standard for completeness.
 publishing {
     publications {

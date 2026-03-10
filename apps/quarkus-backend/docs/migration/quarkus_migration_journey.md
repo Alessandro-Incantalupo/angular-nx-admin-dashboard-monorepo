@@ -114,9 +114,12 @@ This is the final level of our current journey, focusing on stability and profes
 - **The "Git for DB"**: Every change is tracked in `src/main/resources/db/changelog/`.
 - **🧠 Need more?**: Check out the [Liquibase Deep Dive](./liquibase_deep_dive.md).
 
-### 🚨 2. Standardized Error Handling (Upcoming)
+### 🚨 2. Standardized Error Handling (RFC 7807)
 
-- **The Goal**: Unified error messages (RFC 7807) so the Angular frontend always knows exactly what went wrong.
+- **The Concept**: No more "Silent Fails." The backend now returns structured JSON errors.
+- **The Benefit**: Your Angular frontend knows exactly which field failed (e.g., "Email is invalid") instead of just guessing.
+- **🧠 Need more?**: Check out the [Error Handling Deep Dive](./error_handling_deep_dive.md).
+- **Comparing Patterns**: See [Bad vs. Good Patterns](./bad_vs_good_patterns.md) to understand the "Why".
 
 ---
 

@@ -10,6 +10,7 @@ import { provideTransloco } from '@jsverse/transloco';
 // import packageJson from '@root/package.json';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { BaseResponseInterceptor } from '@core/interceptors/base-response.interceptor';
+import { errorHandlerInterceptor } from '@core/interceptors/error-handler.interceptor';
 import { LoadingInterceptor } from '@core/interceptors/loading.interceptor';
 
 import { provideAngularSvgIcon } from 'angular-svg-icon';
@@ -32,6 +33,7 @@ export const appConfig: ApplicationConfig = {
         LoadingInterceptor,
         authInterceptor,
         BaseResponseInterceptor,
+        errorHandlerInterceptor, // Catch all backend errors
       ])
     ),
 

@@ -9,33 +9,52 @@ import { filter, map } from 'rxjs';
 // Token to whitelist APIs that should skip this interceptor
 export const WHITELISTED_API = new HttpContextToken<boolean>(() => false);
 
-// Main interceptor function
+/**
+ * BaseResponseInterceptor handles "Unwrapping" the Response Envelope.
+ *
+ * INTELLIGENT PATTERN: Conditional Unwrapping
+ * We check if the response looks like an envelope ({data, ...}).
+ * - If YES: We unwrap 'data' and present it to the service.
+ * - If NO: We pass the raw response through (supports direct entities or library calls).
+ */
 export const BaseResponseInterceptor: HttpInterceptorFn = (req, next) => {
-  // Skip interception if the request is whitelisted
   if (req.context.get(WHITELISTED_API)) return next(req);
 
   return next(req).pipe(
-    // Only process HttpResponse events
     filter(
-      (event): event is HttpResponse<BaseResponse<unknown>> =>
-        event instanceof HttpResponse
+      (event): event is HttpResponse<any> => event instanceof HttpResponse
     ),
     map(resp => {
-      // Throw if the response body is missing
-      if (!resp.body) throw new Error('No body in response');
-      const { data, code, message } = resp.body;
+      const body = resp.body;
 
-      // Throw if backend signals an error (code -1 or >0 with a message)
-      if (
-        typeof message === 'string' &&
-        typeof code === 'number' &&
-        (code === -1 || code > 0)
-      ) {
-        throw new Error(message ?? 'Unknown error');
+      // Smart Check: Does it look like an envelope we should unwrap?
+      if (body && typeof body === 'object' && 'data' in body) {
+        const { data, code, message } = body;
+
+        // Legacy check for app-level error codes inside a 200 OK
+        if (
+          typeof message === 'string' &&
+          Number.isInteger(code) &&
+          (code === -1 || (code !== null && code > 0))
+        ) {
+          throw new Error(message ?? 'Backend signaled an application error');
+        }
+
+        /**
+         * INTELLIGENT PATTERN: Selective Unwrapping
+         * If it's a PaginatedResponse (contains 'meta'), we DON'T unwrap 'data'
+         * because the component needs the metadata (totalItems, etc).
+         */
+        if ('meta' in body) {
+          return resp;
+        }
+
+        // For simple envelopes, return the unwrapped data
+        return resp.clone({ body: data });
       }
 
-      // Unwrap the data property for downstream consumers
-      return resp.clone({ body: resp.body });
+      // If not an envelope, pass through the raw body (Standard REST / entities)
+      return resp;
     })
   );
 };

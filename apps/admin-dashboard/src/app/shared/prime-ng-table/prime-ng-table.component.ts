@@ -1,5 +1,5 @@
 import { User } from '@admin-dashboard-nx-monorepo/models';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,6 +15,8 @@ import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
+
 @Component({
   selector: 'app-prime-ng-table',
   templateUrl: './prime-ng-table.component.html',
@@ -28,6 +30,8 @@ import { ToastModule } from 'primeng/toast';
     InputTextModule,
     FormsModule,
     Paginator,
+    TooltipModule,
+    TitleCasePipe,
   ],
   providers: [MessageService],
   styles: ``,
