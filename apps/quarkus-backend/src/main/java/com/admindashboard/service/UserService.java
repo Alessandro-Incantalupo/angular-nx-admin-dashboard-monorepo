@@ -13,6 +13,15 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Level 2: Service Layer (The Brain)
+ *
+ * <p>This class handles all the business logic and database interactions. It is separated from the
+ * API layer (UserResource) to keep the code organized.
+ *
+ * <p>PostgreSQL Tip: We use HQL (Hibernate Query Language) for sorting. "order by createdDate desc"
+ * ensures newest users appear first in your Angular UI.
+ */
 @ApplicationScoped
 @Transactional
 public class UserService {

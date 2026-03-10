@@ -32,6 +32,11 @@ dependencies {
     // --- 🗃️ Database & Data Access ---
     implementation 'io.quarkus:quarkus-hibernate-orm-panache' // Natural Java-to-DB talk.
     implementation 'io.quarkus:quarkus-jdbc-postgresql'      // The driver for Postgres.
+
+    // --- 🗄️ Database Migrations (Level 3) ---
+    // Liquibase is "Git for your Database." 
+    // It tracks every change to your tables so you can roll back or deploy safely.
+    implementation 'io.quarkus:quarkus-liquibase'
     
     // --- ✅ Validation ---
     implementation 'io.quarkus:quarkus-hibernate-validator'  // Catch bad data early.

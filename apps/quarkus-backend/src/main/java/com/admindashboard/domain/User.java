@@ -8,6 +8,14 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Level 2 & 3: Database Entity
+ *
+ * <p>- Level 2: This is the "Internal Truth" of your data in PostgreSQL. - Level 3: The schema of
+ * this table is now MANAGED BY LIQUIBASE. Check
+ * src/main/resources/db/changelog/01_initial_schema.xml to see how this table is officially defined
+ * in the database.
+ */
 @Entity
 @RegisterForReflection
 @Table(name = "ad_user")
