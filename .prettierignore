@@ -45,3 +45,8 @@ mocks/
 # ignore IDE/editor files
 .idea/
 .vscode/
+ 
+# ─────────────────────────────
+# Java files (handled by Spotless)
+# ─────────────────────────────
+*.java

@@ -37,7 +37,13 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java",
+    "editor.formatOnSave": true
+  },
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+  "java.format.settings.profile": "GoogleStyle",
 
   // Windows-specific performance optimizations
   // "files.watcherExclude": {

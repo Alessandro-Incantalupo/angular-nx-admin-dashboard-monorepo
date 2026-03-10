@@ -2,5 +2,14 @@
   "name": "quarkus-backend",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/quarkus-backend/src",
+  "targets": {
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew spotlessApply",
+        "cwd": "apps/quarkus-backend"
+      }
+    }
+  },
   "tags": []
 }

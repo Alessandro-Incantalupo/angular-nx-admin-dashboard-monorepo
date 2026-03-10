@@ -1,5 +1,7 @@
 package com.admindashboard.domain.enumeration;
 
 public enum Role {
-    admin, user, guest
+    admin,
+    user,
+    guest
 }

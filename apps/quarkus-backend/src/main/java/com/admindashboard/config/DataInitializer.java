@@ -20,17 +20,16 @@ public class DataInitializer {
             LOGGER.info("Seeding database with initial users...");
 
             User.persist(
-                new User("Alice Developer", "alice@example.com", Role.admin, Status.active),
-                new User("Bob Designer", "bob@example.com", Role.user, Status.inactive),
-                new User("Charlie Manager", "charlie@example.com", Role.admin, Status.active),
-                new User("Diana Analyst", "diana@example.com", Role.user, Status.active),
-                new User("Eve Tester", "eve@example.com", Role.user, Status.inactive),
-                new User("Frank Engineer", "frank@example.com", Role.user, Status.active),
-                new User("Grace Architect", "grace@example.com", Role.admin, Status.active),
-                new User("Hank Consultant", "hank@example.com", Role.user, Status.inactive),
-                new User("Ivy Developer", "ivy@example.com", Role.user, Status.active),
-                new User("Jack Support", "jack@example.com", Role.user, Status.inactive)
-            );
+                    new User("Alice Developer", "alice@example.com", Role.admin, Status.active),
+                    new User("Bob Designer", "bob@example.com", Role.user, Status.inactive),
+                    new User("Charlie Manager", "charlie@example.com", Role.admin, Status.active),
+                    new User("Diana Analyst", "diana@example.com", Role.user, Status.active),
+                    new User("Eve Tester", "eve@example.com", Role.user, Status.inactive),
+                    new User("Frank Engineer", "frank@example.com", Role.user, Status.active),
+                    new User("Grace Architect", "grace@example.com", Role.admin, Status.active),
+                    new User("Hank Consultant", "hank@example.com", Role.user, Status.inactive),
+                    new User("Ivy Developer", "ivy@example.com", Role.user, Status.active),
+                    new User("Jack Support", "jack@example.com", Role.user, Status.inactive));
 
             LOGGER.info("Seeding complete. Total users: " + User.count());
         } else {

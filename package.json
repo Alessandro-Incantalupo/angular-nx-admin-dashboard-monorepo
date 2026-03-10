@@ -12,6 +12,9 @@
   "lint-staged": {
     "*.{ts,js,json,md,html,css,scss}": [
       "prettier --write"
+    ],
+    "*.java": [
+      "bash -c 'cd apps/quarkus-backend && ./gradlew spotlessApply'"
     ]
   },
   "private": true,

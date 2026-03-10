@@ -12,9 +12,7 @@ import java.util.UUID;
 @Table(name = "ad_user")
 public class User extends PanacheEntityBase {
 
-    @Id
-    @GeneratedValue
-    public UUID id;
+    @Id @GeneratedValue public UUID id;
 
     @Column(nullable = false)
     public String name;

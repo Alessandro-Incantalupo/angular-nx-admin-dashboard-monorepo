@@ -1,7 +1,8 @@
 plugins {
 	id 'java'
     id 'io.quarkus'
-	id 'maven-publish'
+    id 'maven-publish'
+    id 'com.diffplug.spotless' version '8.3.0'
 }
 
 repositories {
@@ -50,4 +51,14 @@ publishing {
 }
 tasks.withType(GenerateModuleMetadata).configureEach {
 	suppressedValidationErrors.add('enforced-platform')
+}
+
+spotless {
+    java {
+        target 'src/*/java/**/*.java'
+        googleJavaFormat('1.28.0').aosp().reflowLongStrings()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }

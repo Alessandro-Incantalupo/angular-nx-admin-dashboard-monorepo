@@ -18,7 +18,7 @@ public class UserResource {
     public PaginatedResponse<User> getAllUsers(
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("size") @DefaultValue("5") int size) {
-        
+
         if (page < 1 || size < 1) {
             throw new BadRequestException("Invalid pagination parameters");
         }
@@ -36,8 +36,12 @@ public class UserResource {
     public Response getStats() {
         // Simple map generation for role stats
         List<User> users = User.listAll();
-        return Response.ok(users.stream()
-                .collect(java.util.stream.Collectors.groupingBy(u -> u.role, java.util.stream.Collectors.counting())))
+        return Response.ok(
+                        users.stream()
+                                .collect(
+                                        java.util.stream.Collectors.groupingBy(
+                                                u -> u.role,
+                                                java.util.stream.Collectors.counting())))
                 .build();
     }
 
@@ -53,7 +57,9 @@ public class UserResource {
     @Transactional
     public Response createUser(User user) {
         if (user.id != null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("A new user cannot already have an ID").build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("A new user cannot already have an ID")
+                    .build();
         }
         user.persist();
         return Response.status(Response.Status.CREATED).entity(user).build();
@@ -64,13 +70,14 @@ public class UserResource {
     @Transactional
     public Response updateUser(@PathParam("id") UUID id, User user) {
         return User.<User>findByIdOptional(id)
-                .map(existingUser -> {
-                    existingUser.name = user.name;
-                    existingUser.email = user.email;
-                    existingUser.role = user.role;
-                    existingUser.status = user.status;
-                    return Response.ok(existingUser).build();
-                })
+                .map(
+                        existingUser -> {
+                            existingUser.name = user.name;
+                            existingUser.email = user.email;
+                            existingUser.role = user.role;
+                            existingUser.status = user.status;
+                            return Response.ok(existingUser).build();
+                        })
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
@@ -85,6 +92,7 @@ public class UserResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+
     @POST
     @Path("/reset")
     @Transactional
