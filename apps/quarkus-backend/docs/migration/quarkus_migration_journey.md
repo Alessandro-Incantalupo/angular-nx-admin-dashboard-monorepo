@@ -18,25 +18,6 @@ If you've never used production Java, think of **Quarkus** as the modern, high-s
 
 At the top level of `apps/quarkus-backend`, we see the "Infrastructure" that makes it a Java/Nx project.
 
-### 1. `build.gradle` (The Dependency Manager)
-
-This is your **shopping list**. It tells Java which "libraries" (code written by others) you want to use.
-
-- **Plugins**: These are the "Engine" parts. `io.quarkus` is the main one.
-- **Dependencies**: These are the "Tools." We have tools for talking to databases (Hibernate) and tools for sending JSON (Jackson).
-
-### 2. `project.json` (The Nx Bridge)
-
-This makes your Java backend talk to **Nx**. It lets you run `nx serve quarkus-backend` just like any other project in the monorepo.
-
-### 3. `application.properties` (The Settings)
-
-This is your **Main Control Panel**. It's a simple text file where you set things like:
-
-- What port should the server run on? (e.g., `8081`)
-- What is the database address?
-- What are the names of our API routes?
-
 ---
 
 ### 🔍 Level 1 Deep Dive: The "Pro" Setup
@@ -61,18 +42,11 @@ Now that we've seen the basics, here is how we've upgraded the "Infrastructure" 
   - **`%dev`**: Settings for "Local Coding" (Port 8081).
   - **`%prod`**: Settings for "The Real World" (Port 8080, specific security).
 - **The Result**: The app "senses" its environment and adjusts its behavior automatically.
-- **🧠 Need more?**: Check out the [App Properties & Hibernate Deep Dive](./app_properties_deep_dive.md) for a breakdown of every complex setting.
+- **🧠 Need more?**: Check out the [App Properties Deep Dive](./app_properties_deep_dive.md).
 
 #### 📄 Level 1d: `settings.gradle` (The Project Bootloader)
 
-- **The Concept**: Runs **before** any other script.
-- **The Job**: It is the "Setup Phase." It tells Gradle where to find the main plugins and what the official Name of the project is.
-- **Why it's separate**: It separates the "How to build" (build.gradle) from "What is needed to start basic operations" (settings.gradle).
-
-#### 📄 Level 1e: `.gitignore` (The Privacy Guard)
-
-- **The Concept**: A list of files that should **never** be saved to Git.
-- **Why it matters**: It keeps giant folders like `.gradle/` or `build/` (which are auto-generated) out of your repository. This keeps your code light and fast.
+- **The Concept**: Runs **before** any other script. It sets up the Gradle build environment and identifies the project.
 
 ---
 
@@ -89,18 +63,40 @@ In Java, we call these **Entities**. They represent the **absolute reality** of 
 - **The Core Concept**: One Java file here = One Table in your Database.
 - **"The Truth"**: If you add a `String bio` field to `User.java`, the database will automatically be updated to have a "bio" column. The Java code **dictates** the database structure.
 
+#### 🎭 `service/dto/` (The "Public Mask")
+
+We don't send raw "Truth" (Entities) to the internet. We use **DTOs** (Data Transfer Objects).
+
+- **The Concept**: It's a filter. You might have 20 columns in the DB, but the frontend only needs 3. The DTO defines exactly those 3.
+- **Safety**: It prevents accidental leakage of private data (like passwords or internal notes).
+
+#### 🗺️ `service/mapper/` (The "Translator")
+
+How do you turn an Entity into a DTO?
+
+- **Tool**: **MapStruct**.
+- **The Concept**: It automatically generates the code to copy data between your internal Entity and your public DTO. It’s like an ultra-fast translator.
+
+#### 🧠 `service/` (The "Brain")
+
+This is where the **Business Logic** lives.
+
+- **The Concept**: Instead of putting logic inside the API (Resource), we put it here.
+- **Power**: This layer handles complex tasks like "Sort by newest first" or "Calculate user stats." It's the engine room of your app.
+- **🧠 Need more?**: Check out the [Level 2 Deep Dive](./level_2_architecture_deep_dive.md).
+
 #### 📞 `web/rest/` (The "API Doors")
 
 These are called **Resources** or **Controllers**.
 
 - **The Concept**: They are the **Receptionists** of your app. They sit by the "front door" (URLs like `/api/users`) and decide what happens when someone makes a request.
-- **How they work**: They look at a URL, find the right Java method, and "ask" the Database (The Truth) for information.
+- **Level 2 update**: They no longer touch the database directly; they just ask the **Service (Brain)** to do the work and then return the **DTO (Mask)** to the user.
 
 #### ⚡ `config/` (The "Startup")
 
 These are code files that run **only once** when the server starts up.
 
-- **Example**: `DataInitializer.java` is like an `init` script. It makes sure that when you first open the app, there are already some users in the database for you to see.
+- **Example**: `DataInitializer.java` makes sure that when you first open the app, there is already some data in the database for you to see.
 
 ---
 
@@ -108,17 +104,13 @@ These are code files that run **only once** when the server starts up.
 
 I've generated a proper **Quarkus JHipster Reference** in `jhipster-quarkus-reference` to see how the pros do it. Here is how it differs from our current "Scaffold":
 
-### 🏗️ Infrastructure (Level 1)
+### 🏗️ Architecture (Level 2)
 
-- **Centralized Versions**: The reference puts all versions in `gradle.properties` so you never have to hunt through `build.gradle`.
-- **Profiles**: It uses `%dev` and `%prod` in `application.properties` to switch settings automatically.
-- **Guardrails**: It includes tools like **Modernizer** (avoids old Java) and **Checkstyle** (enforces code beauty).
-
-### 🏛️ Architecture (Level 2)
-
-- **Service Layer**: It adds a `service/` folder so the "Receptionists" (Resources) don't have to do the heavy lifting.
-- **DTOs (The Masks)**: It uses a `dto/` folder to make sure private database data doesn't accidentally leak to the frontend.
-- **Migrations**: It uses **Liquibase** to track database changes officially rather than letting Hibernate "guess."
+- **✅ Service Layer**: We now have a `service/` folder so the "Receptionists" (Resources) don't have to do the heavy lifting.
+- **✅ DTOs (The Masks)**: We use a `dto/` folder to make sure private database data doesn't accidentally leak to the frontend.
+- **✅ Mappers (MapStruct)**: We use automated mapping to keep the code clean and fast.
+- **🧠 Need more?**: See the [Basic vs. JHipster Comparison](./architecture_comparison_jhipster.md).
+- **❌ Migrations**: We still need **Liquibase** to track database changes officially. This is our target for Level 3!
 
 ---
 

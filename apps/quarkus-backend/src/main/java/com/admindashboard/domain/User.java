@@ -5,6 +5,7 @@ import com.admindashboard.domain.enumeration.Status;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.persistence.*;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +28,16 @@ public class User extends PanacheEntityBase {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     public Status status;
+
+    @Column(name = "created_date", nullable = false, updatable = false)
+    public Instant createdDate;
+
+    @PrePersist
+    public void prePersist() {
+        if (createdDate == null) {
+            createdDate = Instant.now();
+        }
+    }
 
     public User() {}
 
