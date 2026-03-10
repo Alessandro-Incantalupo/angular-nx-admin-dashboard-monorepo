@@ -1,11 +1,25 @@
+// =============================================================================
+// Level 1d: settings.gradle - The Project "Bootloader"
+// =============================================================================
+// This file is the very FIRST thing Gradle reads. 
+// It sets up the environment and defines "Where to find the engine."
+
 pluginManagement {
+    // Stage 1: Where do we download the Plugins (Engines) from?
     repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        mavenLocal()
+        mavenCentral()        // The global Java store.
+        gradlePluginPortal()  // The official home for Gradle plugins.
+        mavenLocal()         // Your local computer cache.
     }
+    
+    // Stage 2: Which version of the Engine are we using?
     plugins {
+        // We use the variables from Level 1a (gradle.properties) here.
+        // This ensures the "Engine" (Quarkus) version stays synced with the "Tools."
         id "${quarkusPluginId}" version "${quarkusPluginVersion}"
     }
 }
+
+// Stage 3: What is the formal name of this project?
+// This name is used by IDEs and when publishing (Section 7 in build.gradle).
 rootProject.name='quarkus-backend'

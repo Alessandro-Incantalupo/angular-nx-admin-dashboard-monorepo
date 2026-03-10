@@ -65,7 +65,14 @@ Now that we've seen the basics, here is how we've upgraded the "Infrastructure" 
 
 #### 📄 Level 1d: `settings.gradle` (The Project Bootloader)
 
-- **The Concept**: Runs **before** any other script. It sets up the Gradle build environment and identifies the project.
+- **The Concept**: Runs **before** any other script.
+- **The Job**: It is the "Setup Phase." It tells Gradle where to find the main plugins and what the official Name of the project is.
+- **Why it's separate**: It separates the "How to build" (build.gradle) from "What is needed to start basic operations" (settings.gradle).
+
+#### 📄 Level 1e: `.gitignore` (The Privacy Guard)
+
+- **The Concept**: A list of files that should **never** be saved to Git.
+- **Why it matters**: It keeps giant folders like `.gradle/` or `build/` (which are auto-generated) out of your repository. This keeps your code light and fast.
 
 ---
 
