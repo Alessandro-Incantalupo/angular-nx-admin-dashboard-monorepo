@@ -1,0 +1,32 @@
+{
+  "title": "Simulazione Errori RFC 7807",
+  "description": "Testa la gestione professionale degli errori e gli intercettori dell'applicazione attivando reali guasti del backend.",
+  "validation": {
+    "title": "Errore di Validazione (400)",
+    "subtitle": "Fallimenti a livello di campo",
+    "description": "Simula una richiesta che fallisce la validazione sul backend. Ritorna molteplici errori di campo (es. email, login) che vengono mappati su toast professionali.",
+    "button": "Attiva Errore Validazione",
+    "tooltip": "Attiva 400 Bad Request con array fieldErrors"
+  },
+  "business": {
+    "title": "Logica di Business (400)",
+    "subtitle": "BadRequestAlertException",
+    "description": "Simula una violazione delle regole di business rilevata da Quarkus. Utilizza il pattern di avviso in stile JHipster per mostrare una chiave/messaggio di errore specifico.",
+    "button": "Attiva Bad Request",
+    "tooltip": "Lancia BadRequestAlertException sul Backend"
+  },
+  "server": {
+    "title": "Errore Interno (500)",
+    "subtitle": "Fallimento imprevisto",
+    "description": "Simula un errore generico 500. L'intercettore globale dovrebbe catturarlo e mostrare un messaggio di fallback 'Errore imprevisto' all'utente.",
+    "button": "Attiva Errore Server",
+    "tooltip": "Simula un'eccezione di runtime/crash"
+  },
+  "envelope": {
+    "title": "Pattern Envelope",
+    "subtitle": "BaseResponse Unwrapping",
+    "description": "Simula una risposta di successo racchiusa in un envelope { data, message, code }. Il BaseResponseInterceptor dovrebbe scartare trasparentemente i dati.",
+    "button": "Test Unwrapping",
+    "tooltip": "Verifica che l'intercettore scarti {data: ...} automaticamente"
+  }
+}

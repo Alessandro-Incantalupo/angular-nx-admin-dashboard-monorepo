@@ -1,0 +1,117 @@
+<div class="p-6" *transloco="let t; read: 'errors'">
+  <div class="mb-8">
+    <h1 class="text-color-foreground mb-2 text-3xl font-bold">
+      {{ t('title') }}
+    </h1>
+    <p class="text-color-muted-foreground">
+      {{ t('description') }}
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
+    <!-- Validation Error Card -->
+    <div
+      class="bg-card border-border flex flex-col rounded-xl border p-6 shadow-sm"
+    >
+      <h2 class="text-color-foreground text-lg font-semibold">
+        {{ t('validation.title') }}
+      </h2>
+      <p class="text-color-muted-foreground/70 mb-4 text-sm">
+        {{ t('validation.subtitle') }}
+      </p>
+      <p class="text-color-muted-foreground mb-6 grow text-sm leading-relaxed">
+        {{ t('validation.description') }}
+      </p>
+      <button
+        app-button
+        [tone]="'warning'"
+        [impact]="'bold'"
+        class="mt-auto self-start"
+        [pTooltip]="t('validation.tooltip')"
+        tooltipPosition="top"
+        (click)="runValidationTest()"
+      >
+        <i class="pi pi-exclamation-circle mr-2"></i>
+        {{ t('validation.button') }}
+      </button>
+    </div>
+
+    <!-- Business logic Error Card -->
+    <div
+      class="bg-card border-border flex flex-col rounded-xl border p-6 shadow-sm"
+    >
+      <h2 class="text-color-foreground text-lg font-semibold">
+        {{ t('business.title') }}
+      </h2>
+      <p class="text-color-muted-foreground/70 mb-4 text-sm">
+        {{ t('business.subtitle') }}
+      </p>
+      <p class="text-color-muted-foreground mb-6 grow text-sm leading-relaxed">
+        {{ t('business.description') }}
+      </p>
+      <button
+        app-button
+        [tone]="'danger'"
+        [impact]="'bold'"
+        class="mt-auto self-start"
+        [pTooltip]="t('business.tooltip')"
+        tooltipPosition="top"
+        (click)="runBadRequestTest()"
+      >
+        <i class="pi pi-shield mr-2"></i> {{ t('business.button') }}
+      </button>
+    </div>
+
+    <!-- Server Error Card -->
+    <div
+      class="bg-card border-border flex flex-col rounded-xl border p-6 shadow-sm"
+    >
+      <h2 class="text-color-foreground text-lg font-semibold">
+        {{ t('server.title') }}
+      </h2>
+      <p class="text-color-muted-foreground/70 mb-4 text-sm">
+        {{ t('server.subtitle') }}
+      </p>
+      <p class="text-color-muted-foreground mb-6 grow text-sm leading-relaxed">
+        {{ t('server.description') }}
+      </p>
+      <button
+        app-button
+        [tone]="'info'"
+        [impact]="'bold'"
+        class="mt-auto self-start"
+        [pTooltip]="t('server.tooltip')"
+        tooltipPosition="top"
+        (click)="runServerErrorTest()"
+      >
+        <i class="pi pi-bolt mr-2"></i> {{ t('server.button') }}
+      </button>
+    </div>
+
+    <!-- Envelope Card -->
+    <div
+      class="bg-card border-border flex flex-col rounded-xl border p-6 shadow-sm"
+    >
+      <h2 class="text-color-foreground text-lg font-semibold">
+        {{ t('envelope.title') }}
+      </h2>
+      <p class="text-color-muted-foreground/70 mb-4 text-sm">
+        {{ t('envelope.subtitle') }}
+      </p>
+      <p class="text-color-muted-foreground mb-6 grow text-sm leading-relaxed">
+        {{ t('envelope.description') }}
+      </p>
+      <button
+        app-button
+        [tone]="'primary'"
+        [impact]="'light'"
+        class="border-primary mt-auto self-start border"
+        [pTooltip]="t('envelope.tooltip')"
+        tooltipPosition="top"
+        (click)="runEnvelopeTest()"
+      >
+        <i class="pi pi-box mr-2"></i> {{ t('envelope.button') }}
+      </button>
+    </div>
+  </div>
+</div>

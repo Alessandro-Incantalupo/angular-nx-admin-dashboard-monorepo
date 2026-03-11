@@ -1,0 +1,32 @@
+{
+  "title": "RFC 7807 Error Simulation",
+  "description": "Test the application's professional error handling and interceptors by triggering real backend failures.",
+  "validation": {
+    "title": "Validation Error (400)",
+    "subtitle": "Field-level failures",
+    "description": "Simulates a request that fails validation on the backend. It returns multiple field errors (e.g., email, login) which are mapped to professional toasts.",
+    "button": "Trigger Validation Error",
+    "tooltip": "Triggers 400 Bad Request with fieldErrors array"
+  },
+  "business": {
+    "title": "Business Logic (400)",
+    "subtitle": "BadRequestAlertException",
+    "description": "Simulates a business rule violation detected by Quarkus. It uses the JHipster-style alert pattern to show a specific error key/message.",
+    "button": "Trigger Bad Request",
+    "tooltip": "Throws BadRequestAlertException on Backend"
+  },
+  "server": {
+    "title": "Internal Error (500)",
+    "subtitle": "Unexpected failure",
+    "description": "Simulates a generic 500 error. The global interceptor should catch this and show a fallback 'Unexpected error' message to the user.",
+    "button": "Trigger Server Error",
+    "tooltip": "Simulates a runtime exception/crash"
+  },
+  "envelope": {
+    "title": "Envelope Pattern",
+    "subtitle": "BaseResponse Unwrapping",
+    "description": "Simulates a successful response wrapped in a { data, message, code } envelope. The BaseResponseInterceptor should transparently unwrap the data.",
+    "button": "Test Unwrapping",
+    "tooltip": "Verify interceptor unwraps {data: ...} automatically"
+  }
+}

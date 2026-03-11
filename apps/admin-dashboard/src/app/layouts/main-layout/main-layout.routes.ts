@@ -22,6 +22,10 @@ export default [
         path: PATHS.USERS,
         loadChildren: () => import('../../features/users/users.routes'),
       },
+      {
+        path: PATHS.ERRORS,
+        loadChildren: () => import('../../features/errors/errors.routes'),
+      },
     ],
   },
 ] satisfies Routes;

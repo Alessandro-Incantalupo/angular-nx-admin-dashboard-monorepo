@@ -50,12 +50,14 @@ export const pages: CustomMenuItem[] = [
       {
         icon: 'assets/icons/heroicons/outline/exclamation-triangle.svg',
         label: 'Errors',
-        route: PATHS.ERRORS, // Kept as a single string
+        route: PATHS.ERRORS,
+        expanded: false,
         children: [
-          { label: '404', route: `${PATHS.ERRORS}/${PATHS.ERROR_404}` }, // Concatenated route
-          { label: '500', route: `${PATHS.ERRORS}/${PATHS.ERROR_500}` }, // Concatenated route
+          {
+            label: 'RFC 7807',
+            route: `${PATHS.ERRORS}/${PATHS.ERRORS_RFC7807}`,
+          },
         ],
-        disabled: true,
       },
       {
         icon: 'assets/icons/heroicons/outline/cube.svg',
