@@ -75,3 +75,45 @@ This guide compares common "beginner" habits with the "professional" standards w
   - **Lightning Fast**: It only checks if the code _compiles_.
   - **Comprehensive**: It checks _every_ file in the project at once.
   - **Focused**: It doesn't run tests or start the server, so it's the perfect "Check Pulse" command after editing.
+
+---
+
+## 5. Architectural Integrity (ArchUnit)
+
+### ❌ Bad: "Accidental" Boundary Crossing
+
+- **Scenario**: A developer imports a `User` entity directly into a REST Controller.
+- **Why it's bad**: It starts a "chain reaction." Soon, the controller is doing database logic, and you can't change the database without rewriting your API. It's like building a house where the plumbing is welded to the wallpaper.
+
+### ✅ Good: ArchUnit Enforcement
+
+- **The Guardrail**: A test that says "Controllers only talk to Services."
+- **Why it's good**: It's **Self-Healing Architecture**. If someone tries to "weld the plumbing to the wallpaper," the build fails immediately. You don't need a human to catch it in a code review; the computer catches it in 2 seconds.
+
+---
+
+## 6. Modern Java Evolution (Modernizer)
+
+### ❌ Bad: "Old Habits" (Legacy Code)
+
+- **Scenario**: Using `java.util.Vector` or old `SimpleDateFormat` instead of the modern `java.time` library.
+- **Why it's bad**: Old Java APIs are often slow, not thread-safe, or just plain clunky. They make the project feel "stale" and harder for new developers to learn.
+
+### ✅ Good: Modernizer Plugin
+
+- **The Guardrail**: A script that scans for 100+ "Old Ways" and suggests the "New Ways."
+- **Why it's good**: It keeps your project on the **Bleeding Edge**. It ensures we are using the most efficient, safest versions of the Java language automatically.
+
+---
+
+## 7. Consistency & Team Health (Checkstyle)
+
+### ❌ Bad: Variable Naming "Debates"
+
+- **Scenario**: One developer uses `userID`, another uses `user_id`. One puts braces on a new line, another on the same line.
+- **Why it's bad**: It creates **Cognitive Friction**. Your brain has to "re-learn" how to read the code every time you switch files. It leads to petty arguments in code reviews that waste team energy.
+
+### ✅ Good: Checkstyle (Automated Style Guide)
+
+- **The Guardrail**: A shared configuration file that everyone's computer follows.
+- **Why it's good**: **Total Uniformity**. The code looks like it was written by one person. Code reviews can focus on "Is this logic correct?" instead of "You forgot a space before that parenthesis."

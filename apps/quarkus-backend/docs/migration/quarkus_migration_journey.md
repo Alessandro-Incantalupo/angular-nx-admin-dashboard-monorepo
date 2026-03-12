@@ -118,8 +118,32 @@ This is the final level of our current journey, focusing on stability and profes
 
 - **The Concept**: No more "Silent Fails." The backend now returns structured JSON errors.
 - **The Benefit**: Your Angular frontend knows exactly which field failed (e.g., "Email is invalid") instead of just guessing.
-- **🧠 Need more?**: Check out the [Error Handling Deep Dive](./error_handling_deep_dive.md).
-- **Comparing Patterns**: See [Bad vs. Good Patterns](./bad_vs_good_patterns.md) to understand the "Why".
+- [ ] **🧠 Need more?**: Check out the [Error Handling Deep Dive](./error_handling_deep_dive.md).
+- [ ] **Comparing Patterns**: See [Bad vs. Good Patterns](./bad_vs_good_patterns.md) to understand the "Why".
+
+### 🛡️ 3. Architectural Enforcement (ArchUnit)
+
+- **The Concept**: Tests that verify the **Design** of your code, not just the logic.
+- **Why it matters**: It prevents "Architectural Decay." In a large project, someone might accidentally import a Database Entity into the Web layer. ArchUnit catches this during the build, ensuring the code stays organized as it grows.
+- [ ] **🧠 Need more?**: Check out the [ArchUnit Deep Dive](./archunit_deep_dive.md).
+- **🧠 Pattern Comparison**: See [Bad vs. Good: Architectural Integrity](./bad_vs_good_patterns.md#5-architectural-integrity-archunit).
+
+### 🕵️ 4. Modern Java Standards (Modernizer)
+
+- **The Concept**: An automated tool that scans for outdated or clunky Java APIs.
+- **Why it matters**: Java has evolved significantly. Using "The Old Way" can lead to performance issues or security risks. Modernizer forces the team to use the latest, safest, and fastest patterns available in Java 25.
+- [ ] **🧠 Need more?**: Check out the [Modernizer Deep Dive](./modernizer_deep_dive.md).
+- **🧠 Pattern Comparison**: See [Bad vs. Good: Modern Java](./bad_vs_good_patterns.md#6-modern-java-evolution-modernizer).
+
+### 🎨 5. Professional Styling (Checkstyle)
+
+- **The Concept**: Enforces programmatic conventions like naming, brace placement, and file structure.
+- **Why it matters**: Total consistency. When the entire team follows the same rules, you can switch between any file and it feels familiar. It eliminates "Style Wars" in code reviews and lets you focus on actual business logic.
+- [ ] **🧠 Need more?**: Check out the [Checkstyle Deep Dive](./checkstyle_deep_dive.md).
+- **🧠 Pattern Comparison**: See [Bad vs. Good: Consistency](./bad_vs_good_patterns.md#7-consistency--team-health-checkstyle).
+
+> [!TIP]
+> **Pro Tip for Frontend Devs**: In your Angular code, you use `eslint` and `prettier` to keep things tidy. Think of these Java guardrails as the same thing, but with "teeth"—the build will actually FAIL if these rules are violated, ensuring production code is always perfect.
 
 ---
 

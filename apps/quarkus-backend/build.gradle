@@ -8,6 +8,10 @@ plugins {
     id 'maven-publish'    // Allows packaging the app for deployment.
     // Spotless: The perfectionist formatter. Ensures everyone's code looks identical.
     id 'com.diffplug.spotless' version "${spotlessVersion}"
+    id "com.gorylenko.gradle-git-properties" version "${gitPropertiesPluginVersion}"
+    id "org.sonarqube" version "${sonarqubePluginVersion}"
+    id "com.github.andygoossens.gradle-modernizer-plugin" version "${modernizerPluginVersion}"
+    id "checkstyle"
 }
 
 // =============================================================================
@@ -69,6 +73,7 @@ dependencies {
     // --- 🧪 Testing ---
     testImplementation 'io.quarkus:quarkus-junit'           // The basic testing tool.
     testImplementation 'io.rest-assured:rest-assured'       // Tests API calls specifically.
+    testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}"
 }
 
 // =============================================================================
@@ -130,4 +135,24 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
     }
+}
+
+// =============================================================================
+// 9. ADDITIONAL JHIPSTER GUARDRAILS & PLUGINS
+// =============================================================================
+gitProperties {
+    failOnNoGitDirectory = false
+    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+}
+
+checkstyle {
+    toolVersion "${checkstyleVersion}"
+    configFile file("checkstyle.xml")
+    checkstyleTest.enabled = false
+}
+
+modernizer {
+    failOnViolations = false
+    includeTestClasses = true
+    javaVersion = "25"
 }
