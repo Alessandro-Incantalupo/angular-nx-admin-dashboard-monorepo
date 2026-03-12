@@ -61,7 +61,7 @@ Now that we've seen the basics, here is how we've upgraded the "Infrastructure" 
   - **`%dev`**: Settings for "Local Coding" (Port 8081).
   - **`%prod`**: Settings for "The Real World" (Port 8080, specific security).
 - **The Result**: The app "senses" its environment and adjusts its behavior automatically.
-- **🧠 Need more?**: Check out the [App Properties & Hibernate Deep Dive](./app_properties_deep_dive.md) for a breakdown of every complex setting.
+- **🧠 Need more?**: Check out the [App Properties & Hibernate Deep Dive](./app_properties_deep_dive.md) for a breakdown of every complex setting, including database naming strategies.
 
 #### 📄 Level 1d: `settings.gradle` (The Project Bootloader)
 
@@ -138,9 +138,37 @@ This is the final level of our current journey, focusing on stability and profes
 ### 🎨 5. Professional Styling (Checkstyle)
 
 - **The Concept**: Enforces programmatic conventions like naming, brace placement, and file structure.
-- **Why it matters**: Total consistency. When the entire team follows the same rules, you can switch between any file and it feels familiar. It eliminates "Style Wars" in code reviews and lets you focus on actual business logic.
-- [ ] **🧠 Need more?**: Check out the [Checkstyle Deep Dive](./checkstyle_deep_dive.md).
+- **Why it matters**: Total consistency. When the entire team follows the same rules, you can switch between any file and it feels familiar.
+- [x] **🧠 Need more?**: Check out the [Checkstyle Deep Dive](./checkstyle_deep_dive.md).
 - **🧠 Pattern Comparison**: See [Bad vs. Good: Consistency](./bad_vs_good_patterns.md#7-consistency--team-health-checkstyle).
+
+### 🎭 6. DTOs & Mapping (The "Mask" and the "Truth")
+
+- **The Concept**: Separating your Database structure from your API structure.
+- **Why it matters**: It prevents sensitive data (like password hashes) from leaking to the frontend. It also lets you change your database without breaking your Angular code.
+- [ ] **🧠 Need more?**: Check out the [DTO & Mapping Deep Dive](./dto_mapping_deep_dive.md).
+- **🧠 Pattern Comparison**: See [Bad vs. Good: Data Safety](./bad_vs_good_patterns.md#1-dto-pattern-the-mask-and-the-truth).
+
+### 🏛️ 7. DB Naming Strategies (Snake_Case Enforcement)
+
+- **The Concept**: Automated rules that ensure database tables and columns always use `snake_case`.
+- **Why it matters**: In Java we use `camelCase` (`userId`), but databases expect `snake_case` (`user_id`). This strategy bridge the gap automatically so your SQL looks professional without manual effort.
+- [ ] **🧠 Need more?**: Check out the [Database Naming Deep Dive](./database_naming_deep_dive.md) for full Java vs. SQL examples.
+- **🧠 Pattern Comparison**: See [Bad vs. Good: Database Naming](./bad_vs_good_patterns.md#8-database-naming-snake_case).
+
+### 🔐 8. Security Scaffolding (JWT & RBAC)
+
+- **The Concept**: Moving from an open API to a Role-Based Access Control system using JSON Web Tokens.
+- **Why it matters**: It ensures only "Authenticated" users can touch your data, and only "Admins" can perform sensitive actions. It's the standard for modern web security.
+- [ ] **🧠 Need more?**: Check out the [Security & RBAC Deep Dive](./security_deep_dive.md).
+- **🧠 Pattern Comparison**: See [Bad vs. Good: Security Scaffolding](./bad_vs_good_patterns.md#9-security-scaffolding-rbac).
+
+### 📊 9. Observability (Prometheus & Grafana)
+
+- **The Concept**: A "Heartbeat Monitor" for your application.
+- **Why it matters**: In production, you need to see if your app is running out of memory or which APIs are slow. This stack provides real-time dashboards to keep the app healthy.
+- [ ] **🧠 Need more?**: Check out the [Observability Deep Dive](./observability_deep_dive.md).
+- **🧠 Pattern Comparison**: See [Bad vs. Good: Observability](./bad_vs_good_patterns.md#10-observability-scrape-model).
 
 > [!TIP]
 > **Pro Tip for Frontend Devs**: In your Angular code, you use `eslint` and `prettier` to keep things tidy. Think of these Java guardrails as the same thing, but with "teeth"—the build will actually FAIL if these rules are violated, ensuring production code is always perfect.

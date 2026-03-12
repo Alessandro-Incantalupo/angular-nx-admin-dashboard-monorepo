@@ -113,6 +113,48 @@ This guide compares common "beginner" habits with the "professional" standards w
 - **Scenario**: One developer uses `userID`, another uses `user_id`. One puts braces on a new line, another on the same line.
 - **Why it's bad**: It creates **Cognitive Friction**. Your brain has to "re-learn" how to read the code every time you switch files. It leads to petty arguments in code reviews that waste team energy.
 
+---
+
+## 8. Database Naming (Snake_Case)
+
+### ❌ Bad: Mixed Naming (CamelCase in SQL)
+
+- **Scenario**: Hibernate creates a table named `AdminUser` with a column `createdDate`.
+- **Why it's bad**: In the database world, `snake_case` (e.g., `admin_user`, `created_date`) is the standard. If you use mixed case, some databases (like Postgres) become Case-Sensitive, forcing you to use double-quotes around every query: `SELECT "createdDate" FROM "AdminUser"`. It's a massive headache for SQL developers.
+
+### ✅ Good: JHipster Naming Strategies
+
+- **The Guardrail**: Automated rules that turn `AdminUser` into `admin_user`.
+- **Why it's good**: It ensures your database follows industry standards without you thinking about it. Your SQL queries remain simple and clean: `SELECT created_date FROM admin_user`.
+
+---
+
+## 9. Security Scaffolding (RBAC)
+
+### ❌ Bad: "Open Doors" Security
+
+- **Scenario**: Using simple if-statements inside your methods to check if a user is an admin.
+- **Why it's bad**: It's **Brittle**. If you forget to add the check to one new method, you have a security hole. It also mixes "Security Logic" with "Business Logic," making the code messy.
+
+### ✅ Good: JWT + RolesAllowed
+
+- **The Guardrail**: Using `@RolesAllowed(AuthoritiesConstants.ADMIN)` or centralized configuration.
+- **Why it's good**: **Declarative Security**. You define the rules at the "Front Door." If a user doesn't have the right token, they don't even get inside the method. It's safe, standardized, and easy to audit.
+
+---
+
+## 10. Observability (Scrape Model)
+
+### ❌ Bad: "Log Diving" to Find Issues
+
+- **Scenario**: Checking text files for the word "Error" when the app feels slow.
+- **Why it's bad**: It's **Reactive**. You only look when it's already broken. You have no historical data to see "When exactly did memory start climbing?" or "Are we getting more traffic than yesterday?"
+
+### ✅ Good: Prometheus + Grafana (Visual Monitoring)
+
+- **The Guardrail**: The app constantly "broadcasts" its health metrics.
+- **Why it's good**: **Proactive Visibility**. You can look at a dashboard and see trends _before_ the app crashes. You can see memory usage, request speed, and database connection pools in real-time. It's like having a dashboard in an airplane instead of just waiting for the engine to smoke.
+
 ### ✅ Good: Checkstyle (Automated Style Guide)
 
 - **The Guardrail**: A shared configuration file that everyone's computer follows.
