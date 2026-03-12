@@ -11,7 +11,7 @@
         target="_blank"
         class="hover:text-primary sm:text-sm"
       >
-        Admin Dashboard NX Monorepo
+        {{ t('general.appName') }}
       </a>
     </div>
     <ul class="text-color-muted-foreground/50 flex">
@@ -21,7 +21,7 @@
           target="_blank"
           class="menu-link px-2"
         >
-          Issues
+          {{ t('general.footer.issues') }}
         </a>
       </li>
       <li class="hover:text-primary">
@@ -29,7 +29,7 @@
           [href]="t('general.github-repo')"
           target="_blank"
           class="menu-link px-2"
-          >Sponsor</a
+          >{{ t('general.footer.sponsor') }}</a
         >
       </li>
       <li class="hover:text-primary">
@@ -37,7 +37,7 @@
           [href]="t('general.github-repo')"
           target="_blank"
           class="menu-link px-2"
-          >Starred</a
+          >{{ t('general.footer.starred') }}</a
         >
       </li>
     </ul>

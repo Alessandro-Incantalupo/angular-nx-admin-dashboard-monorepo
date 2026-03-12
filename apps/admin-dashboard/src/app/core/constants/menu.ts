@@ -8,24 +8,24 @@ export const pages: CustomMenuItem[] = [
     items: [
       {
         icon: 'assets/icons/heroicons/outline/chart-pie.svg',
-        label: 'Dashboard',
+        labelKey: 'dashboard',
         route: PATHS.USERS,
       },
       {
         icon: 'assets/icons/heroicons/outline/lock-closed.svg',
-        label: 'Auth',
+        labelKey: 'auth',
         route: `${PATHS.AUTH}/${PATHS.SIGN_UP}`, // Concatenated route
         children: [
           {
-            label: 'Sign up',
+            labelKey: 'signUp',
             route: `${PATHS.AUTH}/${PATHS.SIGN_UP}`,
           }, // Concatenated route
           {
-            label: 'Sign in',
+            labelKey: 'signIn',
             route: `${PATHS.AUTH}/${PATHS.SIGN_IN}`,
           }, // Concatenated route
           {
-            label: 'Sign in template driven',
+            labelKey: 'signInTemplateDriven',
             route: `${PATHS.AUTH}/${PATHS.SIGN_IN_TEMPLATE_DRIVEN}`, // Concatenated route
           },
 
@@ -49,23 +49,23 @@ export const pages: CustomMenuItem[] = [
       },
       {
         icon: 'assets/icons/heroicons/outline/exclamation-triangle.svg',
-        label: 'Errors',
+        labelKey: 'errors',
         route: PATHS.ERRORS,
         expanded: false,
         children: [
           {
-            label: 'RFC 7807',
+            labelKey: 'rfc7807',
             route: `${PATHS.ERRORS}/${PATHS.ERRORS_RFC7807}`,
           },
         ],
       },
       {
         icon: 'assets/icons/heroicons/outline/cube.svg',
-        label: 'Features',
+        labelKey: 'features',
         route: PATHS.FEATURES_UI, // Kept as a single string
         children: [
           {
-            label: 'Table',
+            labelKey: 'table',
             route: `${PATHS.FEATURES_UI}/${PATHS.FEATURES_TABLE}`,
           }, // Concatenated route
         ],
@@ -79,19 +79,19 @@ export const pages: CustomMenuItem[] = [
     items: [
       {
         icon: 'assets/icons/heroicons/outline/download.svg',
-        label: 'Download',
+        labelKey: 'download',
         route: PATHS.DOWNLOAD,
         disabled: true,
       },
       {
         icon: 'assets/icons/heroicons/outline/gift.svg',
-        label: 'Gift Card',
+        labelKey: 'giftCard',
         route: PATHS.GIFT,
         disabled: true,
       },
       {
         icon: 'assets/icons/heroicons/outline/users.svg',
-        label: 'Users',
+        labelKey: 'users',
         route: PATHS.USERS,
       },
     ],
@@ -102,24 +102,24 @@ export const pages: CustomMenuItem[] = [
     items: [
       {
         icon: 'assets/icons/heroicons/outline/cog.svg',
-        label: 'Settings',
+        labelKey: 'settings',
         route: PATHS.SETTINGS,
         disabled: true,
       },
       {
         icon: 'assets/icons/heroicons/outline/bell.svg',
-        label: 'Notifications',
+        labelKey: 'notifications',
         route: PATHS.NOTIFICATIONS,
         disabled: true,
       },
       {
         icon: 'assets/icons/heroicons/outline/folder.svg',
-        label: 'Folders',
+        labelKey: 'folders',
         route: PATHS.FOLDERS,
         children: [
-          { label: 'Current Files', route: PATHS.FOLDERS_CURRENT_FILES },
-          { label: 'Downloads', route: PATHS.FOLDERS_DOWNLOAD },
-          { label: 'Trash', route: PATHS.FOLDERS_TRASH },
+          { labelKey: 'currentFiles', route: PATHS.FOLDERS_CURRENT_FILES },
+          { labelKey: 'downloads', route: PATHS.FOLDERS_DOWNLOAD },
+          { labelKey: 'trash', route: PATHS.FOLDERS_TRASH },
         ],
         disabled: true,
       },

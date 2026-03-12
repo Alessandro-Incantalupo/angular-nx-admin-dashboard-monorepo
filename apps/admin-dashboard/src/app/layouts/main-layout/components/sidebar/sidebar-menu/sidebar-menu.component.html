@@ -1,11 +1,11 @@
-<div class="pt-4">
+<div *transloco="let t" class="pt-4">
   @for (menu of menuStore.pagesMenu(); track $index) {
     <div class="mx-1 mb-2 flex items-center justify-between">
       <small
         [class]="{ hidden: !menuStore.showSidebar() }"
         class="text-color-muted-foreground/50 text-xs font-semibold"
       >
-        {{ menu.group }}
+        {{ t('menuGroups.' + menu.group) }}
       </small>
     </div>
     <ul class="flex flex-col space-y-1">
@@ -50,7 +50,7 @@
                       : 'text-color-muted-foreground/50'
                   "
                 >
-                  {{ item.label }}
+                  {{ t('menu.' + item.labelKey) }}
                   @if (item.disabled) {
                     <p-chip
                       class="mx-2 flex items-center px-4 py-0.5 text-[11px] tracking-wide"
@@ -74,7 +74,7 @@
                 <a
                   class="text-color-muted-foreground group-hover:text-color-foreground ml-10 truncate text-xs font-semibold tracking-wide focus:outline-hidden"
                 >
-                  {{ item.label }}
+                  {{ t('menu.' + item.labelKey) }}
                   @if (item.disabled) {
                     <p-chip
                       class="mx-2 flex items-center px-4 py-0.5 text-[11px] tracking-wide"
@@ -113,7 +113,7 @@
                 <span
                   class="bg-foreground text-background absolute -top-[34px] left-14 z-1 w-auto min-w-max origin-left scale-0 rounded-md p-2 text-xs font-bold shadow-md transition-all duration-200 group-hover:scale-100"
                 >
-                  {{ item.label }}
+                  {{ t('menu.' + item.labelKey) }}
                 </span>
               </div>
             }

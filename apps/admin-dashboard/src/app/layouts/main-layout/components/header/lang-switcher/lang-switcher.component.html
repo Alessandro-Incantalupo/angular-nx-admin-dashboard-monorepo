@@ -1,0 +1,30 @@
+<div (clickOutside)="isOpen.set(false)">
+  <button
+    (click)="toggle()"
+    class="text-color-muted-foreground hover:text-color-foreground inline-flex cursor-pointer items-center gap-1.5 rounded-md p-1 text-sm font-medium transition-colors"
+    type="button"
+    aria-label="Change language"
+  >
+    <span class="text-base leading-none">{{ activeLanguage().flag }}</span>
+    <span class="hidden sm:inline">{{ activeLanguage().label }}</span>
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="bg-background shadow-custom ring-opacity-5 absolute right-0 z-20 mt-1 w-28 origin-top-right rounded-md py-1 ring-1 ring-transparent"
+    >
+      @for (lang of languages; track lang.code) {
+        <button
+          (click)="setLang(lang.code)"
+          [class.bg-card]="lang.code === activeLang()"
+          [class.text-primary]="lang.code === activeLang()"
+          class="text-color-muted-foreground hover:bg-card hover:text-color-foreground flex w-full cursor-pointer items-center gap-2 px-3 py-1.5 text-sm"
+          type="button"
+        >
+          <span>{{ lang.flag }}</span>
+          <span>{{ lang.label }}</span>
+        </button>
+      }
+    </div>
+  }
+</div>

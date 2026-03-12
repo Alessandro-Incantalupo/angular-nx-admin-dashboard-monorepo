@@ -1,8 +1,8 @@
 @for (menu of menuStore.pagesMenu(); track $index) {
-  <div class="pt-4">
+  <div *transloco="let t" class="pt-4">
     <div class="mx-1 mb-2 flex items-center justify-between">
       <small class="text-color-muted-foreground text-xs font-semibold">
-        {{ menu.group }}
+        {{ t('menuGroups.' + menu.group) }}
       </small>
     </div>
     <ul class="flex flex-col space-y-1">
@@ -43,7 +43,7 @@
                   (click)="closeMenu(item)"
                   class="ml-10 truncate text-xs font-semibold tracking-wide focus:outline-hidden"
                 >
-                  {{ item.label }}
+                  {{ t('menu.' + item.labelKey) }}
                   @if (item.disabled) {
                     <p-chip
                       class="mx-2 flex items-center px-4 py-0.5 text-[11px] tracking-wide"
@@ -67,7 +67,7 @@
                 <a
                   class="ml-10 truncate text-xs font-semibold tracking-wide focus:outline-hidden"
                 >
-                  {{ item.label }}
+                  {{ t('menu.' + item.labelKey) }}
                   @if (item.disabled) {
                     <p-chip
                       class="mx-2 flex items-center px-4 py-0.5 text-[11px] tracking-wide"

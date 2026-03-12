@@ -2,7 +2,7 @@ import { MenuItem } from 'primeng/api';
 
 export interface SubMenuItem {
   icon?: string;
-  label?: string;
+  labelKey: string;
   route?: string | null;
   expanded?: boolean;
   active?: boolean;

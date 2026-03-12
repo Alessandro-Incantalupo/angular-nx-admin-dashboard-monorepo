@@ -1,6 +1,8 @@
 <!-- Theme Selector -->
-<div class="mx-4 my-2">
-  <span class="text-color-foreground text-xs font-semibold">Color</span>
+<div *transloco="let t" class="mx-4 my-2">
+  <span class="text-color-foreground text-xs font-semibold">{{
+    t('profileMenu.color')
+  }}</span>
   <div class="mt-2 grid grid-cols-2 gap-2">
     @for (item of themeStore.getThemeColors(); track $index) {
       <div
@@ -15,7 +17,7 @@
           [style.background-color]="item.name"
           class="mr-1 flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full"
         ></span>
-        <p class="capitalize">{{ item.name }}</p>
+        <p>{{ t('profileMenu.colorNames.' + item.name) }}</p>
       </div>
     }
   </div>

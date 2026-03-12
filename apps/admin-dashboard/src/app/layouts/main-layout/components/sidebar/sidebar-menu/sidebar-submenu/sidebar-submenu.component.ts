@@ -7,12 +7,19 @@ import {
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuStore } from '@core/state/menu.store';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { SubMenuItem } from '../../../../../../core/models/menu.model';
 
 @Component({
   selector: 'app-sidebar-submenu',
-  imports: [SvgIconComponent, RouterLinkActive, RouterLink, NgTemplateOutlet],
+  imports: [
+    SvgIconComponent,
+    RouterLinkActive,
+    RouterLink,
+    NgTemplateOutlet,
+    TranslocoDirective,
+  ],
   templateUrl: './sidebar-submenu.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { SubMenuItem } from '@core/models/menu.model';
 import { MenuStore } from '@core/state/menu.store';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { toast } from 'ngx-sonner';
 import { ChipModule } from 'primeng/chip';
@@ -15,18 +16,24 @@ import { ChipModule } from 'primeng/chip';
 @Component({
   selector: 'app-navbar-mobile-submenu',
   templateUrl: './navbar-mobile-submenu.component.html',
-  imports: [NgTemplateOutlet, AngularSvgIconModule, ChipModule],
+  imports: [
+    NgTemplateOutlet,
+    AngularSvgIconModule,
+    ChipModule,
+    TranslocoDirective,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarMobileSubmenuComponent {
   router = inject(Router);
   readonly menuStore = inject(MenuStore);
+  private readonly transloco = inject(TranslocoService);
 
   public submenu = input<SubMenuItem>();
 
   public toggleMenu(item: SubMenuItem): void {
     if (item.disabled) {
-      toast.info('Feature under development', {
+      toast.info(this.transloco.translate('toast.featureUnderDevelopment'), {
         position: 'top-center',
       });
       return;

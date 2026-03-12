@@ -1,5 +1,6 @@
 @for (menu of menuStore.pagesMenu(); track $index) {
   <div
+    *transloco="let t"
     class="relative inline-block align-top"
     (mouseenter)="open($index)"
     (mouseleave)="close()"
@@ -13,7 +14,7 @@
       class="mr-2 inline-flex rounded-md px-3 py-2 text-sm font-medium"
       type="button"
     >
-      <span>{{ menu.group }}</span>
+      <span>{{ t('menuGroups.' + menu.group) }}</span>
     </button>
     @if (openIndex() === $index) {
       <div

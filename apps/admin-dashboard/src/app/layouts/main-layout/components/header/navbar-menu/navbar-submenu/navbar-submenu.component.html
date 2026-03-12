@@ -1,4 +1,5 @@
 <ul
+  *transloco="let t"
   #submenuRef
   class="bg-background shadow-custom mt-2 space-y-0.5 rounded-md py-3"
 >
@@ -25,7 +26,7 @@
             @if (item.icon) {
               <svg-icon src="{{ item.icon }}" [svgClass]="'h-5 w-5'"></svg-icon>
             }
-            <span class="ml-1">{{ item.label }}</span>
+            <span class="ml-1">{{ t('menu.' + item.labelKey) }}</span>
             @if (item.disabled) {
               <p-chip
                 class="mx-2 flex items-center px-4 py-0.5 text-[11px] tracking-wide"
@@ -55,7 +56,7 @@
                   </svg-icon>
                 </span>
               }
-              <span class="ml-1">{{ item.label }}</span>
+              <span class="ml-1">{{ t('menu.' + item.labelKey) }}</span>
               @if (item.disabled) {
                 <p-chip
                   class="mx-2 flex items-center px-4 py-0.5 text-[11px] tracking-wide"

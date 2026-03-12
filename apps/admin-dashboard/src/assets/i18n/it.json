@@ -3,7 +3,50 @@
     "openUserMenu": "Apri il menu utente",
     "yourProfile": "Il tuo profilo",
     "color": "Colore",
+    "language": "Lingua",
     "logout": "Esci",
-    "signIn": "Accedi"
+    "signIn": "Accedi",
+    "colorNames": {
+      "base": "Base",
+      "yellow": "Giallo",
+      "green": "Verde",
+      "blue": "Blu",
+      "orange": "Arancione",
+      "red": "Rosso",
+      "violet": "Viola"
+    }
+  },
+  "menuGroups": {
+    "Base": "Base",
+    "Collaboration": "Collaborazione",
+    "Config": "Configurazione"
+  },
+  "profile": {
+    "breadcrumb": "Profilo",
+    "logout": "Esci",
+    "homepage": "Pagina principale"
+  },
+  "toast": {
+    "featureUnderDevelopment": "Funzionalità in sviluppo"
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "auth": "Autenticazione",
+    "signUp": "Registrati",
+    "signIn": "Accedi",
+    "signInTemplateDriven": "Accedi (Template)",
+    "errors": "Errori",
+    "rfc7807": "RFC 7807",
+    "features": "Funzionalità",
+    "table": "Tabella",
+    "download": "Download",
+    "giftCard": "Gift Card",
+    "users": "Utenti",
+    "settings": "Impostazioni",
+    "notifications": "Notifiche",
+    "folders": "Cartelle",
+    "currentFiles": "File correnti",
+    "downloads": "Download",
+    "trash": "Cestino"
   }
 }

@@ -8,6 +8,7 @@
 		To: "opacity-0 scale-95"
 -->
 <div
+  *transloco="let t"
   [class]="
     menuStore.showMobileMenu()
       ? 'animate-fade-in-up pointer-events-auto scale-100 opacity-100 duration-200'
@@ -29,7 +30,7 @@
               <svg-icon src="assets/icons/logo.svg"> </svg-icon>
             </a>
             <b class="text-color-foreground pl-3 text-sm font-bold">
-              Admin Dashboard NX Monorepo
+              {{ t('general.appName') }}
             </b>
           </div>
         </div>
@@ -39,7 +40,7 @@
             type="button"
             class="text-color-muted-foreground focus:ring-primary hover:bg-card hover:text-color-foreground inline-flex items-center justify-center rounded-md p-2 transition-transform hover:rotate-90 focus:ring-2 focus:outline-hidden focus:ring-inset"
           >
-            <span class="sr-only">Close menu</span>
+            <span class="sr-only">{{ t('general.closeMenu') }}</span>
             <!-- Heroicon name: outline/x -->
             <svg-icon src="assets/icons/heroicons/outline/x.svg"> </svg-icon>
           </button>

@@ -3,7 +3,50 @@
     "openUserMenu": "Open user menu",
     "yourProfile": "Your Profile",
     "color": "Color",
+    "language": "Language",
     "logout": "Logout",
-    "signIn": "Sign In"
+    "signIn": "Sign In",
+    "colorNames": {
+      "base": "Base",
+      "yellow": "Yellow",
+      "green": "Green",
+      "blue": "Blue",
+      "orange": "Orange",
+      "red": "Red",
+      "violet": "Violet"
+    }
+  },
+  "menuGroups": {
+    "Base": "Base",
+    "Collaboration": "Collaboration",
+    "Config": "Config"
+  },
+  "profile": {
+    "breadcrumb": "Profile",
+    "logout": "Logout",
+    "homepage": "Homepage"
+  },
+  "toast": {
+    "featureUnderDevelopment": "Feature under development"
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "auth": "Auth",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "signInTemplateDriven": "Sign In (Template)",
+    "errors": "Errors",
+    "rfc7807": "RFC 7807",
+    "features": "Features",
+    "table": "Table",
+    "download": "Download",
+    "giftCard": "Gift Card",
+    "users": "Users",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "folders": "Folders",
+    "currentFiles": "Current Files",
+    "downloads": "Downloads",
+    "trash": "Trash"
   }
 }
