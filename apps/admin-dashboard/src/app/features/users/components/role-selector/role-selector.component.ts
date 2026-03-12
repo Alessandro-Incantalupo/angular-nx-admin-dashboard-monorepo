@@ -10,7 +10,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
   selector: 'app-role-selector',
   imports: [TranslocoDirective],
   templateUrl: './role-selector.component.html',
-  styles: ``,
+  host: {
+    class: 'mb-6 flex gap-4',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoleSelectorComponent {

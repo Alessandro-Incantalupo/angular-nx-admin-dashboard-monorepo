@@ -23,11 +23,9 @@ import { map } from 'rxjs';
   selector: 'app-user-form',
   imports: [ReactiveFormsModule, TranslocoDirective],
   templateUrl: './user-form.component.html',
-  styles: `
-    :host {
-      display: block;
-    }
-  `,
+  host: {
+    class: 'block',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserFormComponent implements OnInit {

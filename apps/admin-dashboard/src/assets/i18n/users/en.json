@@ -8,7 +8,7 @@
     "addUserForm": "Add User Form",
     "reset-demo": "♻️ Reset Demo Data",
     "reset-demo-short": "♻️ Reset",
-    "abilitiesTitle": "User Abilities",
+    "abilitiesTitle": "Your current abilities:",
 
   "form": {
     "name-placeholder": "Name",
@@ -17,7 +17,24 @@
     "status-inactive": "Inactive",
     "signal": "Signals (Experimental)",
     "reactive": "Reactive",
-    "add-user": "Add User"
+    "add-user": "Add User",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+
+  "table": {
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view-only": "View Only"
+  },
+
+  "guest-banner": {
+    "message": "You are viewing as a Guest. Login to access User and Admin features.",
+    "quick-demo": "Quick Demo Login:"
   },
 
   "login-button": {

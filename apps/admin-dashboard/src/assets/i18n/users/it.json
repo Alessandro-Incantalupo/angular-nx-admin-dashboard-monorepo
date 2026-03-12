@@ -7,7 +7,8 @@
   "hideForm": "Nascondi Form",
   "addUserForm": "Modulo Aggiungi Utente",
   "reset-demo": "Reimposta Dati Demo",
-  "abilitiesTitle": "Abilità Utente",
+  "reset-demo-short": "Reimposta",
+  "abilitiesTitle": "Le tue abilità attuali:",
   "form": {
     "name-placeholder": "Nome",
     "email-placeholder": "esempio@esempio.com",
@@ -15,12 +16,33 @@
     "status-inactive": "Inattivo",
     "signal": "Signals (Sperimentale)",
     "reactive": "Reattivo",
-    "add-user": "Aggiungi Utente"
+    "add-user": "Aggiungi Utente",
+    "save": "Salva",
+    "cancel": "Annulla"
+  },
+  "table": {
+    "name": "Nome",
+    "email": "Email",
+    "role": "Ruolo",
+    "actions": "Azioni",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "view-only": "Solo visualizzazione"
+  },
+  "guest-banner": {
+    "message": "Stai visualizzando come ospite. Accedi per usare le funzioni Utente e Admin.",
+    "quick-demo": "Login Demo Rapido:"
+  },
+  "login-button": {
+    "user": "👤 Accedi come Utente",
+    "admin": "👑 Accedi come Admin",
+    "user-mobile": "Login Utente",
+    "admin-mobile": "Login Admin"
   },
   "role-selector": {
-      "guest": "👁️ Guest {{mobile}}",
-      "user": "👤 Utente {{mobile}}",
-      "admin": "👑 Admin {{mobile}}"
+      "guest": "Ospite",
+      "user": "Utente",
+      "admin": "Admin"
     },
     "stats": {
       "user-roles-distribution": "Distribuzione Ruoli Utente",

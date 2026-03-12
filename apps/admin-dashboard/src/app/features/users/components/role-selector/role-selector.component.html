@@ -1,73 +1,61 @@
 <!-- Role Selector for Demo - Only show if authenticated -->
 <ng-container *transloco="let t; prefix: 'users.role-selector'">
   @if (isAuthenticated()) {
-    <div class="mb-6 flex gap-4">
-      @for (role of roles; track $index) {
-        <button
-          class="hover:bg-primary/90 focus:ring-primary/50 text-color-foreground h-12 w-full transform rounded px-4 py-2 shadow-md transition-transform hover:scale-105 focus:ring-4 sm:w-32"
-          [class.bg-primary]="
-            role === 'guest'
-              ? isGuest()
-              : role === 'user'
-                ? isUser()
-                : isAdmin()
-          "
-          [class.bg-muted]="
-            role === 'guest'
-              ? !isGuest()
-              : role === 'user'
-                ? !isUser()
-                : !isAdmin()
-          "
-          [class.text-color-foreground]="
-            role === 'guest'
-              ? isGuest()
-              : role === 'user'
-                ? isUser()
-                : isAdmin()
-          "
-          [disabled]="
-            (role === 'guest' && isGuest()) ||
-            (role === 'user' && isUser()) ||
-            (role === 'admin' && isAdmin())
-          "
-          (click)="whatIsMyRole.emit(role)"
-        >
-          <span class="sm:hidden">
-            {{ t(role) }}
-          </span>
+    @for (role of roles; track $index) {
+      <button
+        class="hover:bg-primary/90 focus:ring-primary/50 text-color-foreground h-12 w-full transform rounded px-4 py-2 shadow-md transition-transform hover:scale-105 focus:ring-4 sm:w-32"
+        [class.bg-primary]="
+          role === 'guest' ? isGuest() : role === 'user' ? isUser() : isAdmin()
+        "
+        [class.bg-muted]="
+          role === 'guest'
+            ? !isGuest()
+            : role === 'user'
+              ? !isUser()
+              : !isAdmin()
+        "
+        [class.text-color-foreground]="
+          role === 'guest' ? isGuest() : role === 'user' ? isUser() : isAdmin()
+        "
+        [disabled]="
+          (role === 'guest' && isGuest()) ||
+          (role === 'user' && isUser()) ||
+          (role === 'admin' && isAdmin())
+        "
+        (click)="whatIsMyRole.emit(role)"
+      >
+        <span class="sm:hidden">
+          {{ t(role) }}
+        </span>
+        <span class="hidden sm:inline">
           <span class="hidden sm:inline">
-            <span class="hidden sm:inline">
-              {{
-                role === 'guest'
-                  ? '👁️ ' + t('guest')
-                  : role === 'user'
-                    ? '👤 ' + t('user')
-                    : '👑 ' + t('admin')
-              }}
-            </span>
+            {{
+              role === 'guest'
+                ? '👁️ ' + t('guest')
+                : role === 'user'
+                  ? '👤 ' + t('user')
+                  : '👑 ' + t('admin')
+            }}
           </span>
-        </button>
-      }
-    </div>
+        </span>
+      </button>
+    }
   } @else {
     <!-- Guest view only when not authenticated -->
-    <div class="mb-6 flex gap-4">
-      @for (role of roles; track $index) {
-        <button
-          class="hover:bg-primary/90 focus:ring-primary/50 text-color-foreground h-12 w-full transform rounded px-4 py-2 shadow-md transition-transform hover:scale-105 focus:ring-4 sm:w-32"
-          [class.bg-primary]="isGuest()"
-          [disabled]="role !== 'guest' && !isAuthenticated()"
-        >
-          {{
-            role === 'guest'
-              ? t('guest')
-              : role === 'user'
-                ? t('user')
-                : t('admin')
-          }}
-        </button>
-      }
-    </div>
+    @for (role of roles; track $index) {
+      <button
+        class="hover:bg-primary/90 focus:ring-primary/50 text-color-foreground h-12 w-full transform rounded px-4 py-2 shadow-md transition-transform hover:scale-105 focus:ring-4 sm:w-32"
+        [class.bg-primary]="isGuest()"
+        [disabled]="role !== 'guest' && !isAuthenticated()"
+      >
+        {{
+          role === 'guest'
+            ? t('guest')
+            : role === 'user'
+              ? t('user')
+              : t('admin')
+        }}
+      </button>
+    }
   }
 </ng-container>

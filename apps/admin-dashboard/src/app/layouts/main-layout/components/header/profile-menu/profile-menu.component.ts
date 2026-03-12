@@ -8,13 +8,16 @@ import { Router } from '@angular/router';
 import { PATHS } from '@core/constants/routes';
 import { AuthStore } from '@core/state/auth.store';
 import { ThemeStore } from '@core/state/theme.store';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { ClickOutsideRxjsDirective } from '@shared/directives/click-outside-rxjs.directive';
 import { SvgIconComponent } from 'angular-svg-icon';
 @Component({
   selector: 'app-profile-menu',
-  imports: [SvgIconComponent, ClickOutsideRxjsDirective],
+  imports: [SvgIconComponent, TranslocoDirective, ClickOutsideRxjsDirective],
   templateUrl: './profile-menu.component.html',
-  styles: ``,
+  host: {
+    class: 'relative ml-3',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMenuComponent {
@@ -22,24 +25,19 @@ export class ProfileMenuComponent {
   authStore = inject(AuthStore);
   router = inject(Router);
 
-  public isOpen = signal(false);
+  readonly isOpen = signal(false);
 
   public profileMenu = [
     {
-      title: 'Your Profile',
+      titleKey: 'profileMenu.yourProfile',
       icon: './assets/icons/heroicons/outline/user-circle.svg',
       link: PATHS.PROFILE,
     },
     // {
-    //   title: 'Settings',
+    //   titleKey: 'profileMenu.settings',
     //   icon: './assets/icons/heroicons/outline/cog-6-tooth.svg',
     //   link: PATHS.SETTINGS,
     //   disabled: true,
-    // },
-    // {
-    //   title: 'Log out',
-    //   icon: './assets/icons/heroicons/outline/logout.svg',
-    //   link: PATHS.AUTH,
     // },
   ];
 

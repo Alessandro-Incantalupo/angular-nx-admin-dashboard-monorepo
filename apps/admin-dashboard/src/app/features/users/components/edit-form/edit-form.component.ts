@@ -1,4 +1,4 @@
-import { User } from '@admin-dashboard-nx-monorepo/models';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import {
   ChangeDetectionStrategy,
@@ -19,13 +19,11 @@ import { AuthService } from '@core/services/auth.service';
 @Component({
   selector: 'app-edit-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslocoDirective],
   templateUrl: './edit-form.component.html',
-  styles: `
-    :host {
-      display: block;
-    }
-  `,
+  host: {
+    class: 'block',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditFormComponent {

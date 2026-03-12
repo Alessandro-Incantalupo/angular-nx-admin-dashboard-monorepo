@@ -1,115 +1,117 @@
-@if (authStore.isAuthenticated()) {
-  <!-- Profile Menu (When Logged In) -->
-  <div class="relative ml-3" (clickOutside)="isOpen.set(false)">
-    <!-- Profile Button -->
-    <button
-      (click)="toggleMenu()"
-      class="bg-card relative flex rounded-full text-sm"
-      type="button"
-    >
-      <span class="sr-only">Open user menu</span>
-      <img
-        class="h-9 w-9 rounded-md"
-        src="https://avatars.githubusercontent.com/u/145116865?v=4"
-        alt="git hub profile picture"
-      />
-    </button>
-
-    <!-- Dropdown -->
-    @if (isOpen()) {
-      <div
-        [class]="
-          isOpen()
-            ? 'visible translate-y-0 scale-100 opacity-100'
-            : 'invisible -translate-y-5 scale-95 opacity-0'
-        "
-        class="bg-background shadow-custom ring-opacity-5 absolute right-0 z-20 mt-2 w-60 origin-top-right transform rounded-md py-4 ring-1 ring-transparent transition focus:outline-hidden"
+<ng-container *transloco="let t">
+  <div (clickOutside)="isOpen.set(false)">
+    @if (authStore.isAuthenticated()) {
+      <!-- Profile Menu (When Logged In) -->
+      <!-- Profile Button -->
+      <button
+        (click)="toggleMenu()"
+        class="bg-card relative flex rounded-full text-sm"
+        type="button"
       >
-        <!-- User Info -->
-        <div class="flex flex-row items-center px-4 pb-4">
-          <div class="w-10 shrink-0">
-            <img
-              class="rounded-md"
-              src="https://avatars.githubusercontent.com/u/145116865?v=4"
-              alt="git hub profile picture"
-            />
-          </div>
-          <div
-            class="text-color-foreground overflow-hidden px-2 text-sm font-semibold"
-          >
-            Alessandro Incantalupo
-            <p
-              class="text-color-muted-foreground truncate text-xs font-semibold text-ellipsis"
+        <span class="sr-only">{{ t('profileMenu.openUserMenu') }}</span>
+        <img
+          class="h-9 w-9 rounded-md"
+          src="https://avatars.githubusercontent.com/u/145116865?v=4"
+          [attr.alt]="authStore.userData()?.name"
+        />
+      </button>
+
+      <!-- Dropdown -->
+      @if (isOpen()) {
+        <div
+          [class]="
+            isOpen()
+              ? 'visible translate-y-0 scale-100 opacity-100'
+              : 'invisible -translate-y-5 scale-95 opacity-0'
+          "
+          class="bg-background shadow-custom ring-opacity-5 absolute right-0 z-20 mt-2 w-60 origin-top-right transform rounded-md py-4 ring-1 ring-transparent transition focus:outline-hidden"
+        >
+          <!-- User Info -->
+          <div class="flex flex-row items-center px-4 pb-4">
+            <div class="w-10 shrink-0">
+              <img
+                class="rounded-md"
+                src="https://avatars.githubusercontent.com/u/145116865?v=4"
+                [attr.alt]="authStore.userData()?.name"
+              />
+            </div>
+            <div
+              class="text-color-foreground overflow-hidden px-2 text-sm font-semibold"
             >
-              alessandro.incantalupo&#64;gmail.com
-            </p>
-          </div>
-        </div>
-        <div class="border-border border-b border-dashed"></div>
-
-        <!-- Menu Items -->
-        <ul class="mx-4 my-2 flex flex-col">
-          @for (item of profileMenu; track $index) {
-            <li
-              (click)="toProfile(item.link)"
-              class="text-color-muted-foreground hover:bg-card hover:text-primary inline-flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold"
-            >
-              <svg-icon
-                src="{{ item.icon }}"
-                [svgClass]="'h-5 w-5 text-color-muted-foreground/50'"
-              ></svg-icon>
-              {{ item.title }}
-            </li>
-          }
-        </ul>
-
-        <hr class="border-border border-dashed" />
-
-        <!-- Theme Selector -->
-        <div class="mx-4 my-2">
-          <span class="text-color-foreground text-xs font-semibold">Color</span>
-          <div class="mt-2 grid grid-cols-2 gap-2">
-            @for (item of themeStore.getThemeColors(); track $index) {
-              <div
-                (click)="themeStore.setColor(item.name)"
-                [class]="{
-                  'border-muted-foreground bg-card':
-                    item.name == themeStore.color(),
-                  'border-primary': item.name == themeStore.color(),
-                }"
-                class="focus-visible:ring-ring border-border bg-background text-color-muted-foreground hover:bg-card hover:text-color-foreground inline-flex h-8 cursor-pointer items-center justify-start rounded-md border px-3 text-xs font-medium whitespace-nowrap shadow-xs transition-colors focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+              {{ authStore.userData()?.name }}
+              <p
+                class="text-color-muted-foreground truncate text-xs font-semibold text-ellipsis"
               >
-                <span
-                  [style.background-color]="item.name"
-                  class="mr-1 flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full"
-                ></span>
-                <p class="capitalize">{{ item.name }}</p>
-              </div>
+                {{ authStore.userData()?.email }}
+              </p>
+            </div>
+          </div>
+          <div class="border-border border-b border-dashed"></div>
+
+          <!-- Menu Items -->
+          <ul class="mx-4 my-2 flex flex-col">
+            @for (item of profileMenu; track $index) {
+              <li
+                (click)="toProfile(item.link)"
+                class="text-color-muted-foreground hover:bg-card hover:text-primary inline-flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold"
+              >
+                <svg-icon
+                  src="{{ item.icon }}"
+                  [svgClass]="'h-5 w-5 text-color-muted-foreground/50'"
+                ></svg-icon>
+                {{ t(item.titleKey) }}
+              </li>
             }
+          </ul>
+
+          <hr class="border-border border-dashed" />
+
+          <!-- Theme Selector -->
+          <div class="mx-4 my-2">
+            <span class="text-color-foreground text-xs font-semibold">{{
+              t('profileMenu.color')
+            }}</span>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              @for (item of themeStore.getThemeColors(); track $index) {
+                <div
+                  (click)="themeStore.setColor(item.name)"
+                  [class]="{
+                    'border-muted-foreground bg-card':
+                      item.name == themeStore.color(),
+                    'border-primary': item.name == themeStore.color(),
+                  }"
+                  class="focus-visible:ring-ring border-border bg-background text-color-muted-foreground hover:bg-card hover:text-color-foreground inline-flex h-8 cursor-pointer items-center justify-start rounded-md border px-3 text-xs font-medium whitespace-nowrap shadow-xs transition-colors focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <span
+                    [style.background-color]="item.name"
+                    class="mr-1 flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full"
+                  ></span>
+                  <p class="capitalize">{{ item.name }}</p>
+                </div>
+              }
+            </div>
+          </div>
+          <hr class="border-border border-dashed" />
+
+          <!-- Logout Button -->
+          <div class="mx-4 my-2">
+            <button
+              (click)="logout()"
+              class="w-full rounded-md px-3 py-2 text-xs font-semibold text-red-500 hover:bg-red-50"
+            >
+              {{ t('profileMenu.logout') }}
+            </button>
           </div>
         </div>
-        <hr class="border-border border-dashed" />
-
-        <!-- Logout Button -->
-        <div class="mx-4 my-2">
-          <button
-            (click)="logout()"
-            class="w-full rounded-md px-3 py-2 text-xs font-semibold text-red-500 hover:bg-red-50"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
+      }
+    } @else {
+      <!-- If NOT Logged In, Show Login Button -->
+      <a
+        (click)="quickLogin('admin')"
+        class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-semibold text-white transition"
+      >
+        {{ t('profileMenu.signIn') }}
+      </a>
     }
   </div>
-} @else {
-  <!-- If NOT Logged In, Show Login Button -->
-  <div class="relative ml-3">
-    <a
-      (click)="quickLogin('admin')"
-      class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-semibold text-white transition"
-    >
-      Sign In
-    </a>
-  </div>
-}
+</ng-container>

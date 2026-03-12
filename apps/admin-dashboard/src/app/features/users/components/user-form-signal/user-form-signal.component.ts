@@ -22,11 +22,9 @@ interface UserFormData {
   selector: 'app-user-form-signal',
   imports: [Field, TranslocoDirective],
   templateUrl: './user-form-signal.component.html',
-  styles: `
-    :host {
-      display: block;
-    }
-  `,
+  host: {
+    class: 'block',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserFormSignalComponent {

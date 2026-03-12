@@ -10,7 +10,9 @@ import { provideTranslocoScope, TranslocoDirective } from '@jsverse/transloco';
   selector: 'app-user-abilities',
   imports: [TranslocoDirective],
   templateUrl: './user-abilities.component.html',
-  styles: ``,
+  host: {
+    class: 'border-primary bg-background mb-6 block rounded border-l-4 p-4',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideTranslocoScope('general')],
 })

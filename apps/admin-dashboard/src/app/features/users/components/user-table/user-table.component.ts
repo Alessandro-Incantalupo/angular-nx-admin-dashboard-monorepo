@@ -4,17 +4,16 @@ import {
   input,
   output,
 } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { User } from '@models';
 
 @Component({
   selector: 'app-user-table',
-  imports: [],
+  imports: [TranslocoDirective],
   templateUrl: './user-table.component.html',
-  styles: `
-    :host {
-      display: block;
-    }
-  `,
+  host: {
+    class: 'block',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserTableComponent {

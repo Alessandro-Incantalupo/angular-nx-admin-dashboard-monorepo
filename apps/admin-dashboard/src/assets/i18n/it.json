@@ -1,5 +1,9 @@
 {
-
-
-
+  "profileMenu": {
+    "openUserMenu": "Apri il menu utente",
+    "yourProfile": "Il tuo profilo",
+    "color": "Colore",
+    "logout": "Esci",
+    "signIn": "Accedi"
+  }
 }
