@@ -4,8 +4,6 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { CustomMenuItem } from '@core/models/menu.model';
 import { MenuStore } from '@core/state/menu.store';
 import { ChipModule } from 'primeng/chip';
 import { NavbarSubmenuComponent } from './navbar-submenu/navbar-submenu.component';
@@ -19,30 +17,13 @@ import { NavbarSubmenuComponent } from './navbar-submenu/navbar-submenu.componen
 })
 export class NavbarMenuComponent {
   readonly menuStore = inject(MenuStore);
-  readonly router = inject(Router);
   readonly openIndex = signal<number | null>(null);
-
-  private showMenuClass = [
-    'scale-100',
-    'animate-fade-in-up',
-    'opacity-100',
-    'pointer-events-auto',
-  ];
-  private hideMenuClass = [
-    'scale-95',
-    'animate-fade-out-down',
-    'opacity-0',
-    'pointer-events-none',
-  ];
 
   open(i: number) {
     this.openIndex.set(i);
   }
+
   close() {
     this.openIndex.set(null);
-  }
-
-  public toggleMenu(menu: CustomMenuItem): void {
-    menu.selected = !menu.selected;
   }
 }

@@ -43,7 +43,7 @@
 
       <!-- Child Menu -->
       <ng-template #childMenu let-item="item">
-        <div class="dropdown relative flex w-full">
+        <div class="group dropdown relative flex w-full">
           <button
             (click)="toggleMenu(item)"
             class="text-color-muted-foreground hover:bg-card hover:text-color-foreground mx-3 flex w-full items-center justify-between rounded-md px-2 py-2 text-xs font-semibold"
@@ -76,9 +76,9 @@
               </svg-icon>
             </span>
           </button>
-          <!-- Submenu Dropdown -->
+          <!-- Submenu Dropdown: hidden by default, revealed on CSS hover of the parent .group div -->
           <app-navbar-submenu
-            class="dropdown-content absolute top-0 left-[100%] min-w-[200px] origin-top-left"
+            class="dropdown-content absolute top-0 left-[100%] z-30 hidden min-w-[200px] origin-top-left group-hover:block"
             [submenu]="item.children"
           ></app-navbar-submenu>
         </div>
