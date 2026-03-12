@@ -24,7 +24,8 @@
     },
     "stats": {
       "user-roles-distribution": "Distribuzione Ruoli Utente",
-      "view-stats": "Vedi Statistiche",
+      "view-stats": "📊 Vedi Statistiche",
+      "view-stats-short": "📊 Statistiche",
       "title": "Statistiche Utente"
     }
   }
