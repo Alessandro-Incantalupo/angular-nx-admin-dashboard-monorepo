@@ -6,8 +6,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomMenuItem } from '@core/models/menu.model';
+import { MenuStore } from '@core/state/menu.store';
 import { ChipModule } from 'primeng/chip';
-import { MenuService } from '../../../services/menu.service';
 import { NavbarSubmenuComponent } from './navbar-submenu/navbar-submenu.component';
 
 @Component({
@@ -18,7 +18,7 @@ import { NavbarSubmenuComponent } from './navbar-submenu/navbar-submenu.componen
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarMenuComponent {
-  menuService = inject(MenuService);
+  readonly menuStore = inject(MenuStore);
   readonly router = inject(Router);
   readonly openIndex = signal<number | null>(null);
 

@@ -1,11 +1,11 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLinkActive } from '@angular/router';
+import { MenuStore } from '@core/state/menu.store';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { toast } from 'ngx-sonner';
 import { ChipModule } from 'primeng/chip';
 import { SubMenuItem } from '../../../../../core/models/menu.model';
-import { MenuService } from '../../../services/menu.service';
 import { SidebarSubmenuComponent } from './sidebar-submenu/sidebar-submenu.component';
 @Component({
   selector: 'app-sidebar-menu',
@@ -21,8 +21,8 @@ import { SidebarSubmenuComponent } from './sidebar-submenu/sidebar-submenu.compo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarMenuComponent {
-  menuService = inject(MenuService);
-  router = inject(Router);
+  readonly menuStore = inject(MenuStore);
+  readonly router = inject(Router);
 
   toggleMenu(item: SubMenuItem) {
     if (item.disabled) {
@@ -30,7 +30,7 @@ export class SidebarMenuComponent {
       return;
     }
     if (item.children && item.children.length > 0) {
-      item.expanded = !item.expanded;
+      this.menuStore.toggleMenu(item);
       return;
     }
     if (item.route) {

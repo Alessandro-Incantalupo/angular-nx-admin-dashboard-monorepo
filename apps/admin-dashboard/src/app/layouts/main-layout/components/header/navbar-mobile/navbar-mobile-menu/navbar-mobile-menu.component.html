@@ -1,4 +1,4 @@
-@for (menu of menuService.pagesMenu; track $index) {
+@for (menu of menuStore.pagesMenu(); track $index) {
   <div class="pt-4">
     <div class="mx-1 mb-2 flex items-center justify-between">
       <small class="text-color-muted-foreground text-xs font-semibold">
@@ -17,7 +17,7 @@
             <!-- Icon -->
             <div
               [class]="
-                item.active && !menuService.showSideBar
+                item.active && !menuStore.showSidebar()
                   ? 'text-primary'
                   : 'text-color-muted-foreground/50'
               "
@@ -87,7 +87,7 @@
             @if (item.children) {
               <button
                 [class]="{
-                  hidden: !menuService.showSideBar,
+                  hidden: !menuStore.showSidebar(),
                   'rotate-90': item.expanded,
                 }"
                 class="text-color-muted-foreground/50 pointer-events-none absolute top-1 right-0 flex items-center p-1 transition-all duration-500"

@@ -1,7 +1,7 @@
 <div
   class="max-h-0 overflow-hidden pt-1 pl-4 transition-all duration-500"
   [class]="{
-    hidden: !menuService.showSideBar,
+    hidden: !menuStore.showSidebar(),
     'max-h-screen': submenu()?.expanded,
   }"
 >
@@ -42,7 +42,7 @@
             </a>
             <button
               [class]="{
-                hidden: !menuService.showSideBar,
+                hidden: !menuStore.showSidebar(),
                 'rotate-90': sub.expanded,
               }"
               class="text-color-muted-foreground flex items-center p-1 transition-all duration-500"

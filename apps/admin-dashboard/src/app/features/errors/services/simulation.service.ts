@@ -24,7 +24,6 @@ export class SimulationService {
    * Triggers a 400 Bad Request with field-level validation errors.
    */
   testValidationError() {
-    console.log('--- Simulating Validation Error ---');
     this.http.get(`${this.simulateUrl}/validation-error`).subscribe({
       error: err =>
         console.log('Validation error handled by subscription:', err),
@@ -35,7 +34,6 @@ export class SimulationService {
    * Triggers a BadRequestAlertException (Business Logic Failure).
    */
   testBadRequest() {
-    console.log('--- Simulating Business Logic Error ---');
     this.http.get(`${this.simulateUrl}/bad-request`).subscribe({
       error: err => console.log('Bad request handled by subscription:', err),
     });
@@ -45,7 +43,6 @@ export class SimulationService {
    * Triggers a 500 Internal Server Error.
    */
   testServerError() {
-    console.log('--- Simulating 500 Server Error ---');
     this.http.get(`${this.simulateUrl}/server-error`).subscribe({
       error: err => console.log('Server error handled by subscription:', err),
     });
@@ -55,7 +52,6 @@ export class SimulationService {
    * Triggers a wrapped success response.
    */
   testEnvelopeUnwrapping() {
-    console.log('--- Simulating Response Envelope ---');
     this.http.get(`${this.simulateUrl}/envelope`).subscribe({
       next: data => console.log('Unwrapped Data received by subscriber:', data),
       error: err => console.log('Envelope test failed:', err),

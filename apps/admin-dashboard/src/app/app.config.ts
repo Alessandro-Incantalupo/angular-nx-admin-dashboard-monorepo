@@ -5,7 +5,7 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
 // import packageJson from '@root/package.json';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
@@ -25,7 +25,7 @@ import { TranslocoHttpLoader } from './transloco-loader';
 export const appConfig: ApplicationConfig = {
   providers: [
     // Enables Angular routing with lazy loading and route guards
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
 
     // Adds HttpClient so we can make HTTP requests in services
     provideHttpClient(

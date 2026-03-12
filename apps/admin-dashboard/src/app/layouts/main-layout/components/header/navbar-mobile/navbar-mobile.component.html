@@ -9,7 +9,7 @@
 -->
 <div
   [class]="
-    menuService.showMobileMenu
+    menuStore.showMobileMenu()
       ? 'animate-fade-in-up pointer-events-auto scale-100 opacity-100 duration-200'
       : 'pointer-events-none scale-95 opacity-0 duration-100 ease-out'
   "

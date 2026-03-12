@@ -2,7 +2,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SubMenuItem } from '@core/models/menu.model';
-import { MenuService } from '@layouts/main-layout/services/menu.service';
+import { MenuStore } from '@core/state/menu.store';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { toast } from 'ngx-sonner';
 import { ChipModule } from 'primeng/chip';
@@ -21,8 +21,8 @@ import { NavbarMobileSubmenuComponent } from '../navbar-mobile-submenu/navbar-mo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarMobileMenuComponent {
-  public menuService = inject(MenuService);
-  router = inject(Router);
+  readonly menuStore = inject(MenuStore);
+  readonly router = inject(Router);
 
   public toggleMenu(item: SubMenuItem): void {
     if (item.disabled) {
@@ -32,7 +32,7 @@ export class NavbarMobileMenuComponent {
       return;
     }
     if (item.children && item.children.length > 0) {
-      item.expanded = !item.expanded;
+      this.menuStore.toggleMenu(item);
       return;
     }
     if (item.route) {
@@ -44,6 +44,6 @@ export class NavbarMobileMenuComponent {
     if (item?.disabled) {
       return;
     }
-    this.menuService.showMobileMenu = false;
+    this.menuStore.setMobileMenu(false);
   }
 }

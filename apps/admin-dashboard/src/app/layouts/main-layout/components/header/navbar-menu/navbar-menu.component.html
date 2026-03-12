@@ -1,4 +1,4 @@
-@for (menu of menuService.pagesMenu; track $index) {
+@for (menu of menuStore.pagesMenu(); track $index) {
   <div
     class="relative inline-block align-top"
     (mouseenter)="open($index)"

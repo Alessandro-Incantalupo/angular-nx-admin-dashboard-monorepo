@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MenuStore } from '@core/state/menu.store';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { MenuService } from '../../../services/menu.service';
 import { NavbarMobileMenuComponent } from './navbar-mobile-menu/navbar-mobile-menu.component';
 
 @Component({
@@ -10,9 +10,9 @@ import { NavbarMobileMenuComponent } from './navbar-mobile-menu/navbar-mobile-me
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarMobileComponent {
-  public menuService = inject(MenuService);
+  readonly menuStore = inject(MenuStore);
 
   public toggleMobileMenu(): void {
-    this.menuService.showMobileMenu = false;
+    this.menuStore.setMobileMenu(false);
   }
 }

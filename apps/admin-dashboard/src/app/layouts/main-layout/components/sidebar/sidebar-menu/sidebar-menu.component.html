@@ -1,8 +1,8 @@
 <div class="pt-4">
-  @for (menu of menuService.pagesMenu; track $index) {
+  @for (menu of menuStore.pagesMenu(); track $index) {
     <div class="mx-1 mb-2 flex items-center justify-between">
       <small
-        [class]="{ hidden: !menuService.showSideBar }"
+        [class]="{ hidden: !menuStore.showSidebar() }"
         class="text-color-muted-foreground/50 text-xs font-semibold"
       >
         {{ menu.group }}
@@ -20,7 +20,7 @@
             <!-- Icon -->
             <div
               [class]="
-                item.active && !menuService.showSideBar
+                item.active && !menuStore.showSidebar()
                   ? 'text-primary'
                   : 'text-color-muted-foreground/50'
               "
@@ -95,7 +95,7 @@
               <button
                 (click)="toggleMenu(item)"
                 [class]="{
-                  hidden: !menuService.showSideBar,
+                  hidden: !menuStore.showSidebar(),
                   'rotate-90': item.expanded,
                 }"
                 class="text-color-muted-foreground/50 pointer-events-none absolute top-1 right-0 flex items-center p-1 transition-all duration-500"
@@ -108,7 +108,7 @@
             }
 
             <!-- Tooltip -->
-            @if (!menuService.showSideBar) {
+            @if (!menuStore.showSidebar()) {
               <div class="fixed w-full">
                 <span
                   class="bg-foreground text-background absolute -top-[34px] left-14 z-1 w-auto min-w-max origin-left scale-0 rounded-md p-2 text-xs font-bold shadow-md transition-all duration-200 group-hover:scale-100"

@@ -6,9 +6,9 @@ import {
   input,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MenuStore } from '@core/state/menu.store';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { SubMenuItem } from '../../../../../../core/models/menu.model';
-import { MenuService } from '../../../../services/menu.service';
 
 @Component({
   selector: 'app-sidebar-submenu',
@@ -18,10 +18,10 @@ import { MenuService } from '../../../../services/menu.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarSubmenuComponent {
-  menuService = inject(MenuService);
-  submenu = input<SubMenuItem>();
+  readonly menuStore = inject(MenuStore);
+  readonly submenu = input<SubMenuItem>();
 
-  public toggleMenu(menu: any) {
-    this.menuService.toggleSubMenu(menu);
+  public toggleMenu(menu: SubMenuItem) {
+    this.menuStore.toggleSubMenu(menu);
   }
 }

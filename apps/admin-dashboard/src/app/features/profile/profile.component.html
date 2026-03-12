@@ -40,9 +40,9 @@
   <div class="text-center">
     <!-- Profile Info -->
     <app-profile-info
-      [userName]="this.userData?.['name']"
-      [email]="this.userData?.['email']"
-      [userRole]="this.userData?.['role']"
+      [userName]="userData()?.name"
+      [email]="userData()?.email"
+      [userRole]="userData()?.role"
       avatarUrl="https://avatars.githubusercontent.com/u/145116865?v=4"
     />
 

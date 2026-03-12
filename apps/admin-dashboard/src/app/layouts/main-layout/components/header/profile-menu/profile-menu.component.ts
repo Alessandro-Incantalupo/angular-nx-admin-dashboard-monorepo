@@ -56,12 +56,11 @@ export class ProfileMenuComponent {
   //   this.router.navigate([PATHS.AUTH, PATHS.SIGN_IN]);
   // }
 
-  toProfile(link: string) {
-    const userData = this.authStore.userData(); // Get the user object
+  toProfile(_link: string) {
+    const userData = this.authStore.userData();
     if (!userData) return;
-    this.router.navigate([PATHS.PROFILE, userData.id], {
-      state: { userData: this.authStore.userData() },
-    });
+    this.isOpen.set(false);
+    this.router.navigate([PATHS.PROFILE, userData.id]);
   }
 
   quickLogin(userType: 'admin' | 'user') {

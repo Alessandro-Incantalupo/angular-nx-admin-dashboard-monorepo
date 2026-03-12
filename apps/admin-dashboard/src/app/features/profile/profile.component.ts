@@ -1,10 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
-  signal,
+  input,
 } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from '@core/state/auth.store';
 import { ThemeStore } from '@core/state/theme.store';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
@@ -23,32 +24,24 @@ import { ThemeSelectorComponent } from './theme-selector/theme-selector.componen
     ThemeSelectorComponent,
     ProfileInfoComponent,
   ],
-  providers: [AuthStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ProfileComponent {
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  themeStore = inject(ThemeStore);
-  authStore = inject(AuthStore);
+  readonly router = inject(Router);
+  readonly themeStore = inject(ThemeStore);
+  readonly authStore = inject(AuthStore);
 
-  breadcrumbItems = signal<{ label: string; route?: string }[]>([]);
+  // auto-bound from :id route param via withComponentInputBinding()
+  readonly id = input.required<string>();
 
-  state = this.router.currentNavigation()?.extras.state;
-  userData: { [key: string]: any } | undefined = undefined;
+  readonly userData = computed(() => this.authStore.userData());
 
-  constructor() {
-    // Get user data from state
-    this.userData = this.state?.['userData'];
-    // Get username from route parameters
-    this.route.params.subscribe(params => {
-      const currentUsername = this.userData?.['name'] || 'Name Not Found';
-      // ✅ Update breadcrumbs dynamically
-      this.breadcrumbItems.set([
-        { label: 'Profile', route: `/profile/${currentUsername}` },
-      ]);
-    });
-  }
+  readonly breadcrumbItems = computed(() => [
+    {
+      label: 'Profile',
+      route: `/profile/${this.userData()?.name ?? this.id()}`,
+    },
+  ]);
 
   logout() {
     this.authStore.logout();

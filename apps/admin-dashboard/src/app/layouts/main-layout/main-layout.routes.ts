@@ -1,13 +1,11 @@
 import { Routes } from '@angular/router';
 import { PATHS } from '../../core/constants/routes';
 import { MainLayoutComponent } from './main-layout.component';
-import { MenuService } from './services/menu.service';
 
 export default [
   {
     path: '',
     component: MainLayoutComponent,
-    providers: [MenuService],
     children: [
       {
         path: '',

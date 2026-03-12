@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { SubMenuItem } from '@core/models/menu.model';
-import { MenuService } from '@layouts/main-layout/services/menu.service';
+import { MenuStore } from '@core/state/menu.store';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { toast } from 'ngx-sonner';
 import { ChipModule } from 'primeng/chip';
@@ -20,7 +20,7 @@ import { ChipModule } from 'primeng/chip';
 })
 export class NavbarMobileSubmenuComponent {
   router = inject(Router);
-  public menuService = inject(MenuService);
+  readonly menuStore = inject(MenuStore);
 
   public submenu = input<SubMenuItem>();
 
@@ -32,7 +32,7 @@ export class NavbarMobileSubmenuComponent {
       return;
     }
     if (item.children && item.children.length > 0) {
-      item.expanded = !item.expanded;
+      this.menuStore.toggleSubMenu(item);
       return;
     }
     if (item.route) {
@@ -40,17 +40,10 @@ export class NavbarMobileSubmenuComponent {
     }
   }
 
-  private collapse(items: Array<any>) {
-    items.forEach(item => {
-      item.expanded = false;
-      if (item.children) this.collapse(item.children);
-    });
-  }
-
   public closeMobileMenu(item?: SubMenuItem): void {
     if (item?.disabled) {
       return;
     }
-    this.menuService.showMobileMenu = false;
+    this.menuStore.setMobileMenu(false);
   }
 }
