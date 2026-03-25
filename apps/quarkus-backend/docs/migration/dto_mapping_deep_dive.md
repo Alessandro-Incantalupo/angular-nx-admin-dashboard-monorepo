@@ -29,10 +29,16 @@ This is a simple Java class that only contain the fields we want to show to the 
 
 ```java
 public class UserDTO {
-    public Long id;
-    public String login;
+    public UUID id;
+    public String name;
     public String email;
+    public UserStatus status;
     public Set<String> authorities;
+
+    // Auditing
+    public String createdBy;
+    public Instant createdDate;
+    // ...
 }
 ```
 

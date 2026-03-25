@@ -21,9 +21,14 @@ In a professional API, you never want to return "Empty" errors or generic HTML p
 ### How to use it in your Code:
 
 ```java
+// Inside UserService.java
+if (userService.findByEmail(email).isPresent()) {
+    throw new EmailAlreadyUsedException();
+}
+
 // Inside a Controller/Resource
-if (userService.findByLogin(login).isPresent()) {
-    throw new BadRequestAlertException("Login already in use", "user", "userexists");
+if (userService.findByName(name).isPresent()) {
+    throw new LoginAlreadyUsedException();
 }
 ```
 

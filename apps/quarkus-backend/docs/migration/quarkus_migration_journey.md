@@ -96,6 +96,11 @@ These are called **Resources** or **Controllers**.
 - **The Concept**: They are the **Receptionists** of your app. They sit by the "front door" (URLs like `/api/users`) and decide what happens when someone makes a request.
 - **How they work**: They look at a URL, find the right Java method, and "ask" the Database (The Truth) for information.
 
+#### 🛠️ `service/` (The "Brain")
+
+- **The Concept**: This is the **Logic Engine**. It sits between the API (Web) and the Database (Domain).
+- **Why it matters**: It's where the hard decisions are made. For example, `UserService.java` checks if an email is already used BEFORE trying to save a new user. It keeps your code clean by separating "How we talk to the web" from "How our business works."
+
 #### ⚡ `config/` (The "Startup")
 
 These are code files that run **only once** when the server starts up.
@@ -116,9 +121,9 @@ This is the final level of our current journey, focusing on stability and profes
 
 ### 🚨 2. Standardized Error Handling (RFC 7807)
 
-- **The Concept**: No more "Silent Fails." The backend now returns structured JSON errors.
+- **The Concept**: No more "Silent Fails." The backend now returns structured JSON errors using custom exceptions like `EmailAlreadyUsedException`.
 - **The Benefit**: Your Angular frontend knows exactly which field failed (e.g., "Email is invalid") instead of just guessing.
-- [ ] **🧠 Need more?**: Check out the [Error Handling Deep Dive](./error_handling_deep_dive.md).
+- [x] **🧠 Need more?**: Check out the [Error Handling Deep Dive](./error_handling_deep_dive.md).
 - [ ] **Comparing Patterns**: See [Bad vs. Good Patterns](./bad_vs_good_patterns.md) to understand the "Why".
 
 ### 🛡️ 3. Architectural Enforcement (ArchUnit)
@@ -146,8 +151,14 @@ This is the final level of our current journey, focusing on stability and profes
 
 - **The Concept**: Separating your Database structure from your API structure.
 - **Why it matters**: It prevents sensitive data (like password hashes) from leaking to the frontend. It also lets you change your database without breaking your Angular code.
-- [ ] **🧠 Need more?**: Check out the [DTO & Mapping Deep Dive](./dto_mapping_deep_dive.md).
+- [x] **🧠 Need more?**: Check out the [DTO & Mapping Deep Dive](./dto_mapping_deep_dive.md).
 - **🧠 Pattern Comparison**: See [Bad vs. Good: Data Safety](./bad_vs_good_patterns.md#1-dto-pattern-the-mask-and-the-truth).
+
+### 🕵️ 7. Auditing Metadata (The "Traceability")
+
+- **The Concept**: Automatically tracking **WHO** created a record and **WHEN** it was last changed.
+- **Why it matters**: Essential for accountability in professional apps. We use JPA hooks (`@PrePersist`, `@PreUpdate`) to ensure these fields are updated without manual effort.
+- [x] **🧠 Need more?**: Check out the [Auditing & User Domain Deep Dive](./auditing_deep_dive.md).
 
 ### 🏛️ 7. DB Naming Strategies (Snake_Case Enforcement)
 
@@ -156,11 +167,12 @@ This is the final level of our current journey, focusing on stability and profes
 - [ ] **🧠 Need more?**: Check out the [Database Naming Deep Dive](./database_naming_deep_dive.md) for full Java vs. SQL examples.
 - **🧠 Pattern Comparison**: See [Bad vs. Good: Database Naming](./bad_vs_good_patterns.md#8-database-naming-snake_case).
 
-### 🔐 8. Security Scaffolding (JWT & RBAC)
+### 🔐 9. Authentication Foundation (OIDC / 3rd Party)
 
-- **The Concept**: Moving from an open API to a Role-Based Access Control system using JSON Web Tokens.
-- **Why it matters**: It ensures only "Authenticated" users can touch your data, and only "Admins" can perform sensitive actions. It's the standard for modern web security.
-- [ ] **🧠 Need more?**: Check out the [Security & RBAC Deep Dive](./security_deep_dive.md).
+- **The Concept**: Instead of building our own "Login" and "Password Hashing" system, we delegate security to professional providers (like Keycloak, Auth0, or Google).
+- **The Gain**: You don't have to worry about storing passwords or implementing Multi-Factor Authentication. It's safer and less code to maintain.
+- **How it works**: Quarkus acts as a **Resource Server**. It receives a JWT from the 3rd party, verifies its signature, and maps the roles to your backend resources.
+- [ ] **🧠 Need more?**: Check out the [Security & OIDC Deep Dive](./oidc_security_deep_dive.md).
 - **🧠 Pattern Comparison**: See [Bad vs. Good: Security Scaffolding](./bad_vs_good_patterns.md#9-security-scaffolding-rbac).
 
 ### 📊 9. Observability (Prometheus & Grafana)

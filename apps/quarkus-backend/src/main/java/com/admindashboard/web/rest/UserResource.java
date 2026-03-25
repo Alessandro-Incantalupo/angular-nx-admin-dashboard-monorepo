@@ -32,24 +32,38 @@ public class UserResource {
                     "Invalid pagination parameters", "user", "pagination");
         }
 
-        long totalItems = userService.count();
+        List<UserDTO> allUsers = userService.getAllManagedUsers();
+        long totalItems = allUsers.size();
         int totalPages = (int) Math.ceil((double) totalItems / size);
-        List<UserDTO> users = userService.findPage(page - 1, size);
 
-        return new PaginatedResponse<>(users, totalItems, totalPages, page, size);
+        int fromIndex = (page - 1) * size;
+        int toIndex = Math.min(fromIndex + size, (int) totalItems);
+
+        List<UserDTO> paginatedUsers =
+                (fromIndex < totalItems) ? allUsers.subList(fromIndex, toIndex) : List.of();
+
+        return new PaginatedResponse<>(paginatedUsers, totalItems, totalPages, page, size);
     }
 
     @GET
     @Path("/stats")
     public Response getStats() {
-        List<UserDTO> users = userService.findAll();
+        List<UserDTO> users = userService.getAllManagedUsers();
 
-        // Ensure even an empty map is returned clearly for the chart
+        // Grouping by authorities. We'll join them as a comma-separated string for the chart
+        // or just pick the first one which is usually primary.
         Map<String, Long> stats =
                 users.stream()
                         .collect(
                                 Collectors.groupingBy(
-                                        u -> u.role.toString(), Collectors.counting()));
+                                        u -> {
+                                            if (u.authorities != null
+                                                    && u.authorities.contains("ROLE_ADMIN")) {
+                                                return "Admin";
+                                            }
+                                            return "User";
+                                        },
+                                        Collectors.counting()));
 
         return Response.ok(stats).build();
     }
@@ -57,27 +71,26 @@ public class UserResource {
     @GET
     @Path("/{id}")
     public Response getUser(@PathParam("id") UUID id) {
-        return userService
-                .findOne(id)
-                .map(user -> Response.ok(new ResponseWrapper<>(user)).build())
+        return com.admindashboard.domain.User.<com.admindashboard.domain.User>findByIdOptional(id)
+                .map(user -> Response.ok(new ResponseWrapper<>(new UserDTO(user))).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
     @POST
     public Response createUser(@Valid UserDTO userDTO) {
-        // We allow the client to send an ID (common in some SPAs),
-        // but our service will ensure a clean persistence.
-        UserDTO result = userService.save(userDTO);
+        // Business logic delegated to service layer
+        com.admindashboard.domain.User result = userService.createUser(userDTO);
         return Response.status(Response.Status.CREATED)
-                .entity(new ResponseWrapper<>(result))
+                .entity(new ResponseWrapper<>(new UserDTO(result)))
                 .build();
     }
 
     @PUT
     @Path("/{id}")
     public Response updateUser(@PathParam("id") UUID id, @Valid UserDTO userDTO) {
+        userDTO.id = id;
         return userService
-                .update(id, userDTO)
+                .updateUser(userDTO)
                 .map(result -> Response.ok(new ResponseWrapper<>(result)).build())
                 .orElse(
                         Response.status(Response.Status.NOT_FOUND)
@@ -88,15 +101,19 @@ public class UserResource {
     @DELETE
     @Path("/{id}")
     public Response deleteUser(@PathParam("id") UUID id) {
-        boolean deleted = userService.delete(id);
-        if (deleted) {
-            return Response.ok(new ResponseWrapper<>(Map.of("id", id, "status", "deleted")))
-                    .build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(Map.of("error", "User not found", "id", id))
-                    .build();
-        }
+        return com.admindashboard.domain.User.<com.admindashboard.domain.User>findByIdOptional(id)
+                .map(
+                        user -> {
+                            userService.deleteUser(user);
+                            return Response.ok(
+                                            new ResponseWrapper<>(
+                                                    Map.of("id", id, "status", "deleted")))
+                                    .build();
+                        })
+                .orElse(
+                        Response.status(Response.Status.NOT_FOUND)
+                                .entity(Map.of("error", "User not found", "id", id))
+                                .build());
     }
 
     @POST

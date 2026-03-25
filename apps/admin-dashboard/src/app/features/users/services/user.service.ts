@@ -12,7 +12,10 @@ export class UsersService {
   private readonly http = inject(HttpClient);
   private readonly createUrlRemote = injectBaseUrl();
 
-  private readonly usersUrl = this.createUrlRemote(`/users`, () => `/users`);
+  private readonly usersUrl = this.createUrlRemote(
+    `/api/users`,
+    () => `/api/users`
+  );
   private readonly RESET_USERS_HTTP_CONTEXT = new HttpContext().set(
     BYPASS_LOADING_SPINNER,
     true

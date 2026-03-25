@@ -1,8 +1,13 @@
 import { User } from '@admin-dashboard-nx-monorepo/models';
-import { updateState } from '@angular-architects/ngrx-toolkit';
+import {
+  setError,
+  setLoaded,
+  setLoading,
+  updateState,
+  withCallState,
+} from '@angular-architects/ngrx-toolkit';
 import { computed, inject } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
-import { tapResponse } from '@ngrx/operators';
 import {
   signalStore,
   withComputed,
@@ -11,47 +16,41 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { toast } from 'ngx-sonner';
-import { switchMap } from 'rxjs';
+import { pipe, tap } from 'rxjs';
 
-type UserState = {
-  isAuthenticated: boolean;
+export interface AuthState {
   userData: User | null;
-  error: string | null;
-};
+  role: User['role'];
+}
 
-const initialState: UserState = {
-  isAuthenticated: !!localStorage.getItem('token'),
+const AUTH_INITIAL_STATE: AuthState = {
   userData: null,
-  error: null,
-};
+  role: 'guest',
+} as const;
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
-  withState<UserState>(initialState),
+  withCallState({ collection: 'auth' }),
+  withState(AUTH_INITIAL_STATE),
   withComputed(state => {
-    const isGuest = computed(() => state.userData()?.role === 'guest');
-    const isUser = computed(() => state.userData()?.role === 'user');
-    const isAdmin = computed(() => state.userData()?.role === 'admin');
-    const canView = computed(
-      () => state.isAuthenticated() || state.userData()?.role === 'guest'
+    const authService = inject(AuthService);
+    const isAuthenticated = computed(() => authService.isAuthenticated());
+
+    const isGuest = computed(
+      () => state.role() === 'guest' || !isAuthenticated()
     );
+    const isUser = computed(() => state.role() === 'user');
+    const isAdmin = computed(() => state.role() === 'admin');
+
+    const canView = computed(() => isAuthenticated() || isGuest());
     const canEdit = computed(
-      () => isUser() || (isAdmin() && state.isAuthenticated())
+      () => isUser() || (isAdmin() && isAuthenticated())
     );
     const canDelete = computed(() => isAdmin());
     const canCreate = computed(() => isAdmin());
-    const roleDescription = computed(() => {
-      const role = state.userData()?.role ?? 'guest';
-      const descriptions = {
-        guest: 'As a guest, you can only view limited content.',
-        user: 'As a user, you can view and edit content.',
-        admin: 'As an admin, you can create, edit, and delete content.',
-      };
-      return descriptions[role];
-    });
 
     return {
+      isAuthenticated,
       isGuest,
       isUser,
       isAdmin,
@@ -59,82 +58,90 @@ export const AuthStore = signalStore(
       canEdit,
       canDelete,
       canCreate,
-      roleDescription,
     };
   }),
 
-  withMethods((state, authService = inject(AuthService)) => {
-    const login = rxMethod<{ email: string; password: string }>(input$ =>
-      input$.pipe(
-        switchMap(({ email, password }) =>
-          authService.login(email, password).pipe(
-            tapResponse({
-              next: ({ token }) => {
-                localStorage.setItem('token', token);
-                updateState(state, 'Login Success', {
-                  isAuthenticated: true,
-                  userData: authService.decodeUserFromToken(),
-                });
-                toast.success('Login successful');
-              },
-              error: () => {
-                localStorage.removeItem('token');
-                updateState(state, 'Login Error', {
-                  isAuthenticated: false,
-                  userData: null,
-                  error: 'Invalid credentials',
-                });
-                toast.error('Login failed. Please check your credentials.');
-              },
-            })
-          )
+  withMethods(store => {
+    const authService = inject(AuthService);
+    return {
+      syncAuthState: rxMethod<unknown>(
+        pipe(
+          tap(() => {
+            const identity = authService.identityClaims();
+            if (!identity) {
+              updateState(store, '[Auth] Clear State', AUTH_INITIAL_STATE);
+              return;
+            }
+
+            const firstName =
+              identity.given_name ||
+              identity.name?.split(' ')[0] ||
+              identity.preferred_username ||
+              'User';
+            const lastName =
+              identity.family_name ||
+              identity.name?.split(' ').slice(1).join(' ') ||
+              '';
+            const fullName =
+              identity.name ||
+              (lastName ? `${firstName} ${lastName}` : firstName);
+
+            const accessToken = authService.accessToken;
+            let roles: string[] = [];
+
+            try {
+              if (accessToken) {
+                const decodedAccess = JSON.parse(
+                  atob(accessToken.split('.')[1])
+                );
+                roles = [
+                  ...(decodedAccess.realm_access?.roles || []),
+                  ...(decodedAccess.roles || []),
+                ];
+              }
+            } catch (e) {
+              console.error('Error decoding access token', e);
+            }
+
+            if (roles.length === 0) {
+              roles =
+                (identity.realm_access?.roles as string[]) ||
+                (identity.roles as string[]) ||
+                [];
+            }
+
+            let role: User['role'] = 'user';
+            if (roles.some(r => r.toLowerCase().includes('admin'))) {
+              role = 'admin';
+            } else if (roles.some(r => r.toLowerCase().includes('user'))) {
+              role = 'user';
+            } else if (roles.includes('guest')) {
+              role = 'guest';
+            }
+
+            const userData: User = {
+              id: identity.sub,
+              name: fullName,
+              email: identity.email,
+              firstName,
+              lastName,
+              role,
+              status: 'active',
+            };
+
+            updateState(store, '[Auth] Sync State', { userData, role });
+          })
         )
-      )
-    );
-
-    const logout = () => {
-      localStorage.removeItem('token');
-      updateState(state, 'Logout', {
-        isAuthenticated: false,
-        userData: null,
-        error: null,
-      });
+      ),
+      login: () => authService.login(),
+      logout: () => authService.logout(),
     };
-
-    const setError = (error: string) => {
-      updateState(state, 'Set Error', { error });
-    };
-
-    const setRole = (role: 'guest' | 'user' | 'admin') => {
-      const currentUser = state.userData();
-      if (!currentUser) {
-        toast.error('Cannot set role. No user is logged in.');
-        return;
-      }
-
-      updateState(state, 'Set Role', {
-        userData: { ...currentUser, role },
-      });
-
-      toast.success(`Role updated to "${role}"`);
-    };
-
-    return { login, logout, setError, setRole };
   }),
-  // This hook runs when the AuthStore is initialized.
-  // It checks if a JWT token exists in localStorage.
-  // If a token is found, it decodes the user from the token and updates the store state.
-  // This ensures that after a page refresh, the authentication state and user data are restored.
-  withHooks((_, authService = inject(AuthService)) => ({
-    onInit: () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        updateState(_, 'Hydrate user from token', {
-          isAuthenticated: true,
-          userData: authService.decodeUserFromToken(),
-          error: null,
-        });
-      }
+
+  withHooks({
+    onInit(store) {
+      const authService = inject(AuthService);
+      store.syncAuthState(authService.events$);
     },
-  }))
+  })
 );

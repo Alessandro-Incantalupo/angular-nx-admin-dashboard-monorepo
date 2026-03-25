@@ -51,11 +51,7 @@ export default class SignInComponent {
   });
 
   onSubmit() {
-    this.submitted = true;
-    if (this.form.invalid) return;
-
-    const { email, password } = this.form.value;
-    this.authStore.login({ email, password });
+    this.authStore.login();
   }
 
   // Helper function to check form field validity

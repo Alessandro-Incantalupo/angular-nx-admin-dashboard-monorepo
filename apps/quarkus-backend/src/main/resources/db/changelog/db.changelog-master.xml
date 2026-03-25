@@ -10,5 +10,7 @@
       It lists all your database versions in the order they should be applied.
     -->
     <include file="db/changelog/01_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/02_user_refinement.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/03_demo_data.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

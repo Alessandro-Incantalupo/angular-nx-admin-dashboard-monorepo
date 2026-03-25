@@ -1,7 +1,9 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ApplicationConfig,
+  inject,
   isDevMode,
+  provideAppInitializer,
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -15,6 +17,8 @@ import { LoadingInterceptor } from '@core/interceptors/loading.interceptor';
 
 import { provideAngularSvgIcon } from 'angular-svg-icon';
 import { providePrimeNG } from 'primeng/config';
+import { provideOAuthClient, OAuthService } from 'angular-oauth2-oidc';
+import { authCodeFlowConfig } from '@core/services/auth.service';
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './transloco-loader';
 
@@ -53,6 +57,30 @@ export const appConfig: ApplicationConfig = {
 
     // Allows using SVG icons like <svg-icon src="..."></svg-icon>
     provideAngularSvgIcon(),
+
+    // OIDC / OAuth2 Client support
+    provideOAuthClient(),
+
+    // Initialize OIDC at startup (Resilient/Non-blocking)
+    provideAppInitializer(() => {
+      const oauthService = inject(OAuthService);
+      oauthService.configure(authCodeFlowConfig);
+
+      return oauthService
+        .loadDiscoveryDocumentAndTryLogin()
+        .then(() => {
+          if (isDevMode()) console.log('OIDC Discovery Successful');
+        })
+        .catch(error => {
+          // Failure is caught so the app still bootstraps (Showcase Mode)
+          console.warn(
+            'OIDC Discovery Failed. App is running in unauthenticated mode.',
+            error
+          );
+          return Promise.resolve();
+        });
+    }),
+
     // Custom DI token containing package metadata (e.g. version, name)
     // { provide: APP_INFO, useValue: packageJson },
     provideTransloco({

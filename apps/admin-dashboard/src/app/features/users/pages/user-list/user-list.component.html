@@ -22,20 +22,6 @@
     </div>
   </div>
 
-  <app-user-abilities
-    [roleDescription]="authStore.roleDescription()"
-    [isAuthenticated]="authStore.isAuthenticated()"
-    (whatIsMyRole)="quickLogin($event)"
-  ></app-user-abilities>
-
-  <app-role-selector
-    [isAuthenticated]="authStore.isAuthenticated()"
-    [isGuest]="authStore.isGuest()"
-    [isUser]="authStore.isUser()"
-    [isAdmin]="authStore.isAdmin()"
-    (whatIsMyRole)="authStore.setRole($event)"
-  ></app-role-selector>
-
   @if (userStore.usersLoading()) {
     <p>{{ t('users.loading') }}</p>
   } @else if (userStore.usersError()) {

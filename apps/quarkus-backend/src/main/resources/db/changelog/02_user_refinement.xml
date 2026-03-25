@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <!-- 
+      CHIPSET: 02_user_refinement
+      AUTHOR: admin
+      GOAL: Port JHipster's Authority system and Auditing metadata to the User table.
+    -->
+    <changeSet id="02-add-authority-table" author="admin">
+        <createTable tableName="ad_authority">
+            <column name="name" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert tableName="ad_authority">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="ad_authority">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="03-add-auditing-columns" author="admin">
+        <addColumn tableName="ad_user">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp" defaultValueComputed="current_timestamp"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="04-user-authority-join-table" author="admin">
+        <createTable tableName="ad_user_authority">
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="ad_user_authority"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="ad_user_authority"
+                                 constraintName="fk_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="authority_name"
+                                 baseTableName="ad_user_authority"
+                                 constraintName="fk_authority_name"
+                                 referencedColumnNames="name"
+                                 referencedTableName="ad_authority"/>
+    </changeSet>
+
+    <changeSet id="05-migrate-existing-roles" author="admin">
+        <rollback>
+            <!-- No simple rollback for migration logic -->
+        </rollback>
+        <!-- Logic to move existing 'role' data into the join table if any exists -->
+        <sql>
+            INSERT INTO ad_user_authority (user_id, authority_name)
+            SELECT id, 'ROLE_ADMIN' FROM ad_user WHERE role = 'admin';
+            
+            INSERT INTO ad_user_authority (user_id, authority_name)
+            SELECT id, 'ROLE_USER' FROM ad_user WHERE role != 'admin';
+        </sql>
+    </changeSet>
+
+    <changeSet id="06-remove-legacy-role-column" author="admin">
+        <dropColumn tableName="ad_user" columnName="role"/>
+    </changeSet>
+
+    <changeSet id="07-add-login-column" author="admin">
+        <addColumn tableName="ad_user">
+            <column name="login" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="08-refine-user-columns" author="admin">
+        <modifyDataType tableName="ad_user" columnName="email" newDataType="varchar(254)"/>
+        <modifyDataType tableName="ad_user" columnName="name" newDataType="varchar(50)"/>
+        <modifyDataType tableName="ad_user" columnName="status" newDataType="varchar(255)"/>
+    </changeSet>
+
+</databaseChangeLog>

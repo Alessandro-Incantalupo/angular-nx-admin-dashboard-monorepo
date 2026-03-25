@@ -52,6 +52,8 @@ dependencies {
 
     // --- 📞 Web & API ---
     implementation 'io.quarkus:quarkus-rest-jackson'        // Handles JSON data.
+    implementation 'io.quarkus:quarkus-oidc'
+    implementation 'io.quarkus:quarkus-keycloak-authorization'
     implementation 'io.quarkus:quarkus-jackson'
     implementation 'io.quarkus:quarkus-arc'                 // Dependency Injection.
     implementation 'io.quarkus:quarkus-rest'                // The REST API engine.

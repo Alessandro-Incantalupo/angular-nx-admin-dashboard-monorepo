@@ -4,18 +4,15 @@ import com.admindashboard.domain.Authority;
 import com.admindashboard.domain.User;
 import com.admindashboard.domain.enumeration.UserStatus;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/** A DTO for the {@link com.admindashboard.domain.User} entity. */
+/** A DTO representing a user, with his authorities. */
 @RegisterForReflection
-public class UserDTO {
+public class AdminUserDTO {
 
     public UUID id;
 
@@ -23,31 +20,30 @@ public class UserDTO {
     @Size(min = 1, max = 50)
     public String login;
 
-    @NotBlank(message = "Name is required")
     @Size(max = 50)
     public String name;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
+    @Email
     @Size(min = 5, max = 254)
     public String email;
 
-    @NotNull(message = "Status is required")
-    public UserStatus status;
+    @NotNull public UserStatus status;
+
+    public String createdBy;
+
+    public Instant createdDate;
+
+    public String lastModifiedBy;
+
+    public Instant lastModifiedDate;
 
     public Set<String> authorities;
 
-    public String role; // Frontend compatibility
+    public AdminUserDTO() {
+        // Empty constructor needed for Jackson.
+    }
 
-    // --- Auditing Meta ---
-    public String createdBy;
-    public Instant createdDate;
-    public String lastModifiedBy;
-    public Instant lastModifiedDate;
-
-    public UserDTO() {}
-
-    public UserDTO(User user) {
+    public AdminUserDTO(User user) {
         this.id = user.id;
         this.login = user.login;
         this.name = user.name;
@@ -59,22 +55,14 @@ public class UserDTO {
         this.lastModifiedDate = user.lastModifiedDate;
         this.authorities =
                 user.authorities.stream().map(Authority::getName).collect(Collectors.toSet());
-
-        // Map to a single role for frontend table display
-        if (this.authorities.contains("ROLE_ADMIN")) {
-            this.role = "admin";
-        } else if (this.authorities.contains("ROLE_USER")) {
-            this.role = "user";
-        } else {
-            this.role = "guest";
-        }
     }
 
     @Override
     public String toString() {
-        return "UserDTO{"
-                + "id="
+        return "AdminUserDTO{"
+                + "id='"
                 + id
+                + '\''
                 + ", name='"
                 + name
                 + '\''
@@ -83,8 +71,17 @@ public class UserDTO {
                 + '\''
                 + ", status="
                 + status
+                + ", createdBy="
+                + createdBy
+                + ", createdDate="
+                + createdDate
+                + ", lastModifiedBy='"
+                + lastModifiedBy
+                + '\''
+                + ", lastModifiedDate="
+                + lastModifiedDate
                 + ", authorities="
                 + authorities
-                + '}';
+                + "}";
     }
 }

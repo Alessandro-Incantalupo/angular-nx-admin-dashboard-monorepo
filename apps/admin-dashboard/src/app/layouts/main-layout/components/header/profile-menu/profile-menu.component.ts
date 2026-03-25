@@ -45,6 +45,10 @@ export class ProfileMenuComponent {
     this.isOpen.set(!this.isOpen());
   }
 
+  login() {
+    this.authStore.login();
+  }
+
   logout() {
     this.isOpen.set(false);
     this.authStore.logout();
@@ -61,19 +65,5 @@ export class ProfileMenuComponent {
     this.router.navigate([PATHS.PROFILE, userData.id]);
   }
 
-  quickLogin(userType: 'admin' | 'user') {
-    const demoCredentials = [
-      { role: 'admin', email: 'admin@example.com', password: 'admin123' },
-      { role: 'user', email: 'user@example.com', password: 'user123' },
-    ];
-
-    const credentials = demoCredentials.find(cred => cred.role === userType);
-
-    if (credentials) {
-      this.authStore.login({
-        email: credentials.email,
-        password: credentials.password,
-      });
-    }
-  }
+  // Quick login removed because OIDC requires redirect to Keycloak
 }

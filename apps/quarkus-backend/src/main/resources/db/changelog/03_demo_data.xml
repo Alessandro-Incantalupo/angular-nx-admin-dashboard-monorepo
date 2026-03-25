@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="09-insert-demo-users" author="admin">
+        <!-- Alessandro (Admin) -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000001"/>
+            <column name="login" value="alessandro"/>
+            <column name="name" value="Alessandro Incantalupo"/>
+            <column name="email" value="alessandro@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000001"/>
+            <column name="authority_name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000001"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- Alice -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000002"/>
+            <column name="login" value="alice"/>
+            <column name="name" value="Alice Smith"/>
+            <column name="email" value="alice@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000002"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- Bob -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000003"/>
+            <column name="login" value="bob"/>
+            <column name="name" value="Bob Jones"/>
+            <column name="email" value="bob@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000003"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- Charlie -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000004"/>
+            <column name="login" value="charlie"/>
+            <column name="name" value="Charlie Brown"/>
+            <column name="email" value="charlie@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000004"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- David -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000005"/>
+            <column name="login" value="david"/>
+            <column name="name" value="David Miller"/>
+            <column name="email" value="david@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000005"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- Eve -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000006"/>
+            <column name="login" value="eve"/>
+            <column name="name" value="Eve Wilson"/>
+            <column name="email" value="eve@example.com"/>
+            <column name="status" value="DEACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000006"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- Frank -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000007"/>
+            <column name="login" value="frank"/>
+            <column name="name" value="Frank Taylor"/>
+            <column name="email" value="frank@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000007"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- Grace -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000008"/>
+            <column name="login" value="grace"/>
+            <column name="name" value="Grace Hopper"/>
+            <column name="email" value="grace@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000008"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- Heidi -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000009"/>
+            <column name="login" value="heidi"/>
+            <column name="name" value="Heidi Klum"/>
+            <column name="email" value="heidi@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000009"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+
+        <!-- Ivan -->
+        <insert tableName="ad_user">
+            <column name="id" value="00000000-0000-0000-0000-000000000010"/>
+            <column name="login" value="ivan"/>
+            <column name="name" value="Ivan Drago"/>
+            <column name="email" value="ivan@example.com"/>
+            <column name="status" value="ACTIVATED"/>
+            <column name="created_date" valueComputed="current_timestamp"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="ad_user_authority">
+            <column name="user_id" value="00000000-0000-0000-0000-000000000010"/>
+            <column name="authority_name" value="ROLE_USER"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

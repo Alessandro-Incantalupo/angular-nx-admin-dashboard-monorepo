@@ -1,32 +1,51 @@
-import { User } from '@admin-dashboard-nx-monorepo/models';
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { injectBaseUrl } from '@core/CIF/inject-base-url';
+import { inject, Injectable, isDevMode } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
+import { environment } from '@environments/environment';
+import { map, shareReplay } from 'rxjs';
+
+export const authCodeFlowConfig: AuthConfig = {
+  issuer: environment.oidc.issuer,
+  redirectUri: environment.oidc.redirectUri,
+  clientId: environment.oidc.clientId,
+  responseType: 'code',
+  scope: environment.oidc.scope,
+  showDebugInformation: isDevMode(),
+  requireHttps: environment.oidc.requireHttps,
+  strictDiscoveryDocumentValidation: false,
+};
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly http = inject(HttpClient);
-  private readonly createUrlRemote = injectBaseUrl();
+  private readonly oauthService = inject(OAuthService);
 
-  private readonly authUrl = this.createUrlRemote(`/auth`, () => `/auth`);
+  // Observable stream of OIDC events
+  readonly events$ = this.oauthService.events.pipe(shareReplay(1));
 
-  decodeUserFromToken(): any | null {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
+  // Signal-based reactive state using toSignal interop
+  readonly isAuthenticated = toSignal(
+    this.events$.pipe(map(() => this.oauthService.hasValidAccessToken())),
+    { initialValue: false }
+  );
 
-    try {
-      const payload = token.split('.')[1];
-      const decoded = JSON.parse(atob(payload));
-      return decoded as User;
-    } catch {
-      return null;
+  readonly identityClaims = toSignal(
+    this.events$.pipe(map(() => this.oauthService.getIdentityClaims() as any)),
+    { initialValue: null }
+  );
+
+  // Direct access for non-reactive needs (interceptors, etc.)
+  get accessToken() {
+    return this.oauthService.getAccessToken();
+  }
+
+  login = () => {
+    if (!this.oauthService.discoveryDocumentLoaded) {
+      console.warn(
+        'Cannot login: OIDC Discovery Document not loaded. Is the backend running?'
+      );
+      return;
     }
-  }
-
-  login(email: string, password: string) {
-    return this.http.post<{ token: string }>(this.authUrl + '/login', {
-      email,
-      password,
-    });
-  }
+    this.oauthService.initCodeFlow();
+  };
+  logout = () => this.oauthService.logOut();
 }

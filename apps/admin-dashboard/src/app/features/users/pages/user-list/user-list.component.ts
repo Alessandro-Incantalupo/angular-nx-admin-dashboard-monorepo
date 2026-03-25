@@ -7,8 +7,6 @@ import {
   signal,
 } from '@angular/core';
 import { AuthStore } from '@core/state/auth.store';
-import { RoleSelectorComponent } from '@features/users/components/role-selector/role-selector.component';
-import { UserAbilitiesComponent } from '@features/users/components/user-abilities/user-abilities.component';
 import { UsersStore } from '@features/users/state/user.store';
 
 import { RouterLink } from '@angular/router';
@@ -28,8 +26,6 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
     UserFormComponent,
     UserFormSignalComponent,
     PrimeNgTableComponent,
-    RoleSelectorComponent,
-    UserAbilitiesComponent,
     Dialog,
     RouterLink,
   ],
@@ -55,39 +51,7 @@ export default class UserListComponent {
     { label: 'Admin', value: 'admin' },
   ];
 
-  readonly demoCredentials = [
-    {
-      email: 'admin@example.com',
-      password: 'admin123',
-      role: 'admin',
-      description: 'Full access to create, edit, and delete users',
-    },
-    {
-      email: 'user@example.com',
-      password: 'user123',
-      role: 'user',
-      description: 'Can view and edit users',
-    },
-  ] as const;
-
-  readonly tabs = signal([
-    { name: 'Tab 1' },
-    { name: 'Tab 2' },
-    { name: 'Tab 3' },
-  ]);
-  readonly activeTab = signal<string>('Tab 1');
-
-  quickLogin(userType: 'admin' | 'user') {
-    const credentials = this.demoCredentials.find(
-      cred => cred.role === userType
-    );
-    if (credentials) {
-      this.authStore.login({
-        email: credentials.email,
-        password: credentials.password,
-      });
-    }
-  }
+  // Quick login removed because OIDC requires redirect to Keycloak
 
   canEditUser(user: User): boolean {
     const currentUser = this.authStore.userData();
