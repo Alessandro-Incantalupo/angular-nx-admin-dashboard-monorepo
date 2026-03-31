@@ -25,6 +25,7 @@
 16. [ES Modules vs CommonJS and ECMAScript](#16-es-modules-vs-commonjs-and-ecmascript)
 17. [Pure Functions and Memoization](#17-pure-functions-and-memoization)
 18. [OOP Basics](#18-oop-basics)
+19. [Computational Complexity (Big O)](#19-computational-complexity-big-o)
 
 ---
 
@@ -662,3 +663,69 @@ interface Serialisable {
 | What is SSR?                  | Server-Side Rendering — Angular runs on the server and sends pre-rendered HTML        |
 | What is a monorepo?           | A single repository containing multiple projects sharing code under `libs/`           |
 | What is Nx?                   | A smart monorepo build system with caching, affected commands, and code generators    |
+
+---
+
+## 19. Computational Complexity (Big O)
+
+### 🗣️ Spoken answer
+
+> "Big O notation describes how an algorithm's time or space requirements grow as the input size grows. It's worst-case — how bad can it get? You'll see it come up in code reviews when someone puts a `find` inside a `forEach` and accidentally builds an O(n²) loop without realising it. The ones that matter day-to-day as a frontend dev: O(1) for object and Map lookups, O(n) for a single array iteration, O(n²) for nested loops, and O(log n) for binary search. Sorting is O(n log n). You don't need to prove theorems — you need to recognise when you're doing something expensive."
+
+### The common complexities
+
+| Notation   | Name         | Example                                       | n=1000        |
+| ---------- | ------------ | --------------------------------------------- | ------------- |
+| O(1)       | Constant     | `obj[key]`, `map.get(k)`, `set.has(v)`        | 1 op          |
+| O(log n)   | Logarithmic  | Binary search, balanced tree lookup           | ~10 ops       |
+| O(n)       | Linear       | `array.find()`, `array.filter()`, single loop | 1000 ops      |
+| O(n log n) | Linearithmic | `array.sort()`                                | ~10 000 ops   |
+| O(n²)      | Quadratic    | Nested loop, naive duplicate check            | 1 000 000 ops |
+| O(2ⁿ)      | Exponential  | Recursive Fibonacci without memoization       | 💀            |
+
+### The hidden O(n²) trap — common in Angular code
+
+```ts
+// BAD — O(n²): for each user, scan all roles array
+users.forEach(user => {
+  const role = roles.find(r => r.userId === user.id); // O(n) inside O(n)
+});
+
+// GOOD — O(n): build a lookup Map first, then access in O(1)
+const roleByUserId = new Map(roles.map(r => [r.userId, r]));
+users.forEach(user => {
+  const role = roleByUserId.get(user.id); // O(1)
+});
+```
+
+### Space complexity
+
+Same notation, but counts memory instead of time.
+
+```ts
+// O(1) space — fixed extra memory regardless of input
+function sum(arr: number[]) {
+  let total = 0; // one variable
+  for (const n of arr) total += n;
+  return total;
+}
+
+// O(n) space — allocates a new array proportional to input
+function doubled(arr: number[]) {
+  return arr.map(n => n * 2); // new array same size as input
+}
+```
+
+### What interviewers actually ask
+
+- _"You have two arrays — find common elements."_ → naive O(n²) is two nested loops; optimal is O(n) with a `Set`.
+- _"Why is your `@for` slow with 10 000 items?"_ → missing `trackBy`/`track` forces O(n) DOM diffing per change.
+- _"When would you use a `Map` over an object?"_ → same O(1) lookup but `Map` handles non-string keys and preserves insertion order.
+
+### 🎤 Practice questions
+
+> _"What is Big O notation and why does it matter in frontend code?"_
+
+> _"How would you optimise a function that finds matching items between two large arrays?"_
+
+> _"What is the time complexity of `Array.prototype.sort()`?"_
