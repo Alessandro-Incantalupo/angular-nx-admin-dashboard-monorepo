@@ -98,6 +98,7 @@
 | 72  | [Browser Basics — Simplified](coach_tier1_foundations.md#72-browser-basics--simplified)                                             | 🟢   |
 | 73  | [ViewChild — Concrete Use Cases](coach_tier2_angular_core.md#73-viewchild--concrete-use-cases)                                      | 🔵   |
 | 74  | [OOP Basics](coach_tier1_foundations.md#74-oop-basics)                                                                              | 🟢   |
+| 75  | [rxResource()](coach_tier4_advanced.md#35-rxresource----75)                                                                         | 🟠   |
 | 75  | [Tell me about yourself](coach_tier6_behavioral.md#1-tell-me-about-yourself)                                                        | ⚫   |
 | 76  | [Most complex feature](coach_tier6_behavioral.md#2-most-complex-feature-youve-built)                                                | ⚫   |
 | 77  | [Definition of done](coach_tier6_behavioral.md#3-how-do-you-know-when-something-is-done)                                            | ⚫   |

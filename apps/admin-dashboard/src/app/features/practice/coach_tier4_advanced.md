@@ -10,18 +10,19 @@
 1. [Signals](#1-signals)
 2. [Writable vs Read-only Signals](#2-writable-vs-read-only-signals)
 3. [computed() and linkedSignal()](#3-computed-and-linkedsignal)
-4. [effect()](#4-effect)
-5. [Change Detection (OnPush)](#5-change-detection-onpush)
-6. [Zone.js and Zoneless](#6-zonejs-and-zoneless)
-7. [Interceptors](#7-interceptors)
-8. [Eager vs Lazy Loading](#8-eager-vs-lazy-loading)
-9. [@defer](#9-defer)
-10. [@for Cycle Syntax](#10-for-cycle-syntax)
-11. [Shadow DOM](#11-shadow-dom)
-12. [View Encapsulation (Plain English)](#12-view-encapsulation-plain-english)
-13. [Runtime Error Examples](#13-runtime-error-examples)
-14. [Error Handling](#14-error-handling)
-15. [Debugging: Step-by-Step Workflows](#15-debugging-step-by-step-workflows)
+4. [rxResource()](#35-rxresource----75)
+5. [effect()](#4-effect)
+6. [Change Detection (OnPush)](#5-change-detection-onpush)
+7. [Zone.js and Zoneless](#6-zonejs-and-zoneless)
+8. [Interceptors](#7-interceptors)
+9. [Eager vs Lazy Loading](#8-eager-vs-lazy-loading)
+10. [@defer](#9-defer)
+11. [@for Cycle Syntax](#10-for-cycle-syntax)
+12. [Shadow DOM](#11-shadow-dom)
+13. [View Encapsulation (Plain English)](#12-view-encapsulation-plain-english)
+14. [Runtime Error Examples](#13-runtime-error-examples)
+15. [Error Handling](#14-error-handling)
+16. [Debugging: Step-by-Step Workflows](#15-debugging-step-by-step-workflows)
 
 ---
 
@@ -92,6 +93,75 @@ readonly selectedId = linkedSignal(() => this.items()[0]?.id ?? null);
 ### 🎤 Practice question
 
 > _"What is `computed()` and when would you use `linkedSignal()` instead?"_
+
+---
+
+## 3.5 rxResource() — [#75]
+
+### 🗣️ Spoken answer
+
+> "`rxResource()` is Angular 19's built-in way to load async data reactively using Observables. You give it a `request` function that returns a signal-derived params object, and a `loader` function that receives those params and returns an Observable. Whenever the request signal changes, Angular automatically cancels the in-flight Observable and re-runs the loader — no `switchMap` to write manually. The result is a resource object with four read-only signals: `value()`, `isLoading()`, `error()`, and `status()`. It's the Observable counterpart of `resource()` which uses Promises. Think of it as a declarative, signal-aware `switchMap` baked into the framework."
+
+```ts
+import { rxResource } from '@angular/core/rxjs-interop';
+
+@Component({
+  /* ... */
+})
+export class UsersComponent {
+  private readonly http = inject(HttpClient);
+
+  readonly searchTerm = signal('');
+
+  readonly users = rxResource({
+    request: () => this.searchTerm(), // re-runs when searchTerm changes
+    loader: ({ request: term }) => this.http.get<User[]>(`/api/users?q=${term}`),
+  });
+}
+```
+
+```html
+@if (users.isLoading()) {
+<app-spinner />
+} @else if (users.error()) {
+<p>Failed to load users.</p>
+} @else { @for (user of users.value(); track user.id) {
+<app-user-card [user]="user" />
+} }
+```
+
+### Key signals on a resource
+
+| Signal         | Type             | What it holds                                           |
+| -------------- | ---------------- | ------------------------------------------------------- |
+| `.value()`     | `T \| undefined` | Last successful data, `undefined` while loading/error   |
+| `.isLoading()` | `boolean`        | `true` while the Observable is in flight                |
+| `.error()`     | `unknown`        | The thrown error, or `undefined` if healthy             |
+| `.status()`    | `ResourceStatus` | `Idle` / `Loading` / `Resolved` / `Error` / `Reloading` |
+
+### resource() vs rxResource()
+
+| `resource()`           | `rxResource()`                    |
+| ---------------------- | --------------------------------- |
+| loader returns Promise | loader returns Observable         |
+| `async/await` syntax   | RxJS operators still usable       |
+| Simpler for one-shots  | Better for streams / cancellation |
+
+### When to use it
+
+- Loading data that depends on a signal (search, pagination, selected ID)
+- Any case where you'd otherwise write `switchMap` + manual `isLoading` signal
+- Replacing `ngOnInit + subscribe` patterns with a declarative resource
+
+### Gaps to avoid
+
+- Don't call `.set()` on `users.value` — it's read-only. Mutate the request signal instead.
+- The `loader` must return a cold Observable — `http.get()` is ideal.
+- `rxResource` lives in `@angular/core/rxjs-interop`, not `@angular/core`.
+
+### 🎤 Practice question
+
+> _"What is `rxResource()` and how is it different from manually using `switchMap` inside a component?"_
 
 ---
 
