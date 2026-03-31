@@ -8,24 +8,24 @@
 ## 📋 Contents
 
 1. [Framework vs Library](#1-framework-vs-library)
-2. [Why Node.js is Relevant to Angular & npm](#2-why-nodejs-is-relevant-to-angular-npm)
+2. [Why Node.js is Relevant to Angular and npm](#2-why-nodejs-is-relevant-to-angular-and-npm)
 3. [npm vs pnpm](#3-npm-vs-pnpm)
-4. [main.ts, index.html & app.config.ts](#4-maints-indexhtml-appconfigts)
+4. [main.ts, index.html and app.config.ts](#4-maints-indexhtml-and-appconfigts)
 5. [Data Binding](#5-data-binding)
 6. [Lifecycle Hooks](#6-lifecycle-hooks)
 7. [constructor vs ngOnInit](#7-constructor-vs-ngoninit)
-8. [DOM Basics & Terminology](#8-dom-basics-terminology)
-9. [Event Bubbling & Document Root](#9-event-bubbling-document-root)
+8. [DOM Basics and Terminology](#8-dom-basics-and-terminology)
+9. [Event Bubbling and Document Root](#9-event-bubbling-and-document-root)
 10. [Template-Driven Forms](#10-template-driven-forms)
 11. [Reactive Forms](#11-reactive-forms)
-12. [Form Validation & Manipulation](#12-form-validation-manipulation)
+12. [Form Validation and Manipulation](#12-form-validation-and-manipulation)
 13. [General Form Rules](#13-general-form-rules)
 14. [A11y Basics](#14-a11y-basics)
 15. [Semantic HTML](#15-semantic-html)
-16. [ARIA & Alt Text](#16-aria-alt-text)
+16. [ARIA and Alt Text](#16-aria-and-alt-text)
 17. [HTTP CRUD with HttpClient](#17-http-crud-with-httpclient)
-18. [ViewChild & Content Projection](#18-viewchild-content-projection)
-19. [ViewChild — Concrete Use Cases](#19-viewchild-concrete-use-cases)
+18. [ViewChild and Content Projection](#18-viewchild-and-content-projection)
+19. [ViewChild: Concrete Use Cases](#19-viewchild-concrete-use-cases)
 
 ---
 
@@ -41,7 +41,7 @@
 
 ---
 
-## 2. Why Node.js is Relevant to Angular & npm
+## 2. Why Node.js is Relevant to Angular and npm
 
 ### 🗣️ Spoken answer
 
@@ -75,7 +75,7 @@ Node.js role:
 
 ---
 
-## 4. main.ts, index.html & app.config.ts
+## 4. main.ts, index.html and app.config.ts
 
 ### 🗣️ Spoken answer
 
@@ -185,7 +185,7 @@ export class UserComponent {
 
 ---
 
-## 8. DOM Basics & Terminology
+## 8. DOM Basics and Terminology
 
 ### 🗣️ Spoken answer fast-reference
 
@@ -209,7 +209,7 @@ export class UserComponent {
 
 ---
 
-## 9. Event Bubbling & Document Root
+## 9. Event Bubbling and Document Root
 
 ### 🗣️ Spoken answer
 
@@ -296,7 +296,7 @@ onSubmit() {
 
 ---
 
-## 12. Form Validation & Manipulation
+## 12. Form Validation and Manipulation
 
 ### 🗣️ Spoken answer
 
@@ -367,7 +367,7 @@ this.fb.group({ password: [''], confirm: [''] }, { validators: passwordMatch });
 
 ---
 
-## 16. ARIA & Alt Text
+## 16. ARIA and Alt Text
 
 ### 🗣️ Spoken answer
 
@@ -411,7 +411,7 @@ deleteUser(id)       => this.http.delete<void>(`${url}/${id}`)
 
 ---
 
-## 18. ViewChild & Content Projection
+## 18. ViewChild and Content Projection
 
 ### 🗣️ Spoken answer
 
@@ -451,7 +451,7 @@ readonly items = viewChildren(ItemComponent);
 
 ---
 
-## 19. ViewChild — Concrete Use Cases
+## 19. ViewChild: Concrete Use Cases
 
 ### 🗣️ Spoken answer
 

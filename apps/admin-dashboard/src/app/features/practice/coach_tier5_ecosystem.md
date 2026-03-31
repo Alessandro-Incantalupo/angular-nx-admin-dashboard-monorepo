@@ -7,25 +7,25 @@
 
 ## 📋 Contents
 
-1. [Order of "Times" — compile-time, build-time, runtime](#1-order-of-times-compile-time-build-time-runtime)
+1. [Order of Times: compile-time, build-time, runtime](#1-order-of-times-compile-time-build-time-runtime)
 2. [TypeScript Compilation in Angular](#2-typescript-compilation-in-angular)
 3. [Runtime vs Build-Time](#3-runtime-vs-build-time)
 4. [TypeScript Generics](#4-typescript-generics)
-5. [esbuild & Minification](#5-esbuild-minification)
+5. [esbuild and Minification](#5-esbuild-and-minification)
 6. [Vite](#6-vite)
 7. [Build Terminology](#7-build-terminology)
 8. [tsconfig](#8-tsconfig)
-9. [angular.json / project.json](#9-angularjson-projectjson)
-10. [Testing Basics — Components & Scope](#10-testing-basics-components-scope)
+9. [angular.json / project.json](#9-angularjson--projectjson)
+10. [Testing Basics: Components and Scope](#10-testing-basics-components-and-scope)
 11. [Service Worker](#11-service-worker)
 12. [PWAs](#12-pwas)
 13. [Web Components](#13-web-components)
 14. [Capacitor](#14-capacitor)
-15. [Browser & Server Basics](#15-browser-server-basics)
+15. [Browser and Server Basics](#15-browser-and-server-basics)
 
 ---
 
-## 1. Order of "Times" — compile-time, build-time, runtime
+## 1. Order of Times: compile-time, build-time, runtime
 
 ### 🗣️ Spoken answer
 
@@ -116,7 +116,7 @@ const res: ApiResponse<User[]> = await getUsers();
 
 ---
 
-## 5. esbuild & Minification
+## 5. esbuild and Minification
 
 ### 🗣️ Spoken answer
 
@@ -203,7 +203,7 @@ const res: ApiResponse<User[]> = await getUsers();
 
 ---
 
-## 10. Testing Basics — Components & Scope
+## 10. Testing Basics: Components and Scope
 
 ### 🗣️ Spoken answer
 
@@ -294,7 +294,7 @@ describe('UserListComponent', () => {
 
 ---
 
-## 15. Browser & Server Basics
+## 15. Browser and Server Basics
 
 ### 🗣️ Spoken answer
 

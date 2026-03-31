@@ -8,14 +8,14 @@
 ## 📋 Contents
 
 1. [Promises vs Observables](#1-promises-vs-observables)
-2. [Observables — what they are](#2-observables-what-they-are)
-3. [Subscribe & Unsubscribe](#3-subscribe-unsubscribe)
+2. [Observables: what they are](#2-observables-what-they-are)
+3. [Subscribe and Unsubscribe](#3-subscribe-and-unsubscribe)
 4. [async Pipe](#4-async-pipe)
 5. [Hot vs Cold Observables](#5-hot-vs-cold-observables)
 6. [Subject vs BehaviorSubject](#6-subject-vs-behaviorsubject)
 7. [Top RxJS Operators](#7-top-rxjs-operators)
 8. [switchMap vs concatMap](#8-switchmap-vs-concatmap)
-9. [distinctUntilChanged & debounceTime](#9-distinctuntilchanged-debouncetime)
+9. [distinctUntilChanged and debounceTime](#9-distinctuntilchanged-and-debouncetime)
 10. [Mutability vs Immutability](#10-mutability-vs-immutability)
 
 ---
@@ -39,7 +39,7 @@
 
 ---
 
-## 2. Observables — what they are
+## 2. Observables: what they are
 
 ### 🗣️ Spoken answer
 
@@ -58,7 +58,7 @@
 
 ---
 
-## 3. Subscribe & Unsubscribe
+## 3. Subscribe and Unsubscribe
 
 ### 🗣️ Spoken answer
 
@@ -212,7 +212,7 @@ readonly users$ = this.userService.getUsers(); // Observable<User[]>
 
 ---
 
-## 9. distinctUntilChanged & debounceTime
+## 9. distinctUntilChanged and debounceTime
 
 ### 🗣️ Spoken answer
 

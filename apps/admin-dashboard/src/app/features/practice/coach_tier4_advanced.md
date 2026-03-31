@@ -9,16 +9,16 @@
 
 1. [Signals](#1-signals)
 2. [Writable vs Read-only Signals](#2-writable-vs-read-only-signals)
-3. [computed() & linkedSignal()](#3-computed-linkedsignal)
+3. [computed() and linkedSignal()](#3-computed-and-linkedsignal)
 4. [effect()](#4-effect)
-5. [Change Detection — OnPush](#5-change-detection-onpush)
-6. [Zone.js & Zoneless](#6-zonejs-zoneless)
+5. [Change Detection (OnPush)](#5-change-detection-onpush)
+6. [Zone.js and Zoneless](#6-zonejs-and-zoneless)
 7. [Interceptors](#7-interceptors)
 8. [Eager vs Lazy Loading](#8-eager-vs-lazy-loading)
 9. [@defer](#9-defer)
 10. [@for Cycle Syntax](#10-for-cycle-syntax)
 11. [Shadow DOM](#11-shadow-dom)
-12. [View Encapsulation — Plain English](#12-view-encapsulation-plain-english)
+12. [View Encapsulation (Plain English)](#12-view-encapsulation-plain-english)
 13. [Runtime Error Examples](#13-runtime-error-examples)
 14. [Error Handling](#14-error-handling)
 
@@ -72,7 +72,7 @@ export class CounterStore {
 
 ---
 
-## 3. computed() & linkedSignal()
+## 3. computed() and linkedSignal()
 
 ### 🗣️ Spoken answer
 
@@ -116,7 +116,7 @@ constructor() {
 
 ---
 
-## 5. Change Detection — OnPush
+## 5. Change Detection (OnPush)
 
 ### 🗣️ Spoken answer
 
@@ -139,7 +139,7 @@ export class UserCardComponent {
 
 ---
 
-## 6. Zone.js & Zoneless
+## 6. Zone.js and Zoneless
 
 ### 🗣️ Spoken answer
 
@@ -253,7 +253,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 ---
 
-## 12. View Encapsulation — Plain English
+## 12. View Encapsulation (Plain English)
 
 ### 🗣️ Spoken answer
 

@@ -10,19 +10,21 @@
 1. [HTML Basic Terminology](#1-html-basic-terminology)
 2. [JSON](#2-json)
 3. [HTTP Protocol Basics](#3-http-protocol-basics)
-4. [REST, REST APIs & SOAP](#4-rest-rest-apis-soap)
-5. [Browser Basics — Simplified](#5-browser-basics-simplified)
-6. [Flexbox](#6-flexbox)
-7. [CSS Specificity](#7-css-specificity)
-8. [Breakpoints & Responsive](#8-breakpoints-responsive)
-9. [Object Manipulation & Methods](#9-object-manipulation-methods)
-10. [Types & TypeScript Basics](#10-types-typescript-basics)
-11. [The Event Loop](#11-the-event-loop)
-12. [Closures & Hoisting](#12-closures-hoisting)
-13. [Temporal Dead Zone (TDZ)](#13-temporal-dead-zone-tdz)
-14. [ES Modules vs CommonJS & ECMAScript](#14-es-modules-vs-commonjs-ecmascript)
-15. [Pure Functions & Memoization](#15-pure-functions-memoization)
-16. [OOP Basics](#16-oop-basics)
+4. [REST, REST APIs and SOAP](#4-rest-rest-apis-and-soap)
+5. [Browser Basics (Simplified)](#5-browser-basics-simplified)
+6. [SPA (Single Page Application)](#6-spa-single-page-application)
+7. [Flexbox](#7-flexbox)
+8. [CSS Specificity](#8-css-specificity)
+9. [Breakpoints and Responsive](#9-breakpoints-and-responsive)
+10. [Object Manipulation and Methods](#10-object-manipulation-and-methods)
+11. [Map, Set and Record](#11-map-set-and-record)
+12. [Types and TypeScript Basics](#12-types-and-typescript-basics)
+13. [The Event Loop](#13-the-event-loop)
+14. [Closures and Hoisting](#14-closures-and-hoisting)
+15. [Temporal Dead Zone (TDZ)](#15-temporal-dead-zone-tdz)
+16. [ES Modules vs CommonJS and ECMAScript](#16-es-modules-vs-commonjs-and-ecmascript)
+17. [Pure Functions and Memoization](#17-pure-functions-and-memoization)
+18. [OOP Basics](#18-oop-basics)
 
 ---
 
@@ -98,11 +100,13 @@ JSON.stringify(data, null, 2);
 
 ---
 
-## 4. REST, REST APIs & SOAP
+## 4. REST, REST APIs and SOAP
 
 ### 🗣️ Spoken answer
 
-> "REST — Representational State Transfer — is an architectural style for APIs that uses standard HTTP methods and URLs to represent resources. The rules: stateless (server doesn't remember the client between requests), resources identified by URLs, actions expressed via HTTP verbs. A **REST API** follows these conventions: `GET /users` lists users, `POST /users` creates one, `PUT /users/1` replaces one, `PATCH /users/1` partially updates, `DELETE /users/1` removes it. The response is typically JSON. SOAP is an older protocol that wraps operations in XML envelopes — it's verbose, strictly typed via WSDL schemas, and was common in enterprise Java/.NET systems. REST is simpler and has completely replaced SOAP in new web development."
+> "REST is a set of conventions for designing APIs on top of HTTP. The three core rules are: URLs identify resources — so `/users/1` means 'user with ID 1'; HTTP verbs express the action — GET reads, POST creates, PUT replaces, PATCH partially updates, DELETE removes; and requests are stateless — the server holds no memory of the client between calls. The response is almost always JSON.
+>
+> SOAP is an older alternative. Instead of using URLs and verbs cleanly, it wraps every operation inside an XML envelope and defines its contract via a schema called WSDL. It's verbose and rigid, and was common in enterprise Java and .NET systems. REST won — you won't write SOAP in new projects, but you'll see it in legacy integrations."
 
 ### HTTP verb → CRUD map
 
@@ -120,7 +124,7 @@ JSON.stringify(data, null, 2);
 
 ---
 
-## 5. Browser Basics — Simplified
+## 5. Browser Basics (Simplified)
 
 ### 🗣️ Spoken answer
 
@@ -132,7 +136,31 @@ JSON.stringify(data, null, 2);
 
 ---
 
-## 6. Flexbox
+## 6. SPA (Single Page Application)
+
+### 🗣️ Spoken answer
+
+> "A traditional website reloads the entire page every time you navigate — the browser requests a new HTML document from the server for every click. A Single Page Application loads once: one HTML file, one JavaScript bundle. After that, JavaScript takes over all navigation inside the browser without ever talking to the server for a new page. The URL still changes, the view still updates, but there's no full reload. Angular is a SPA framework — the router intercepts link clicks and swaps the view in the DOM. The only network calls after the initial load are API calls to fetch or save data.
+>
+> The tradeoff: initial load is heavier (you download the whole app upfront), and SEO requires extra work because there's no HTML content for crawlers on the first request — which is why SSR (server-side rendering) exists."
+
+### ⚡ Key points
+
+| Concept      | MPA (traditional)            | SPA                          |
+| ------------ | ---------------------------- | ---------------------------- |
+| Navigation   | Full page reload from server | JS swaps the view in-browser |
+| Initial load | Fast (small HTML)            | Slower (whole JS bundle)     |
+| After load   | Slow (round-trip per page)   | Fast (no reloads)            |
+| SEO          | Easy (real HTML)             | Needs SSR                    |
+| Examples     | Classic PHP sites            | Angular, React, Vue apps     |
+
+### 🎤 Practice question
+
+> _"What is a Single Page Application and what are its tradeoffs versus a traditional multi-page site?"_
+
+---
+
+## 7. Flexbox
 
 ### 🗣️ Spoken answer
 
@@ -163,7 +191,7 @@ JSON.stringify(data, null, 2);
 
 ---
 
-## 7. CSS Specificity
+## 8. CSS Specificity
 
 ### 🗣️ Spoken answer
 
@@ -186,7 +214,7 @@ JSON.stringify(data, null, 2);
 
 ---
 
-## 8. Breakpoints & Responsive
+## 9. Breakpoints and Responsive
 
 ### 🗣️ Spoken answer
 
@@ -198,35 +226,225 @@ JSON.stringify(data, null, 2);
 
 ---
 
-## 9. Object Manipulation & Methods
+## 10. Object Manipulation and Methods
 
 ### 🗣️ Spoken answer
 
-> "The most important array methods an interviewer will ask about: `map` — transforms each element, returns a new array; `filter` — keeps elements that pass a test; `reduce` — folds the array into a single value; `find` — returns the first match; `some` / `every` — boolean checks. For objects: `Object.keys()`, `Object.values()`, `Object.entries()` for iteration; spread `{ ...obj }` for shallow copy; destructuring for extraction. One rule: prefer **immutable** operations — never mutate the original array or object, return new ones from `map` and `filter`."
+> "Two groups to know cold: **array methods** and **object methods**. For arrays: `map` transforms every element and returns a new array — it never mutates; `filter` keeps only elements that pass a predicate; `reduce` folds the whole array into a single value — used for sums, grouping, building objects; `find` returns the first match or `undefined`; `findIndex` returns its index; `some` returns true if any element passes, `every` returns true if all pass; `flat` and `flatMap` for nested arrays. For objects: `Object.keys()`, `Object.values()`, `Object.entries()` give you arrays you can then chain with `map`/`filter`; spread `{ ...obj }` for a shallow copy with overrides; destructuring to extract and rename fields. The golden rule throughout: never mutate the original — always return new arrays or objects."
 
-### Key patterns
+### Array methods — full cheatsheet
 
 ```ts
-// Immutable object update
-const updated = { ...user, name: 'Alice' };
+const users = [
+  { id: 1, name: 'Alice', active: true },
+  { id: 2, name: 'Bob', active: false },
+  { id: 3, name: 'Carol', active: true },
+];
 
-// Destructuring with rename
-const { id: userId, name } = user;
+// map — transform
+const names = users.map(u => u.name);
+// ['Alice', 'Bob', 'Carol']
 
-// Array to object (reduce)
-const byId = users.reduce((acc, u) => ({ ...acc, [u.id]: u }), {});
+// filter — subset
+const active = users.filter(u => u.active);
+// [{ id: 1, name: 'Alice' }, { id: 3, name: 'Carol' }]
 
-// Optional chaining + nullish coalescing
-const city = user?.address?.city ?? 'Unknown';
+// find — first match
+const alice = users.find(u => u.name === 'Alice');
+
+// findIndex — first match index
+const idx = users.findIndex(u => u.id === 2); // 1
+
+// some / every — boolean
+const hasInactive = users.some(u => !u.active); // true
+const allActive = users.every(u => u.active); // false
+
+// reduce — fold into a value
+const totalIds = users.reduce((sum, u) => sum + u.id, 0); // 6
+
+// reduce — build a lookup map
+const byId = users.reduce<Record<number, (typeof users)[0]>>((acc, u) => ({ ...acc, [u.id]: u }), {});
+// { 1: Alice, 2: Bob, 3: Carol }
+
+// flatMap — map + flatten one level
+const tags = [['a', 'b'], ['c']].flatMap(t => t); // ['a', 'b', 'c']
+
+// chaining
+const activeNames = users.filter(u => u.active).map(u => u.name.toUpperCase());
+// ['ALICE', 'CAROL']
 ```
 
-### 🎤 Practice question
+### Object methods and patterns
 
-> _"How do you immutably update a property in an object in JavaScript?"_
+```ts
+const user = { id: 1, name: 'Alice', role: 'admin' };
+
+// Iterate
+Object.keys(user); // ['id', 'name', 'role']
+Object.values(user); // [1, 'Alice', 'admin']
+Object.entries(user); // [['id', 1], ['name', 'Alice'], ['role', 'admin']]
+
+// Immutable update — spread
+const updated = { ...user, name: 'Bob' };
+
+// Destructuring
+const { id, name } = user;
+
+// Rename on destructure
+const { id: userId, name: userName } = user;
+
+// Remove a key immutably
+const { role, ...rest } = user; // rest = { id: 1, name: 'Alice' }
+
+// Optional chaining: stops and returns undefined if any link in the chain is null/undefined
+// instead of throwing "Cannot read property of undefined"
+const city = user?.address?.city; // undefined if address is missing, no crash
+
+// Nullish coalescing (??): uses the right side only when the left is null or undefined
+// Unlike ||, it does NOT trigger on 0, '', or false
+const city2 = user?.address?.city ?? 'Unknown'; // 'Unknown' only if city is null/undefined
+const count = user?.score ?? 0; // 0 if score is null/undefined (not if it's already 0)
+
+// vs || which is wrong for numbers/booleans:
+const bad = user?.score || 0; // BUG: also replaces score=0 with 0 (same here, but matters for other values)
+const enabled = user?.active ?? true; // true only if active is null/undefined, NOT if it's false
+
+// Dynamic key
+const key = 'name';
+const val = user[key]; // 'Alice'
+
+// Object.fromEntries — rebuild from entries
+const upper = Object.fromEntries(Object.entries(user).map(([k, v]) => [k, String(v).toUpperCase()]));
+```
+
+### Mutability — the one rule that matters
+
+> A **mutable** operation changes the original value in place. An **immutable** operation creates a new value and leaves the original untouched.
+
+```ts
+// MUTABLE — avoid these
+arr.push(item); // mutates arr
+arr.splice(1, 1); // mutates arr
+obj.name = 'Bob'; // mutates obj
+
+// IMMUTABLE — prefer these
+const newArr = [...arr, item]; // new array
+const removed = arr.filter((_, i) => i !== 1); // new array without index 1
+const newObj = { ...obj, name: 'Bob' }; // new object
+```
+
+> Why it matters in Angular: `OnPush` change detection compares **object references**, not deep values. If you mutate in place, the reference stays the same — Angular doesn't see a change and won't re-render. Create a new reference and it will.
+
+### 🎤 Practice questions
+
+> _"What's the difference between `map` and `forEach`?"_ (`map` returns a new array, `forEach` returns nothing and is only for side effects)
+
+> _"How do you immutably remove an item from an array by index?"_
+
+> _"How do you immutably update a nested property in an object?"_
 
 ---
 
-## 10. Types & TypeScript Basics
+## 11. Map, Set and Record
+
+### 🗣️ Spoken answer
+
+> "`Map` and `Set` are built-in JavaScript data structures that exist at runtime, unlike TypeScript types. A `Map` is a key-value store where any value — including objects and functions — can be a key, and it preserves insertion order. That's something a plain object can't do safely. A `Set` is an ordered collection of unique values — inserting a duplicate is a no-op. `Record` on the other hand is a TypeScript compile-time utility type — it's just a typed object-literal shape with a specified key type and value type, it disappears at runtime. You reach for `Map` when you need non-string keys or guaranteed insertion order; `Set` when you need a deduplicated list; `Record` when you want TypeScript to enforce what keys are valid in a plain object."
+
+### Map
+
+```ts
+// Any type as key, ordered, fast lookup
+const roleMap = new Map<string, string[]>([
+  ['admin', ['read', 'write', 'delete']],
+  ['editor', ['read', 'write']],
+]);
+
+roleMap.get('admin'); // ['read', 'write', 'delete']
+roleMap.has('viewer'); // false
+roleMap.set('viewer', ['read']);
+roleMap.size; // 3
+
+// Iteration (insertion order guaranteed)
+for (const [role, perms] of roleMap) {
+  console.log(role, perms);
+}
+
+// Common pattern: replace switch/if chains
+const statusLabel = new Map([
+  ['active', 'Active'],
+  ['inactive', 'Inactive'],
+  ['pending', 'Pending'],
+]);
+const label = statusLabel.get(status) ?? 'Unknown';
+```
+
+### Set
+
+```ts
+// Unique values only
+const seen = new Set<number>();
+seen.add(1);
+seen.add(2);
+seen.add(1); // no-op — already in set
+seen.size; // 2
+seen.has(2); // true
+seen.delete(2);
+
+// Deduplicate an array
+const ids = [1, 2, 2, 3, 3, 3];
+const unique = [...new Set(ids)]; // [1, 2, 3]
+
+// Set operations (manual)
+const a = new Set([1, 2, 3]);
+const b = new Set([2, 3, 4]);
+const union = new Set([...a, ...b]); // {1,2,3,4}
+const intersection = new Set([...a].filter(x => b.has(x))); // {2,3}
+const difference = new Set([...a].filter(x => !b.has(x))); // {1}
+```
+
+### Record (TypeScript only)
+
+```ts
+// Record<Keys, Value> — typed object literal
+type Role = 'admin' | 'editor' | 'viewer';
+const permissions: Record<Role, string[]> = {
+  admin: ['read', 'write', 'delete'],
+  editor: ['read', 'write'],
+  viewer: ['read'],
+};
+// TypeScript errors if you miss a key or add an invalid one
+
+// Record with string keys
+const cache: Record<string, User> = {};
+cache['user-1'] = { id: 1, name: 'Alice' };
+
+// Difference from Map:
+// Record  → plain object, compile-time only, string/symbol/number keys
+// Map     → class instance, runtime, any key type, has .get()/.set()/.has()
+```
+
+### When to use which
+
+| Need                                  | Use                           |
+| ------------------------------------- | ----------------------------- |
+| Key-value, string keys, static shape  | `Record` (TS) or plain object |
+| Key-value, non-string keys or ordered | `Map`                         |
+| Unique values / deduplication         | `Set`                         |
+| Replace switch with lookup            | `Map` or object literal       |
+| Iterate in insertion order            | `Map` or `Set`                |
+
+### 🎤 Practice questions
+
+> _"What's the difference between a `Map` and a plain object in JavaScript?"_
+
+> _"How would you deduplicate an array of IDs?"_
+
+> _"What does `Record<string, User>` mean in TypeScript?"_
+
+---
+
+## 12. Types and TypeScript Basics
 
 ### 🗣️ Spoken answer
 
@@ -250,7 +468,7 @@ NonNullable<T>; // removes null and undefined
 
 ---
 
-## 11. The Event Loop
+## 13. The Event Loop
 
 ### 🗣️ Spoken answer
 
@@ -280,7 +498,7 @@ console.log('3 — sync');
 
 ---
 
-## 12. Closures & Hoisting
+## 14. Closures and Hoisting
 
 ### 🗣️ Spoken answer
 
@@ -307,7 +525,7 @@ counter(); // 2 — count persists in the closure
 
 ---
 
-## 13. Temporal Dead Zone (TDZ)
+## 15. Temporal Dead Zone (TDZ)
 
 ### 🗣️ Spoken answer
 
@@ -333,7 +551,7 @@ function foo() {
 
 ---
 
-## 14. ES Modules vs CommonJS & ECMAScript
+## 16. ES Modules vs CommonJS and ECMAScript
 
 ### 🗣️ Spoken answer
 
@@ -360,7 +578,7 @@ module.exports = { myFn };
 
 ---
 
-## 15. Pure Functions & Memoization
+## 17. Pure Functions and Memoization
 
 ### 🗣️ Spoken answer
 
@@ -388,7 +606,7 @@ readonly total = computed(() => this.items().reduce((s, i) => s + i.price, 0));
 
 ---
 
-## 16. OOP Basics
+## 18. OOP Basics
 
 ### 🗣️ Spoken answer
 
