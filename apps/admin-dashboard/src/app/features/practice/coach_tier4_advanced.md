@@ -21,6 +21,7 @@
 12. [View Encapsulation (Plain English)](#12-view-encapsulation-plain-english)
 13. [Runtime Error Examples](#13-runtime-error-examples)
 14. [Error Handling](#14-error-handling)
+15. [Debugging: Step-by-Step Workflows](#15-debugging-step-by-step-workflows)
 
 ---
 
@@ -285,7 +286,32 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 ### 🗣️ Spoken answer
 
-> "Common runtime errors in Angular: `TypeError: Cannot read properties of null` — you tried to access a property on something that turned out to be null at runtime, TypeScript had no way to know at compile time. `ExpressionChangedAfterItHasBeenCheckedError` — you changed a value that Angular already read during change detection, usually from `ngAfterViewInit`; fix with `changeDetectorRef.detectChanges()` or making the value a signal. `NullInjectorError: No provider for X` — a service or token wasn't provided in the DI tree at that scope. `NG0100` (`ExpressionChangedAfterChecked`) is a dev-only check. HTTP 401/403 responses are runtime errors, not code errors."
+> "The most common Angular runtime errors: `TypeError: Cannot read properties of null` — you accessed a property before the data arrived. `NullInjectorError: No provider for X` — a service isn't in the DI tree at that scope, often because it was accidentally added to a local `providers` array instead of relying on `providedIn: 'root'`. Circular dependency — Service A injects B, B injects A — Angular's DI hits an infinite loop at startup. And the non-null assertion operator `!` lying to TypeScript — you told it the value wasn't null, it was."
+
+### Quick lookup
+
+| Error                                       | Cause                                             | Fix                                      |
+| ------------------------------------------- | ------------------------------------------------- | ---------------------------------------- |
+| `TypeError: Cannot read properties of null` | Accessed value before data arrived                | `?.` optional chaining or `??` default   |
+| `NullInjectorError: No provider for X`      | Service missing from DI tree at that scope        | Check `providedIn` or `providers`        |
+| Double-provided service                     | Same service at root AND in local `providers: []` | Remove the local one                     |
+| `!` assertion crash                         | TypeScript trusted you, runtime didn't            | Initialize properly or replace with `?.` |
+| Circular dependency                         | Service A → B → A                                 | Extract shared logic to a third service  |
+
+**From the codebase:**
+
+```ts
+// auth.store.ts — safe: ?. guards against null userData
+const isAdmin = computed(() => state.userData()?.role === 'admin');
+
+// profile.component.ts — bug: second isolated AuthStore instance,
+// out of sync with the root one used everywhere else
+providers: [AuthStore]; // ← remove this
+
+// auth.interceptor.ts — AuthService injected but never used
+const auth = inject(AuthService); // ← dead code
+const token = localStorage.getItem('token');
+```
 
 ### Runtime vs Build-time error cheatsheet
 
@@ -326,5 +352,125 @@ export class AppErrorHandler implements ErrorHandler {
 ### 🎤 Practice question
 
 > _"How do you handle HTTP errors globally in an Angular application?"_
+
+---
+
+## 15. Debugging: Step-by-Step Workflows
+
+### 🗣️ Spoken answer
+
+> "My debugging flow always starts in the Network tab — open DevTools before triggering the action so you don't miss the request. Find the request, read the status code, then go from there. The status code is the first branch: 400 is your payload, 401 is your token, 403 is permissions, 404 is the URL, 500 is the server's problem. For state bugs I reach for Redux DevTools first, then breakpoints if I need to step through code."
+
+---
+
+### Step 1 — Open DevTools before triggering
+
+`F12` → Network tab → clear the log → trigger the action.
+Sources tab → `Ctrl+P` → search your file by name → click a line to set a breakpoint.
+Or drop `debugger;` directly in TypeScript — execution pauses automatically.
+
+```ts
+saveUser(user: User) {
+  debugger; // pauses here — hover variables, F10 to step over, F11 to step into
+  this.store.save(user);
+}
+// Remove before committing
+```
+
+---
+
+### Step 2 — Read the status code
+
+| Status                | Meaning                               | Where to look next                                                         |
+| --------------------- | ------------------------------------- | -------------------------------------------------------------------------- |
+| **400** Bad Request   | Server rejected your payload          | **Payload tab** — what did you actually send?                              |
+| **401** Unauthorized  | Token missing or invalid              | **Request Headers** — is `Authorization: Bearer ...` there?                |
+| **403** Forbidden     | Authenticated but not allowed         | User role / permissions — right user, wrong rights                         |
+| **404** Not Found     | Wrong URL                             | **Request URL** in Headers tab — typo? missing ID?                         |
+| **409** Conflict      | Duplicate — e.g. email already exists | **Preview tab** — server error message                                     |
+| **422** Unprocessable | Validation failed server-side         | **Preview tab** — which field failed?                                      |
+| **500** Server Error  | Server crashed                        | Backend logs — not your Angular code                                       |
+| **CORS error**        | No status shown, red in console       | **Response Headers** — `Access-Control-Allow-Origin` missing → backend fix |
+
+---
+
+### Scenario: 400 Bad Request — wrong form payload
+
+You submit a form and get 400. Steps:
+
+1. Network tab → click the failing request → **Payload tab**
+2. Read what was actually sent — is a required field `null`? wrong key name? wrong type?
+3. Cross-check with the API contract (Swagger / backend team)
+
+Common Angular form causes:
+
+```ts
+// Field control name doesn't match what the API expects
+this.form.get('userName'); // sent as "userName"
+// API expects "username" → 400
+
+// Forgot to include a required nested object
+const body = this.form.value;
+// form.value strips disabled controls — use getRawValue() instead
+const body = this.form.getRawValue();
+```
+
+---
+
+### Scenario: 401 — token not attached
+
+1. Network tab → request → **Headers tab** → Request Headers section
+2. Is `Authorization: Bearer eyJ...` present?
+   - **No** → your interceptor didn't run or had a condition that skipped it
+   - **Yes, but still 401** → token is expired or invalid → check `localStorage.getItem('token')` in the console
+
+```ts
+// auth.interceptor.ts — common skip condition bug
+if (!token) return next(req); // returns early, never attaches header
+// Check: is localStorage.getItem('token') actually populated at this point?
+```
+
+---
+
+### Scenario: UI not updating — state bug
+
+1. Open **Redux DevTools** → find the last `updateState` label
+2. Click it → check the state diff: was the field actually updated?
+3. If state updated but UI didn't → component isn't reading from the right signal
+4. If state wasn't updated → the rxMethod/effect didn't complete → check for a swallowed error in `tapResponse`
+
+---
+
+### Breakpoints for signals
+
+If a `computed()` is returning the wrong value:
+
+```ts
+readonly activeUsers = computed(() => {
+  debugger; // pauses here every time this recomputes
+  return this.users().filter(u => u.active);
+});
+```
+
+Hover `this.users()` to see what the signal is actually holding at that moment.
+
+---
+
+### Network tab quick-ref
+
+| Tab                            | What to check                                     |
+| ------------------------------ | ------------------------------------------------- |
+| **Headers → General**          | Request URL, method, status code                  |
+| **Headers → Request Headers**  | `Authorization`, `Content-Type` attached?         |
+| **Headers → Response Headers** | `Access-Control-Allow-Origin` for CORS            |
+| **Payload**                    | What your Angular app actually sent to the server |
+| **Preview**                    | What the server returned (parsed)                 |
+| **Response**                   | Raw response string                               |
+
+**Hash (`#`) in the URL:** handled entirely by the browser, never sent to the server. Angular's default routing has no `#`. `HashLocationStrategy` puts the route after `#` so the server only ever sees `/`.
+
+### 🎤 Practice question
+
+> _"You submit a form and get a 400. Walk me through exactly how you'd debug it."_
 
 ---

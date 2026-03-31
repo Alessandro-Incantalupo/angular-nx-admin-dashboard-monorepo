@@ -7,13 +7,14 @@
 
 ## 🗺️ Tier System
 
-| Tier | File                                                  | Topics | Focus                                       |
-| ---- | ----------------------------------------------------- | ------ | ------------------------------------------- |
-| 🟢 1 | [Tier 1 — Foundations](coach_tier1_foundations.md)    | 16     | HTML, CSS, JS, OOP, HTTP basics             |
-| 🔵 2 | [Tier 2 — Angular Core](coach_tier2_angular_core.md)  | 19     | Components, forms, lifecycle, DI, DOM       |
-| 🟡 3 | [Tier 3 — Reactive Patterns](coach_tier3_reactive.md) | 10     | Observables, RxJS, async pipe, streams      |
-| 🟠 4 | [Tier 4 — Advanced Angular](coach_tier4_advanced.md)  | 14     | Signals, OnPush, interceptors, performance  |
-| 🔴 5 | [Tier 5 — Ecosystem](coach_tier5_ecosystem.md)        | 15     | Build tools, testing, tooling, architecture |
+| Tier | File                                                  | Topics | Focus                                             |
+| ---- | ----------------------------------------------------- | ------ | ------------------------------------------------- |
+| 🟢 1 | [Tier 1 — Foundations](coach_tier1_foundations.md)    | 16     | HTML, CSS, JS, OOP, HTTP basics                   |
+| 🔵 2 | [Tier 2 — Angular Core](coach_tier2_angular_core.md)  | 19     | Components, forms, lifecycle, DI, DOM             |
+| 🟡 3 | [Tier 3 — Reactive Patterns](coach_tier3_reactive.md) | 10     | Observables, RxJS, async pipe, streams            |
+| 🟠 4 | [Tier 4 — Advanced Angular](coach_tier4_advanced.md)  | 14     | Signals, OnPush, interceptors, performance        |
+| 🔴 5 | [Tier 5 — Ecosystem](coach_tier5_ecosystem.md)        | 15     | Build tools, testing, tooling, architecture       |
+| ⚫ 6 | [Tier 6 — Behavioral](coach_tier6_behavioral.md)      | 16     | Manager questions, soft skills, self-presentation |
 
 > **Rule for non-technical interviewers:** stay in Tier 1–2 vocabulary even when answering Tier 4 topics.
 
@@ -97,6 +98,22 @@
 | 72  | [Browser Basics — Simplified](coach_tier1_foundations.md#72-browser-basics--simplified)                                             | 🟢   |
 | 73  | [ViewChild — Concrete Use Cases](coach_tier2_angular_core.md#73-viewchild--concrete-use-cases)                                      | 🔵   |
 | 74  | [OOP Basics](coach_tier1_foundations.md#74-oop-basics)                                                                              | 🟢   |
+| 75  | [Tell me about yourself](coach_tier6_behavioral.md#1-tell-me-about-yourself)                                                        | ⚫   |
+| 76  | [Most complex feature](coach_tier6_behavioral.md#2-most-complex-feature-youve-built)                                                | ⚫   |
+| 77  | [Definition of done](coach_tier6_behavioral.md#3-how-do-you-know-when-something-is-done)                                            | ⚫   |
+| 78  | [Unclear requirements](coach_tier6_behavioral.md#4-unclear-requirements--what-do-you-do)                                            | ⚫   |
+| 79  | [Disagreed with a decision](coach_tier6_behavioral.md#5-disagreed-with-a-technical-decision)                                        | ⚫   |
+| 80  | [Code review](coach_tier6_behavioral.md#6-code-review--giving-and-receiving)                                                        | ⚫   |
+| 81  | [Bug in production](coach_tier6_behavioral.md#7-bug-that-made-it-to-production)                                                     | ⚫   |
+| 82  | [Prioritising tasks](coach_tier6_behavioral.md#8-prioritising-multiple-tasks)                                                       | ⚫   |
+| 83  | [What does senior mean?](coach_tier6_behavioral.md#9-what-does-senior-mean-to-you)                                                  | ⚫   |
+| 84  | [Onboarding a new codebase](coach_tier6_behavioral.md#10-how-do-you-onboard-to-a-new-codebase)                                      | ⚫   |
+| 85  | [Keeping up with Angular](coach_tier6_behavioral.md#11-how-do-you-keep-up-with-angular)                                             | ⚫   |
+| 86  | [Mentoring juniors](coach_tier6_behavioral.md#12-helping-a-junior-without-giving-the-answer)                                        | ⚫   |
+| 87  | [3-year plan](coach_tier6_behavioral.md#13-where-do-you-see-yourself-in-3-years)                                                    | ⚫   |
+| 88  | [Weaknesses](coach_tier6_behavioral.md#14-what-are-your-weaknesses)                                                                 | ⚫   |
+| 89  | [Why leaving?](coach_tier6_behavioral.md#15-why-are-you-leaving-your-current-job)                                                   | ⚫   |
+| 90  | [Your question for them](coach_tier6_behavioral.md#16-your-question-for-them)                                                       | ⚫   |
 
 ---
 
