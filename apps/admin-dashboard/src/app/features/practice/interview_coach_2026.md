@@ -7,14 +7,15 @@
 
 ## 🗺️ Tier System
 
-| Tier | File                                                  | Topics | Focus                                             |
-| ---- | ----------------------------------------------------- | ------ | ------------------------------------------------- |
-| 🟢 1 | [Tier 1 — Foundations](coach_tier1_foundations.md)    | 16     | HTML, CSS, JS, OOP, HTTP basics                   |
-| 🔵 2 | [Tier 2 — Angular Core](coach_tier2_angular_core.md)  | 19     | Components, forms, lifecycle, DI, DOM             |
-| 🟡 3 | [Tier 3 — Reactive Patterns](coach_tier3_reactive.md) | 10     | Observables, RxJS, async pipe, streams            |
-| 🟠 4 | [Tier 4 — Advanced Angular](coach_tier4_advanced.md)  | 14     | Signals, OnPush, interceptors, performance        |
-| 🔴 5 | [Tier 5 — Ecosystem](coach_tier5_ecosystem.md)        | 15     | Build tools, testing, tooling, architecture       |
-| ⚫ 6 | [Tier 6 — Behavioral](coach_tier6_behavioral.md)      | 16     | Manager questions, soft skills, self-presentation |
+| Tier | File                                                           | Topics | Focus                                             |
+| ---- | -------------------------------------------------------------- | ------ | ------------------------------------------------- |
+| 🟢 1 | [Tier 1 — Foundations](coach_tier1_foundations.md)             | 16     | HTML, CSS, JS, OOP, HTTP basics                   |
+| 🔵 2 | [Tier 2 — Angular Core](coach_tier2_angular_core.md)           | 19     | Components, forms, lifecycle, DI, DOM             |
+| 🟡 3 | [Tier 3 — Reactive Patterns](coach_tier3_reactive.md)          | 10     | Observables, RxJS, async pipe, streams            |
+| 🟠 4 | [Tier 4 — Advanced Angular](coach_tier4_advanced.md)           | 14     | Signals, OnPush, interceptors, performance        |
+| 🔴 5 | [Tier 5 — Ecosystem](coach_tier5_ecosystem.md)                 | 15     | Build tools, testing, tooling, architecture       |
+| ⚫ 6 | [Tier 6 — Behavioral](coach_tier6_behavioral.md)               | 16     | Manager questions, soft skills, self-presentation |
+| 🟤 7 | [Tier 7 — Java Interview 02/04](coach_tier7_java_interview.md) | 10     | JWT, SOLID, Big O, Palindrome, Ristorante, Kafka  |
 
 > **Rule for non-technical interviewers:** stay in Tier 1–2 vocabulary even when answering Tier 4 topics.
 

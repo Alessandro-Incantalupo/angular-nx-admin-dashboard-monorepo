@@ -18,13 +18,11 @@
  */
 
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { debounceTime } from 'rxjs';
 
 interface UserProfile {
   id: string;
@@ -66,18 +64,6 @@ export class Ex05FormApisComponent implements OnInit {
   // TASK 1 — valueChanges: react to a single control changing
   // ─────────────────────────────────────────────────────────
   setupValueChanges() {
-    this.form
-      .get('bio')!
-      .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(val => this.bioCharCount.set(val.length));
-    this.form.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(500))
-      .subscribe(val => console.log('Form changed:', val));
-    this.form.statusChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(val =>
-        this.formStatus.set(val as 'VALID' | 'INVALID' | 'PENDING')
-      );
     // 1a: Listen to the 'bio' control and update bioCharCount signal
     //     with the length of the new value.
     //     Add takeUntilDestroyed so it auto-cleans up.
@@ -126,19 +112,6 @@ export class Ex05FormApisComponent implements OnInit {
       role: 'admin',
       bio: 'Frontend developer',
     };
-
-    this.form.setValue({
-      id: userFromApi.id,
-      name: userFromApi.name,
-      email: userFromApi.email,
-      role: userFromApi.role,
-      bio: userFromApi.bio,
-    });
-    this.form.patchValue({
-      role: userFromApi.role,
-    });
-
-    this.form.get('id')!.disable();
 
     // TODO 2a: Use setValue() to populate the form with the full user.
     // setValue requires ALL fields to be provided.

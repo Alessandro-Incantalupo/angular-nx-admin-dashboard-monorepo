@@ -22,20 +22,16 @@ export interface User {
 }
 
 // TODO A1: Define a Role type using a union of the allowed role strings
-export type Role = 'admin' | 'user' | 'guest';
+export type Role = any;
 
 // TODO A2: Extend User to create an AdminUser that also has 'permissions: string[]'
 export interface AdminUser extends User {
-  permissions: string[];
+  /* TODO: permissions: string[] */
 }
 
 // TODO A3: Create a generic ApiResponse<T> type:
 //   { data: T; statusCode: number; message: string }
-export type ApiResponse<T> = {
-  data: T;
-  statusCode: number;
-  message: string;
-};
+export type ApiResponse<T> = any;
 
 // Check: ApiResponse<User> should have data:User, statusCode:number, message:string
 // Check: ApiResponse<User[]> should have data:User[]
@@ -47,21 +43,21 @@ export type ApiResponse<T> = {
 // TODO B1: CreateUserPayload — same as User but WITHOUT the 'id' field
 //   (because the server generates the id)
 //   Use Omit<>
-export type CreateUserPayload = Omit<User, 'id'>;
+export type CreateUserPayload = any;
 
 // TODO B2: UpdateUserPayload — all fields of User are optional
 //   (PATCH endpoint — only send changed fields)
 //   Use Partial<>
-export type UpdateUserPayload = Partial<User>;
+export type UpdateUserPayload = any;
 
 // TODO B3: UserSummary — only keep 'id', 'name', and 'email' from User
 //   Use Pick<>
-export type UserSummary = Pick<User, 'id' | 'name' | 'email'>;
+export type UserSummary = any;
 
 // TODO B4: UserStats — a dictionary where each key is a role string and value is a count number
 //   Use Record<>
 //   The result should be like: { admin: 3, user: 45, guest: 12 }
-export type UserStats = Record<Role, number>;
+export type UserStats = any;
 
 // Let's verify our types by writing a few values (TypeScript will error if wrong):
 const newUser: CreateUserPayload = {
@@ -96,26 +92,20 @@ const stats: UserStats = {
 // TODO C1: Create a Map that stores users by their id
 //   Key: string (the user id)
 //   Value: User
-export const userCache: /* TODO: Map type */ any = new Map<string, User>();
+export const userCache: /* TODO: Map type */ any = new Map();
 
 // TODO C2: Add a user to the map
 //   User: { id: 'u1', name: 'Bob', email: 'bob@test.com', role: 'user', status: 'active' }
-userCache.set('u1', {
-  id: 'u1',
-  name: 'Bob',
-  email: 'bob@test.com',
-  role: 'user',
-  status: 'active',
-});
+/* TODO: userCache.???('u1', { ... }) */
 
 // TODO C3: Retrieve the user with id 'u1' from the cache
-const cachedUser = userCache.get('u1');
+const cachedUser: User | undefined = /* TODO */ undefined;
 
 // TODO C4: Check if id 'u2' exists in the cache — assign true/false to hasU2
-const hasU2 = userCache.has('u2');
+const hasU2: boolean = /* TODO */ false;
 
 // TODO C5: Convert all cached users to an array
-const allCachedUsers: User[] = [...userCache.values()];
+const allCachedUsers: User[] = /* TODO */ [];
 
 /*
  * ✅ ANSWERS — Section B:
@@ -141,17 +131,15 @@ const allCachedUsers: User[] = [...userCache.values()];
 //   It should return true if the user is an AdminUser (has permissions array)
 export function isAdmin(user: User | AdminUser): user is AdminUser {
   // TODO: check that 'permissions' exists on user
-  return 'permissions' in user;
+  return false;
 }
 
 // TODO D2: Complete this function that formats a value
 //   If it's a string → return it uppercase
 //   If it's a number → return it with 2 decimal places (toFixed(2))
 export function format(value: string | number): string {
-  if (typeof value === 'string') {
-    return value.toUpperCase();
-  }
-  return value.toFixed(2);
+  // TODO: if string → return uppercase; if number → return toFixed(2)
+  return '';
 }
 
 /*

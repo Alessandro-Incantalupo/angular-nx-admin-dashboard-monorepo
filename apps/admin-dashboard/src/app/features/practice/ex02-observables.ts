@@ -48,23 +48,17 @@ function buildSearchPipeline(
   return searchControl.valueChanges.pipe(
     debounceTime(300),
     distinctUntilChanged(),
+    switchMap(term =>
+      http.get<string[]>(`/api/search?q=${term}`).pipe(catchError(() => of([])))
+    )
     // TODO 1a: wait 300ms after user stops typing
     /* ... */
     // TODO 1b: don't re-fire if the value hasn't changed
     /* ... */
     // TODO 1c: cancel the previous HTTP request and start a new one
-    switchMap(val =>
-      http.get<string[]>(`/api/search?q=${val}`).pipe(
-        // TODO 1d: if this specific request errors, return [] so the outer stream survives
-        /* ... */
-        catchError(() => of([]))
-      )
-    )
+    //          inside, recover from errors with an empty array (TODO 1d)
+    /* ... */
   );
-
-  // ngOnInit() {
-  //   buildSearchPipeline.subscribe()
-  // }
 
   /*
    * ✅ ANSWER:
@@ -116,7 +110,7 @@ export class Ex02Service {
   setupSearch(searchControl: FormControl<string>): void {
     searchControl.valueChanges
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
+        takeUntilDestroyed(),
         debounceTime(300),
         distinctUntilChanged(),
         tap(() => this.isLoading.set(true)),
@@ -127,35 +121,41 @@ export class Ex02Service {
         ),
         tap(() => this.isLoading.set(false))
       )
-      .subscribe(data => {
-        this.results.set(data);
-      });
-  }
+      .subscribe(sv => this.results.set(sv));
+    // TODO 2: wire up the full search pipeline here
+    //   - takeUntilDestroyed(this.destroyRef)
+    //   - debounceTime(300)
+    //   - distinctUntilChanged()
+    //   - tap(() => this.isLoading.set(true))    ← loading on
+    //   - switchMap with catchError inside        ← HTTP + error recovery
+    //   - tap(() => this.isLoading.set(false))   ← loading off
+    //   - subscribe: update this.results signal
 
-  /*
-   * ✅ ANSWER:
-   *
-   * searchControl.valueChanges.pipe(
-   *   takeUntilDestroyed(this.destroyRef),  // ← cleanup
-   *   debounceTime(300),
-   *   distinctUntilChanged(),
-   *   tap(() => this.isLoading.set(true)),  // ← loading on
-   *   switchMap(term =>
-   *     this.http.get<string[]>(`/api/search?q=${term}`).pipe(
-   *       catchError(() => of([]))
-   *     )
-   *   ),
-   *   tap(() => this.isLoading.set(false)), // ← loading off
-   * ).subscribe(data => {
-   *   this.results.set(data);               // ← update signal
-   * });
-   *
-   * WHY signals instead of BehaviorSubject?
-   * - signal() is simpler: no .next(), no .subscribe(), no .value
-   * - Angular templates read signals directly: results() — no async pipe needed
-   * - BehaviorSubject still works, but signals are the modern Angular way
-   * - In your store: updateState() updates signals, components re-render automatically
-   */
+    /*
+     * ✅ ANSWER:
+     *
+     * searchControl.valueChanges.pipe(
+     *   takeUntilDestroyed(this.destroyRef),  // ← cleanup
+     *   debounceTime(300),
+     *   distinctUntilChanged(),
+     *   tap(() => this.isLoading.set(true)),  // ← loading on
+     *   switchMap(term =>
+     *     this.http.get<string[]>(`/api/search?q=${term}`).pipe(
+     *       catchError(() => of([]))
+     *     )
+     *   ),
+     *   tap(() => this.isLoading.set(false)), // ← loading off
+     * ).subscribe(data => {
+     *   this.results.set(data);               // ← update signal
+     * });
+     *
+     * WHY signals instead of BehaviorSubject?
+     * - signal() is simpler: no .next(), no .subscribe(), no .value
+     * - Angular templates read signals directly: results() — no async pipe needed
+     * - BehaviorSubject still works, but signals are the modern Angular way
+     * - In your store: updateState() updates signals, components re-render automatically
+     */
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -233,7 +233,6 @@ function loadDashboardData(http: HttpClient): Observable<{
   //   http.get<User[]>('/api/users')
   //   http.get<Stats>('/api/stats')
   // Return them as a combined object { users, stats }
-
   return forkJoin({
     users: http.get<User[]>('/api/users'),
     stats: http.get<Stats>('/api/stats'),
@@ -269,15 +268,15 @@ function transformPrices(): Observable<string> {
   const numbers$ = of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
   return numbers$.pipe(
+    filter(v => v % 3 === 0),
+    map(v => v * 100),
+    map(n => `€${n}`)
     // TODO 5a: filter — keep only numbers divisible by 3
     /* ... */
     // TODO 5b: map — multiply by 100
     /* ... */
     // TODO 5c: map — convert to string with '€' prefix
     /* ... */
-    filter(n => n % 3 === 0),
-    map(n => n * 100),
-    map(n => `€${n}`)
   );
 
   // Expected emissions: '€300', '€600', '€900'

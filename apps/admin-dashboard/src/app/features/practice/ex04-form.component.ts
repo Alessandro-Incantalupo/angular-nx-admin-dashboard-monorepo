@@ -30,7 +30,6 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
   ValidatorFn,
-  Validators,
 } from '@angular/forms';
 
 // ── Custom Validators ─────────────────────────────────────────
@@ -40,12 +39,9 @@ import {
  * Returns null = valid | { maxPriceExceeded: true } = invalid
  */
 export function maxPriceValidator(max: number): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value as number;
-    if (value > max) {
-      return { maxPriceExceeded: true };
-    }
-    return null;
+  return (_control: AbstractControl): ValidationErrors | null => {
+    // TODO V1: return null if valid, { maxPriceExceeded: true } if value > max
+    return _control.value > max ? { maxPriceExceeded: true } : null;
   };
 }
 
@@ -55,12 +51,11 @@ export function maxPriceValidator(max: number): ValidatorFn {
  * Returns { discountHigherThanPrice: true } if invalid.
  */
 export function discountValidator(): ValidatorFn {
-  return (group: AbstractControl): ValidationErrors | null => {
-    const price = group.get('price')?.value as number;
-    const discountedPrice = group.get('discountedPrice')?.value as number;
-    if (discountedPrice >= price) {
-      return { discountHigherThanPrice: true };
-    }
+  return (_group: AbstractControl): ValidationErrors | null => {
+    // TODO V2: return null if discountedPrice < price, else { discountHigherThanPrice: true }  return (_group: AbstractControl): ValidationErrors | null => {
+    const price = _group.get('price')?.value;
+    const discountedPrice = _group.get('discountedPrice')?.value;
+    if (discountedPrice >= price) return { discountHigherThanPrice: true };
     return null;
   };
 }
@@ -77,20 +72,14 @@ export function discountValidator(): ValidatorFn {
       TODO T1: bind [formGroup]="form" and (ngSubmit)="onSubmit()"
       🦮 T1-A11Y: add role="form" and aria-label="Add product" to the form
     -->
-    <form
-      [formGroup]="form"
-      (ngSubmit)="onSubmit()"
-      role="form"
-      aria-label="Add product"
-      class="space-y-4"
-    >
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
       <!-- ── Name ──────────────────────────────────────────── -->
       <div>
         <!--
           TODO T2: make the label point to the input below
           🦮 T2-A11Y: the 'for' attribute must match the input's 'id'
         -->
-        <label for="product-name">Product name</label>
+        <label for="name">Product name</label>
         <input
           formControlName="name"
           id="product-name"
@@ -100,11 +89,6 @@ export function discountValidator(): ValidatorFn {
         />
         <!-- TODO T4: show error when 'name' has 'required' error and is touched -->
         <!-- 🦮 T4-A11Y: the error span must have role="alert" -->
-        @if (
-          form.get('name')?.hasError('required') && form.get('name')?.touched
-        ) {
-          <span role="alert">Name is required</span>
-        }
       </div>
 
       <!-- ── Price ─────────────────────────────────────────── -->
@@ -131,12 +115,6 @@ export function discountValidator(): ValidatorFn {
         }
         <!-- TODO T5: show error when 'price' has 'maxPriceExceeded' error -->
         <!-- 🦮 T5-A11Y: role="alert" on this too -->
-        @if (
-          form.get('price')?.hasError('maxPriceExceeded') &&
-          form.get('price')?.touched
-        ) {
-          <span role="alert">Price cannot exceed €10,000</span>
-        }
       </div>
 
       <!-- ── Discounted price ───────────────────────────────── -->
@@ -154,11 +132,6 @@ export function discountValidator(): ValidatorFn {
           🦮 T6-A11Y: use aria-live="polite" instead of role="alert" for cross-field errors
                       (they're less urgent — screen reader reads them after current action)
         -->
-        @if (form.hasError('discountHigherThanPrice') && form.touched) {
-          <span aria-live="polite"
-            >Discounted price must be lower than the regular price</span
-          >
-        }
       </div>
 
       <!-- ── Category ──────────────────────────────────────── -->
@@ -180,9 +153,7 @@ export function discountValidator(): ValidatorFn {
         🦮 T7-A11Y: type="submit" is required (never leave button type implicit)
         🦮 T7-A11Y: if loading, add [disabled]="isLoading()" and aria-busy="true"
       -->
-      <button type="submit" [disabled]="isLoading()" aria-busy="true">
-        Add product
-      </button>
+      <button>Add product</button>
     </form>
   `,
 })
@@ -209,23 +180,23 @@ export class ProductFormComponent {
    * F2: Apply discountValidator() as the GROUP validator
    *   this.fb.group({ ... }, { validators: discountValidator() })
    */
-  readonly form = this.fb.group(
-    {
-      name: ['', Validators.required],
-      price: [0, [Validators.required, maxPriceValidator(10_000)]],
-      discountedPrice: [0, [Validators.required]],
-      category: ['electronics', Validators.required],
-    },
-    { validators: discountValidator() }
-  );
+  // TODO F1: add validators to each control (Validators.required, maxPriceValidator(10_000))
+  // TODO F2: apply discountValidator() as the GROUP-level validator
+  //   this.fb.group({ ... }, { validators: discountValidator() })
+  readonly form = this.fb.group({
+    name: [''],
+    price: [0],
+    discountedPrice: [0],
+    category: ['electronics'],
+  });
 
   /**
    * F3: hasError — returns true if control has the error AND has been touched.
    * Same pattern as your sign-in.component.ts.
    */
-  hasError(controlName: string, errorType: string): boolean {
-    const control = this.form.get(controlName);
-    return control?.hasError(errorType) && control?.touched;
+  hasError(_controlName: string, _errorType: string): boolean {
+    // TODO F3: return true if the control has the error AND is touched
+    return false;
   }
 
   /**
@@ -237,11 +208,7 @@ export class ProductFormComponent {
    *   5. submitted.set(false)
    */
   onSubmit(): void {
-    this.submitted.set(true);
-    if (this.form.invalid) return;
-    this.productSubmitted.emit(this.form.getRawValue());
-    this.form.reset({ category: 'electronics' });
-    this.submitted.set(false);
+    // TODO F4: see JSDoc for the 5-step submit workflow
   }
 }
 

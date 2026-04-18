@@ -23,6 +23,8 @@
 14. [What are your weaknesses?](#14-what-are-your-weaknesses)
 15. [Why are you leaving your current job?](#15-why-are-you-leaving-your-current-job)
 16. [Your question for them](#16-your-question-for-them)
+17. [Basic Angular questions from a non-technical interviewer](#17-basic-angular-questions-from-a-non-technical-interviewer)
+18. [Basic Angular questions from a non-technical interviewer](#17-basic-angular-questions-from-a-non-technical-interviewer)
 
 ---
 
@@ -249,5 +251,61 @@ _"What does growth look like here for someone in this role?"_
 - Salary / benefits (let them bring it up or save for the offer stage)
 - "How many vacation days do I get?"
 - Anything you could have found on their website in 5 minutes
+
+---
+
+## 17. Basic Angular questions from a non-technical interviewer
+
+> A manager who isn't a developer will ask surface-level questions and listen for **confidence, clarity, and whether you can explain things simply**. They're not checking correctness — they're checking if you sound like you know what you're doing. Never be condescending. Never over-explain. One analogy + one sentence is enough.
+
+### The rule: analogy first, detail never
+
+For every question: give a plain-English one-liner, optionally one analogy, stop. Don't define terms inside your answer with more terms they won't know.
+
+---
+
+### "What is Angular?"
+
+> _"Angular is a framework made by Google for building web applications. Think of it as a structured set of tools that lets you build complex apps without reinventing everything from scratch. I use it to build the frontend — the part the user sees and interacts with."_
+
+### "What is a component?"
+
+> _"A component is a reusable piece of the UI — like a block. A user card, a table, a navigation bar — each one is a component. You build the page by composing them together, like LEGO."_
+
+### "What is a service?"
+
+> _"A service is where I put logic that doesn't belong to a specific visual piece — like talking to the API or handling authentication. Angular makes it available wherever it's needed automatically."_
+
+### "What is state management?"
+
+> _"State is the data your app holds at any moment — the list of users, whether someone is logged in. State management keeps that data in one controlled place so every part of the app reads from the same source. It prevents bugs where two parts of the screen show different things."_
+
+### "What is TypeScript?"
+
+> _"TypeScript is JavaScript with types. You declare what kind of data a variable holds and the editor tells you immediately if you're using it wrong. It catches bugs before the code even runs."_
+
+### "What is an API?"
+
+> _"An API is the contract between the frontend and the backend. The frontend asks for data, the backend sends it back as JSON. Think of it as a waiter — I order, the kitchen prepares, the waiter brings it back."_
+
+### "What is a monorepo?"
+
+> _"A single code repository holding multiple projects — frontend, backend, shared libraries — all in one place. Makes sharing code easy and keeps everything versioned together. We use Nx to manage it."_
+
+### "What is lazy loading?"
+
+> _"The app only downloads the code for a page when the user navigates there — not upfront. So the app starts faster because it's not loading things the user might never visit."_
+
+### "What is a guard?"
+
+> _"A guard is a gatekeeper for a route. Before Angular shows a page it checks something like 'is the user logged in?' If not, it redirects them. That's how you protect pages from unauthorised access."_
+
+### "What is an interceptor?"
+
+> _"Middleware for HTTP requests. Every time the app calls the server, the interceptor runs first — it attaches the auth token, shows a loading spinner, handles errors globally. Written once, applies everywhere."_
+
+### 🎤 Practice question
+
+> _"Can you explain what Angular is, as if I'm not a developer?"_
 
 ---
