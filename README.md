@@ -9,6 +9,17 @@ A **production-ready enterprise admin dashboard** built with modern Angular arch
 
 > **Note for Recruiters**: The live demo showcases the full-stack application with real API integration. The frontend consumes data from the backend API, demonstrating end-to-end functionality.
 
+## Screenshot
+
+<!-- Add a screenshot here: open the live demo, capture the user management table -->
+![Dashboard — user management table with Signal Store state](./docs/screenshot.png)
+
+## Why I Built It
+
+Enterprise Angular work lives behind NDAs. I built this to give a technical interviewer something concrete to open: an Nx monorepo with the same structure I apply on production engagements — shared libraries across frontend and backend, a working CI/CD pipeline (GitHub Actions → Docker → DigitalOcean), and NgRx Signals state management — all publicly walkable. The Quarkus + Keycloak + PostgreSQL migration in progress reflects where production Angular shops are actually headed: native-compiled APIs, OAuth 2.0 OIDC enterprise auth, and a proper relational database — not an in-memory mock.
+
+---
+
 ## 🎯 **Key Highlights for Recruiters**
 
 - ✅ **Modern Angular 21** with standalone components and signal-based state management
@@ -53,6 +64,19 @@ A **production-ready enterprise admin dashboard** built with modern Angular arch
 - **Consistent tooling** across all projects
 - **Optimized build pipeline** with Nx caching and task orchestration
 - **Scalable architecture** ready for additional apps and libraries
+
+## What This Demonstrates
+
+| Skill | Where |
+|---|---|
+| Nx monorepo with shared libraries (frontend + backend) | `libs/models/`, `libs/app-info/` |
+| Angular 21 standalone components + NgRx Signals state management | `apps/admin-dashboard/src/` |
+| CI/CD pipeline: GitHub Actions → Docker → DigitalOcean | `.github/workflows/`, `api/Dockerfile` |
+| Full-stack type safety via shared TypeScript models | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
+| Hono.js + Bun REST API (TypeScript-first, zero overhead) | `apps/api/` |
+| Vercel frontend deployment + DigitalOcean backend deployment | Live demo links above |
+| Signal-based component architecture with `OnPush` | `apps/admin-dashboard/src/app/` |
+| Feature-based routing with lazy loading | `app.routes.ts` |
 
 ## 🚀 **Technical Skills Demonstrated**
 
