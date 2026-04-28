@@ -12,19 +12,16 @@ The frontend consumes data from the deployed backend API both are live and conne
 ## Screenshot
 
 <!-- Add a screenshot here: open the live demo, capture the user management table -->
-![Dashboard — user management table with Signal Store state](./docs/screenshot.png)
+![Dashboard: user management table with Signal Store state](./docs/screenshot.png)
 
 ## Why I Built It
 
 Most Angular work I do lives behind NDAs. This project exists to make the architecture visible. The decisions here are the ones I'd make on any production codebase:
 
-- **HTTP interceptors as the request/response layer** — auth header injection, global error normalisation, and response transformation flow through a centralised interceptor chain, not scattered across individual services. This is the right seam for cross-cutting concerns.
-- **NgRx Signal Store over `BehaviorSubject` services** — fine-grained reactive signals decouple reads from writes, eliminate `async` pipe boilerplate, and compose naturally with computed state. The store slice per feature keeps state co-located with the domain it belongs to.
-- **`OnPush` + zoneless** — components opt out of zone.js and trigger re-renders only when signals change. This is where Angular's roadmap is pointing; writing it this way now makes the eventual migration trivial.
-- **Feature-based lazy loading** — each domain (users, auth, settings) is a self-contained route chunk with its own store, HTTP service, and interceptor scope. Nothing from one feature leaks into another.
-- **Nx shared library boundary** — `libs/models` is the single source of truth for types used by both the Angular frontend and the Hono.js API. The TypeScript compiler enforces consistency across the monorepo at build time.
-
-The Quarkus + Keycloak + PostgreSQL migration replaces the current Hono.js API with a native-compiled Java backend, OAuth 2.0 OIDC enterprise auth, and a proper relational database layer — the stack that shows up in real enterprise Angular projects.
+- **Services as thin, environment-aware entry points**: each HTTP service knows the base URL for the current environment and the shape of the request, nothing more. Auth headers, retry logic, error normalisation, and response transformation live in the interceptor chain, which swaps cleanly between local, staging, and production without touching a single service file.
+- **NgRx Signal Store over `BehaviorSubject` services**: fine-grained reactive signals decouple reads from writes, eliminate `async` pipe boilerplate, and compose naturally with computed state. The store slice per feature keeps state co-located with the domain it belongs to.
+- **`OnPush` + zoneless**: components opt out of zone.js and trigger re-renders only when signals change. This is where Angular's roadmap is pointing; writing it this way now makes the eventual migration trivial.
+- **Feature-based lazy loading**: each domain (users, auth, settings) is a self-contained route chunk with its own store, HTTP service, and interceptor scope. Nothing from one feature leaks into another.
 
 ---
 
@@ -75,13 +72,13 @@ The Quarkus + Keycloak + PostgreSQL migration replaces the current Hono.js API w
 
 | Pattern | Where |
 |---|---|
-| HTTP interceptors — global auth injection, error normalisation, response transformation | `apps/admin-dashboard/src/app/core/interceptors/` |
-| NgRx Signal Store — per-feature state slices, computed state, effect isolation | `apps/admin-dashboard/src/app/` |
+| HTTP interceptors: global auth injection, error normalisation, response transformation | `apps/admin-dashboard/src/app/core/interceptors/` |
+| NgRx Signal Store: per-feature state slices, computed state, effect isolation | `apps/admin-dashboard/src/app/` |
 | `OnPush` change detection + zoneless signals | Component files in `apps/admin-dashboard/src/app/` |
 | Feature-based lazy loading with self-contained route chunks | `app.routes.ts` |
-| Nx shared library boundary — compiler-enforced type safety across apps | `libs/models/`, `libs/app-info/` |
-| CI/CD: GitHub Actions → Docker build → DigitalOcean App Platform | `.github/workflows/`, `api/Dockerfile` |
-| Full-stack TypeScript — shared models between Angular and Hono.js API | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
+| Nx shared library boundary: compiler-enforced type safety across apps | `libs/models/`, `libs/app-info/` |
+| CI/CD: GitHub Actions + Docker build + DigitalOcean App Platform | `.github/workflows/`, `api/Dockerfile` |
+| Full-stack TypeScript: shared models between Angular and Hono.js API | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
 | Vercel frontend + DigitalOcean backend (both live, CORS configured) | Live demo links above |
 
 ## 🚀 **Technical Skills Demonstrated**
