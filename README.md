@@ -1,13 +1,13 @@
 # Admin Dashboard NX Monorepo
 
-A **production-ready enterprise admin dashboard** built with modern Angular architecture and best practices, showcasing advanced frontend development skills and full-stack capabilities.
+A production-ready enterprise admin dashboard built with Angular 21, Nx monorepo, and NgRx Signals — demonstrating the patterns I consider non-negotiable in a well-structured Angular codebase.
 
 ## 🌐 **Live Demo**
 
-- 🚀 **Frontend Demo**: [admin-dashboard-nx-monorepo.vercel.app](https://admin-dashboard-nx-monorepo.vercel.app)
+- 🚀 **Frontend**: [admin-dashboard-nx-monorepo.vercel.app](https://admin-dashboard-nx-monorepo.vercel.app)
 - 🔗 **Backend API**: [nx-angular-admin-vu22n.ondigitalocean.app](https://nx-angular-admin-vu22n.ondigitalocean.app/)
 
-> **Note for Recruiters**: The live demo showcases the full-stack application with real API integration. The frontend consumes data from the backend API, demonstrating end-to-end functionality.
+The frontend consumes data from the deployed backend API — both are live and connected.
 
 ## Screenshot
 
@@ -16,11 +16,19 @@ A **production-ready enterprise admin dashboard** built with modern Angular arch
 
 ## Why I Built It
 
-Enterprise Angular work lives behind NDAs. I built this to give a technical interviewer something concrete to open: an Nx monorepo with the same structure I apply on production engagements — shared libraries across frontend and backend, a working CI/CD pipeline (GitHub Actions → Docker → DigitalOcean), and NgRx Signals state management — all publicly walkable. The Quarkus + Keycloak + PostgreSQL migration in progress reflects where production Angular shops are actually headed: native-compiled APIs, OAuth 2.0 OIDC enterprise auth, and a proper relational database — not an in-memory mock.
+Most Angular work I do lives behind NDAs. This project exists to make the architecture visible. The decisions here are the ones I'd make on any production codebase:
+
+- **HTTP interceptors as the request/response layer** — auth header injection, global error normalisation, and response transformation flow through a centralised interceptor chain, not scattered across individual services. This is the right seam for cross-cutting concerns.
+- **NgRx Signal Store over `BehaviorSubject` services** — fine-grained reactive signals decouple reads from writes, eliminate `async` pipe boilerplate, and compose naturally with computed state. The store slice per feature keeps state co-located with the domain it belongs to.
+- **`OnPush` + zoneless** — components opt out of zone.js and trigger re-renders only when signals change. This is where Angular's roadmap is pointing; writing it this way now makes the eventual migration trivial.
+- **Feature-based lazy loading** — each domain (users, auth, settings) is a self-contained route chunk with its own store, HTTP service, and interceptor scope. Nothing from one feature leaks into another.
+- **Nx shared library boundary** — `libs/models` is the single source of truth for types used by both the Angular frontend and the Hono.js API. The TypeScript compiler enforces consistency across the monorepo at build time.
+
+The Quarkus + Keycloak + PostgreSQL migration replaces the current Hono.js API with a native-compiled Java backend, OAuth 2.0 OIDC enterprise auth, and a proper relational database layer — the stack that shows up in real enterprise Angular projects.
 
 ---
 
-## 🎯 **Key Highlights for Recruiters**
+## 🎯 **Key Highlights**
 
 - ✅ **Modern Angular 21** with standalone components and signal-based state management
 - ✅ **Nx Monorepo** architecture with shared libraries and dependency management
@@ -67,16 +75,16 @@ Enterprise Angular work lives behind NDAs. I built this to give a technical inte
 
 ## What This Demonstrates
 
-| Skill | Where |
+| Pattern | Where |
 |---|---|
-| Nx monorepo with shared libraries (frontend + backend) | `libs/models/`, `libs/app-info/` |
-| Angular 21 standalone components + NgRx Signals state management | `apps/admin-dashboard/src/` |
-| CI/CD pipeline: GitHub Actions → Docker → DigitalOcean | `.github/workflows/`, `api/Dockerfile` |
-| Full-stack type safety via shared TypeScript models | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
-| Hono.js + Bun REST API (TypeScript-first, zero overhead) | `apps/api/` |
-| Vercel frontend deployment + DigitalOcean backend deployment | Live demo links above |
-| Signal-based component architecture with `OnPush` | `apps/admin-dashboard/src/app/` |
-| Feature-based routing with lazy loading | `app.routes.ts` |
+| HTTP interceptors — global auth injection, error normalisation, response transformation | `apps/admin-dashboard/src/app/core/interceptors/` |
+| NgRx Signal Store — per-feature state slices, computed state, effect isolation | `apps/admin-dashboard/src/app/` |
+| `OnPush` change detection + zoneless signals | Component files in `apps/admin-dashboard/src/app/` |
+| Feature-based lazy loading with self-contained route chunks | `app.routes.ts` |
+| Nx shared library boundary — compiler-enforced type safety across apps | `libs/models/`, `libs/app-info/` |
+| CI/CD: GitHub Actions → Docker build → DigitalOcean App Platform | `.github/workflows/`, `api/Dockerfile` |
+| Full-stack TypeScript — shared models between Angular and Hono.js API | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
+| Vercel frontend + DigitalOcean backend (both live, CORS configured) | Live demo links above |
 
 ## 🚀 **Technical Skills Demonstrated**
 
@@ -106,11 +114,6 @@ Enterprise Angular work lives behind NDAs. I built this to give a technical inte
 - **Performance** - Optimized bundle sizes and lazy loading
 
 ## 🛠️ **Getting Started**
-
-### **🌐 Try the Live Demo**
-
-- **Frontend**: [admin-dashboard-nx-monorepo.vercel.app](https://admin-dashboard-nx-monorepo.vercel.app)
-- **API**: [nx-angular-admin-vu22n.ondigitalocean.app](nx-angular-admin-vu22n.ondigitalocean.app)
 
 ### **Prerequisites**
 
@@ -234,7 +237,7 @@ export class ProfileInfoComponent {
 - **DigitalOcean Deployment**: The latest Docker image is deployed to DigitalOcean App Platform, ensuring a live, production-ready API.
 - **Seamless Updates**: Every push to the main branch triggers a new deployment, keeping the live API up-to-date.
 
-> **Tip:** See the `.github/workflows/` directory for the CI/CD pipeline configuration and `api/Dockerfile` for the backend container setup.
+> See the `.github/workflows/` directory for the CI/CD pipeline configuration and `api/Dockerfile` for the backend container setup.
 
 ### **Production Deployments**
 
@@ -268,7 +271,3 @@ export class ProfileInfoComponent {
 - ⚙️ **Testing Implementation** - Unit tests with Jest, E2E tests with Playwright
 - ⚙️ **Performance Optimization** - Bundle analysis and optimization
 - ⚙️ **Accessibility Audit** - WCAG compliance testing and improvements
-
----
-
-**This project demonstrates enterprise-level Angular development skills, modern architecture patterns, and full-stack development capabilities.**
