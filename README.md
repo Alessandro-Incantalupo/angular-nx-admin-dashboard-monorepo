@@ -18,10 +18,10 @@ The frontend consumes data from the deployed backend API both are live and conne
 
 Most Angular work I do lives behind NDAs. This project exists to make the architecture visible. The decisions here are the ones I'd make on any production codebase:
 
-- **Services as thin, environment-aware entry points**: each HTTP service knows the base URL for the current environment and the shape of the request, nothing more. Auth headers, retry logic, error normalisation, and response transformation live in the interceptor chain, which swaps cleanly between local, staging, and production without touching a single service file.
-- **NgRx Signal Store over `BehaviorSubject` services**: fine-grained reactive signals decouple reads from writes, eliminate `async` pipe boilerplate, and compose naturally with computed state. The store slice per feature keeps state co-located with the domain it belongs to.
+- **Services as the network boundary**: each HTTP service is the only layer that knows the backend URL and response shape. It fetches raw data and hands it off. Components never call services directly, which means swapping environments or backends touches one file, not the whole app.
+- **Signal Store as the manipulation and distribution layer**: the store transforms, filters, and derives exactly what each component needs. Components consume signals passively. The store slice per feature keeps the domain's data and derived state co-located.
 - **`OnPush` + zoneless**: components opt out of zone.js and trigger re-renders only when signals change. This is where Angular's roadmap is pointing; writing it this way now makes the eventual migration trivial.
-- **Feature-based lazy loading**: each domain (users, auth, settings) is a self-contained route chunk with its own store, HTTP service, and interceptor scope. Nothing from one feature leaks into another.
+- **Feature-based folder structure with lazy loading**: each domain (users, auth, settings) is a self-contained directory with its own store, service, and interceptor scope. The route chunk boundary enforces it at build time. Nothing from one feature leaks into another.
 
 ---
 
