@@ -1,13 +1,13 @@
 # Admin Dashboard NX Monorepo
 
-A production-ready enterprise admin dashboard built with Angular 21, Nx monorepo, and NgRx Signals — demonstrating the patterns I consider non-negotiable in a well-structured Angular codebase.
+A production-ready enterprise admin dashboard built with Angular 21, Nx monorepo, and NgRx Signals demonstrating the patterns I consider non-negotiable in a well-structured Angular codebase.
 
 ## 🌐 **Live Demo**
 
 - 🚀 **Frontend**: [admin-dashboard-nx-monorepo.vercel.app](https://admin-dashboard-nx-monorepo.vercel.app)
 - 🔗 **Backend API**: [nx-angular-admin-vu22n.ondigitalocean.app](https://nx-angular-admin-vu22n.ondigitalocean.app/)
 
-The frontend consumes data from the deployed backend API — both are live and connected.
+The frontend consumes data from the deployed backend API both are live and connected.
 
 ## Screenshot
 
@@ -42,9 +42,7 @@ The Quarkus + Keycloak + PostgreSQL migration replaces the current Hono.js API w
 ```
 ├── apps/
 │   ├── admin-dashboard/          # Angular 21 Frontend Application
-│   ├── admin-dashboard-e2e/      # Playwright E2E Tests (scaffolded, not yet implemented)
 │   ├── api/                      # Hono.js + Bun REST API (current)
-│   └── quarkus-backend/          # Java Quarkus Backend (in progress)
 ├── libs/
 │   ├── models/                   # Shared TypeScript Models
 │   └── app-info/                 # Shared Application Info
