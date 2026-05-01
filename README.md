@@ -15,7 +15,7 @@ The frontend consumes data from the deployed backend API, both are live and conn
 
 ## Why I Built It
 
-Most Angular work I do lives behind NDAs. This project exists to make the architecture visible. The decisions here are the ones I'd make on any production codebase:
+The decisions here are the ones I'd make on any production codebase:
 
 - **Services as the network boundary**: each HTTP service is the only layer that knows the backend URL and response shape. It fetches raw data and hands it off. Components never call services directly, which means swapping environments or backends touches one file, not the whole app.
 - **Signal Store as the manipulation and distribution layer**: the store transforms, filters, and derives exactly what each component needs. Components consume signals passively. The store slice per feature keeps the domain's data and derived state co-located.
@@ -32,20 +32,6 @@ Most Angular work I do lives behind NDAs. This project exists to make the archit
 - Enterprise-grade patterns: CRUD operations, user management, role-based features
 - CI/CD: GitHub Actions + Docker + DigitalOcean App Platform (backend), Vercel (frontend)
 
-## Architecture Overview
-
-\`\`\`
-apps/
-  admin-dashboard/          # Angular 21 Frontend Application
-  api/                      # Hono.js + Bun REST API (current)
-libs/
-  models/                   # Shared TypeScript Models
-  app-info/                 # Shared Application Info
-tools/                      # Nx Workspace Tooling
-\`\`\`
-
-**Backend**: Current REST API built with Hono.js on Bun, TypeScript-first with shared models. In progress: Quarkus (Java) backend with PostgreSQL, secured with Keycloak (OAuth 2.0 / OIDC).
-
 ## What This Demonstrates
 
 | Pattern | Where |
@@ -58,14 +44,3 @@ tools/                      # Nx Workspace Tooling
 | CI/CD: GitHub Actions + Docker build + DigitalOcean App Platform | `.github/workflows/`, `api/Dockerfile` |
 | Full-stack TypeScript: shared models between Angular and Hono.js API | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
 | Vercel frontend + DigitalOcean backend (both live, CORS configured) | Live demo links above |
-
-## Getting Started
-
-\`\`\`bash
-git clone https://github.com/Alessandro-Incantalupo/admin-dashboard-nx-monorepo
-cd admin-dashboard-nx-monorepo
-pnpm install
-
-pnpm nx serve admin-dashboard  # Frontend: http://localhost:4300
-pnpm nx serve api              # Backend API: http://localhost:3000
-\`\`\`
