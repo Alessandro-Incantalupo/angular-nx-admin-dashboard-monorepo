@@ -1,13 +1,20 @@
-version: '3.8'
+# Local Postgres for development: `docker compose up -d`.
 services:
-  api:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
-    ports:
-      - '3000:3000'
+  postgres:
+    image: postgres:17-alpine
     environment:
-      - PORT=3000
-    # Optionally, add volumes for development live reload
-    # volumes:
-    #   - ./apps/api:/app
+      POSTGRES_DB: dashboard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d dashboard']
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  pgdata:
