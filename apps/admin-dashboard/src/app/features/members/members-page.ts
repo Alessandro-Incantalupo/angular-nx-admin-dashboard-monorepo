@@ -188,7 +188,9 @@ const tone: Record<MemberStatus, 'success' | 'info' | 'secondary'> = {
           </ng-template>
           <ng-template #body let-m>
             <tr>
-              <th scope="row" class="text-left font-medium">{{ m.name }}</th>
+              <th scope="row" class="px-3.5 py-2 text-left font-medium">
+                {{ m.name }}
+              </th>
               <td class="break-all">{{ m.email }}</td>
               <td>{{ roleLabel[asRole(m.role)] }}</td>
               <td>

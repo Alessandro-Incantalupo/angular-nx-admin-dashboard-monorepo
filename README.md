@@ -1,46 +1,112 @@
-# Admin Dashboard NX Monorepo
+# Admin Dashboard
 
-A production-ready enterprise admin dashboard built with Angular 21, Nx monorepo, and NgRx Signals demonstrating the patterns I consider non-negotiable in a well-structured Angular codebase.
+An admin dashboard for a made-up workspace: sign in, see how the workspace grows on four charts, manage its members, change its settings. It is an Nx monorepo with an Angular front end and a small Hono API on Postgres, built to show how I put together a front end that is fast, accessible and safe by default.
 
-## Live Demo
+![The dashboard in the light theme: four stat tiles and four charts](./docs/dashboard-light.png)
 
-- **Frontend**: [admin-dashboard-nx-monorepo.vercel.app](https://admin-dashboard-nx-monorepo.vercel.app)
-- **Backend API**: [nx-angular-admin-vu22n.ondigitalocean.app](https://nx-angular-admin-vu22n.ondigitalocean.app/)
+## Try it
 
-The frontend consumes data from the deployed backend API, both are live and connected.
+Sign in with the demo account, which can look at everything and change nothing:
 
-## Demo
+| Email              | Password              |
+| ------------------ | --------------------- |
+| `demo@example.com` | `look-but-dont-touch` |
 
-![Adding a user with reactive form validation, toast notification, signal-driven state updates, and pagination](./docs/demo.gif)
+The demo data is put back on every deploy of the API.
 
-## Why I Built It
+## What it shows
 
-The decisions here are the ones I'd make on any production codebase:
+- **Angular 22, zoneless.** Signal inputs and outputs, `computed`, `linkedSignal`, `httpResource`, the built-in control flow, standalone components, lazy routes. NgRx SignalStore holds the session and the members list.
+- **Signal Forms with one schema.** Every form (sign-in, member, settings, password) is a Signal Form validated by a Zod schema in `libs/models`. The API validates the same request with the same schema, and errors only the server can find (an email already in use, a wrong current password) come back onto the same field.
+- **Design tokens and PrimeNG.** `libs/design-system` maps PrimeNG's Aura preset onto the roles of [`@a.incantalupo/design-tokens`](https://www.npmjs.com/package/@a.incantalupo/design-tokens). Light and dark switch with `data-theme`, without a flash on load.
+- **Charts with a text alternative.** Chart.js through PrimeNG, coloured from the tokens. Each chart has a one-line summary, and its numbers are always in a table: read by screen readers, shown on screen with one click.
+- **Accessibility.** Labels and linked error messages on every field, focus on the first invalid field and on the new page after navigation, a skip link, 16px text, 44px targets, and a phone layout that holds at 200% text size.
+- **A small first load.** The sign-in page ships Angular and nothing else (about 95 KB compressed); PrimeNG, its theme and Chart.js load after sign-in.
+- **A careful API.** Hono on Node with Better Auth, Drizzle and Postgres. See the security model below.
 
-- **Services as the network boundary**: each HTTP service is the only layer that knows the backend URL and response shape. It fetches raw data and hands it off. Components never call services directly, which means swapping environments or backends touches one file, not the whole app.
-- **Signal Store as the manipulation and distribution layer**: the store transforms, filters, and derives exactly what each component needs. Components consume signals passively. The store slice per feature keeps the domain's data and derived state co-located.
-- **`OnPush` + zoneless**: components opt out of zone.js and trigger re-renders only when signals change. This is where Angular's roadmap is pointing; writing it this way now makes the eventual migration trivial.
-- **`core/`, `features/`, `shared/` folder convention with lazy loading**: `core/` holds singleton services and interceptors loaded once at startup. `features/` groups each domain (users, auth, settings) into its own lazy route chunk with its own store and service. `shared/` contains reusable components and utilities with no domain knowledge.
+![The members page in the dark theme](./docs/members-dark.png)
 
----
+## Architecture
 
-## Key Highlights
+```mermaid
+flowchart LR
+  subgraph Browser
+    A[Angular app<br/>Signal Forms, SignalStore]
+  end
+  subgraph Vercel
+    S[Static files<br/>CSP, security headers]
+    R["/api/* rewrite"]
+  end
+  subgraph DigitalOcean App Platform
+    H[Hono API<br/>Better Auth, Zod]
+  end
+  P[(Postgres<br/>Drizzle migrations)]
+  M[libs/models<br/>Zod schemas, types]
 
-- Angular 21 with standalone components and signal-based state management
-- Nx Monorepo architecture with shared libraries and dependency management
-- Full-stack implementation with REST API backend and frontend consuming it
-- Enterprise-grade patterns: CRUD operations, user management, role-based features
-- CI/CD: GitHub Actions + Docker + DigitalOcean App Platform (backend), Vercel (frontend)
+  A -->|HTML, JS, CSS| S
+  A -->|"fetch /api (same origin, cookie)"| R --> H
+  H -->|"app_runtime role, rows only"| P
+  M -.-> A
+  M -.-> H
+```
 
-## What This Demonstrates
+The browser only ever talks to the front end's own origin. Vercel forwards `/api/*` to the API, so the session cookie is first-party and `SameSite=Lax` works.
 
-| Pattern | Where |
-|---|---|
-| HTTP interceptors: global auth injection, error normalisation, response transformation | `apps/admin-dashboard/src/app/core/interceptors/` |
-| NgRx Signal Store: per-feature state slices, computed state, effect isolation | `apps/admin-dashboard/src/app/` |
-| `OnPush` change detection + zoneless signals | Component files in `apps/admin-dashboard/src/app/` |
-| Feature-based lazy loading with self-contained route chunks | `app.routes.ts` |
-| Nx shared library boundary: compiler-enforced type safety across apps | `libs/models/`, `libs/app-info/` |
-| CI/CD: GitHub Actions + Docker build + DigitalOcean App Platform | `.github/workflows/`, `api/Dockerfile` |
-| Full-stack TypeScript: shared models between Angular and Hono.js API | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
-| Vercel frontend + DigitalOcean backend (both live, CORS configured) | Live demo links above |
+| Path                   | What                                                                   |
+| ---------------------- | ---------------------------------------------------------------------- |
+| `apps/admin-dashboard` | The Angular app                                                        |
+| `apps/api`             | The Hono API, Drizzle schema and migrations, seed and database scripts |
+| `libs/models`          | Zod schemas and types shared by both apps                              |
+| `libs/design-system`   | PrimeNG preset on the design tokens, global styles, chart colours      |
+
+## Security model
+
+| Concern           | How                                                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Session           | Better Auth session in an `HttpOnly`, `Secure`, `SameSite=Lax` cookie. Nothing in `localStorage`. 8 hours, renewed hourly while in use.                 |
+| Sign-in           | One message for an unknown email and a wrong password. Failures are counted in Postgres: 5 per account and 20 per IP in 15 minutes.                     |
+| Library routes    | Better Auth runs as a library; its HTTP handler is never mounted, so sign-up, reset and OAuth endpoints don't exist.                                    |
+| Roles             | `admin` and `viewer`, checked by one middleware on every route: reads need a session, writes need an admin. Angular's guards only shape the UI.         |
+| Password change   | Needs the current password (failures count like failed sign-ins) and signs out the other sessions. The demo account can't change its password.          |
+| Input             | Every body, query and path parameter goes through a Zod schema; failures answer `422` with field messages.                                              |
+| Cross-site writes | CORS allows only the front end's origin, and every write must carry a matching `Origin` header.                                                         |
+| Errors            | `application/problem+json`, never a stack trace.                                                                                                        |
+| Abuse             | Rate limit on writes, 16 KB body limit.                                                                                                                 |
+| Headers           | CSP (`default-src 'none'` on the API; a hashed inline script on the front end), HSTS, `nosniff`, no referrer, no framing.                               |
+| Database          | The API connects as `app_runtime`, which reads and writes rows and can't change tables. Migrations run as the owner. Members are archived, not deleted. |
+| Personal data     | Logs hold method, route pattern, status and time only. The throttle stores HMACs of emails and IPs, never the values.                                   |
+| Secrets           | Only in environment variables. See `apps/api/.env.example`.                                                                                             |
+
+The tests check this: every write route is refused to a viewer (the list of routes comes from the app itself, so a new route can't be forgotten), the login limits, the password change rules and the error format.
+
+## Run it locally
+
+You need [mise](https://mise.jdx.dev) (or Node 26 and pnpm 12) and Docker.
+
+```sh
+mise install
+pnpm install
+docker compose up -d                    # Postgres on localhost:5432
+cp apps/api/.env.example apps/api/.env  # then fill BETTER_AUTH_SECRET and SEED_ADMIN_PASSWORD
+pnpm db:migrate                         # tables, as the owner
+pnpm db:app-role -- --yes               # the API's own role
+pnpm db:seed                            # made-up workspace, demo and admin logins
+pnpm dev                                # API on :3100, app on http://localhost:4300
+```
+
+Sign in as `demo@example.com` (read-only) or `admin@example.com` with your `SEED_ADMIN_PASSWORD`.
+
+## Checks
+
+```sh
+pnpm lint        # ESLint (with Angular template accessibility rules) and Prettier
+pnpm typecheck
+pnpm test        # Vitest: shared schemas, API on an in-memory Postgres (PGlite), Angular units
+pnpm build
+```
+
+CI runs the same on every push. Deploys run from `main` only: Vercel builds the front end, and `.github/workflows/deploy.yml` migrates the database, ships the API image to DigitalOcean and resets the demo data.
+
+## Licence
+
+MIT
