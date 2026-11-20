@@ -4,7 +4,7 @@ import { connect } from './db/client';
 import { readEnv } from './env';
 
 const env = readEnv();
-const { db, close } = connect(env.DATABASE_URL);
+const { db, close } = connect(env.DATABASE_URL, env.DATABASE_POOL_MAX);
 const app = createApp(db, env);
 
 const server = serve(

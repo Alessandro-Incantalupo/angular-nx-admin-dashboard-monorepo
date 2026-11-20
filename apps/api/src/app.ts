@@ -95,14 +95,19 @@ export function createApp(db: Db, env: Env) {
 
   app.notFound(c => problem(c, 404));
   app.onError((err, c) => {
-    // The error's name and message only: no request data, no stack in the response.
+    // Name and message only, never request data or query parameters (a
+    // failed query's message lists them). No stack in the response.
+    const cause = err.cause instanceof Error ? err.cause : undefined;
     console.error(
       JSON.stringify({
         level: 'error',
         method: c.req.method,
         route: routePath(c, -1),
         error: err.name,
-        message: err.message,
+        message: err.message.split('\n')[0],
+        cause: cause
+          ? `${cause.name}: ${cause.message.split('\n')[0]}`
+          : undefined,
       })
     );
     return problem(c, 500);

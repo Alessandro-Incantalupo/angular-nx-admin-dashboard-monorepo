@@ -7,6 +7,8 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().default(3100),
   /** The app's own role: reads and writes rows, can't change tables. */
   DATABASE_URL: z.url(),
+  /** Connections the API keeps open. Keep it small behind a pooler. */
+  DATABASE_POOL_MAX: z.coerce.number().int().min(1).max(50).default(5),
   /** Signs session cookies and keys the login throttle's hashes. 32+ characters. */
   BETTER_AUTH_SECRET: z.string().min(32),
   /**
