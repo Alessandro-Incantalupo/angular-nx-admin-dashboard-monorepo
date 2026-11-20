@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod';
 import { emailField, nameField } from './fields';
 
 /** Roles inside the demo workspace (data shown on the dashboard, not login accounts). */

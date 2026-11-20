@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod';
 import { emailField } from './fields';
 
 export const languages = ['en', 'it'] as const;

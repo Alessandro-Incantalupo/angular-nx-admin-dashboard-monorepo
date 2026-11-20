@@ -4,60 +4,27 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/admin-dashboard/src",
-  "tags": [],
+  "tags": ["scope:client"],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
+      "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
-      "dependsOn": [
-        {
-          "projects": "design-system",
-          "target": "build-styles"
-        }
-      ],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/admin-dashboard",
         "index": "apps/admin-dashboard/src/index.html",
         "browser": "apps/admin-dashboard/src/main.ts",
-        "polyfills": [],
         "tsConfig": "apps/admin-dashboard/tsconfig.app.json",
-        "assets": [
-          {
-            "glob": "**/*",
-            "input": "apps/admin-dashboard/src/assets",
-            "output": "assets"
-          },
-          {
-            "glob": "**/*",
-            "input": "apps/admin-dashboard/src/mocks",
-            "output": "mocks"
-          },
-          {
-            "glob": "favicon.ico",
-            "input": "apps/admin-dashboard/public",
-            "output": "/"
-          }
-        ],
-        "styles": [
-          "apps/admin-dashboard/src/styles.css",
-          "dist/libs/design-system/styles.css"
-        ],
-        "scripts": []
+        "assets": [{ "glob": "**/*", "input": "apps/admin-dashboard/public" }],
+        "styles": ["apps/admin-dashboard/src/styles.css"]
       },
       "configurations": {
         "production": {
-          "fileReplacements": [
-            {
-              "replace": "apps/admin-dashboard/src/environments/environment.ts",
-              "with": "apps/admin-dashboard/src/environments/environment.prod.ts"
-            }
-          ],
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "400kb",
+              "maximumError": "550kb"
             },
             {
               "type": "anyComponentStyle",
@@ -65,98 +32,43 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "optimization": {
+            "scripts": true,
+            "fonts": false,
+            "styles": { "minify": true, "inlineCritical": false }
+          }
         },
         "development": {
-          "fileReplacements": [
-            {
-              "replace": "apps/admin-dashboard/src/environments/environment.ts",
-              "with": "apps/admin-dashboard/src/environments/environment.development.ts"
-            }
-          ],
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true,
-          "statsJson": true
+          "sourceMap": true
         }
       }
     },
     "serve": {
       "continuous": true,
-      "executor": "@angular-devkit/build-angular:dev-server",
-      "defaultConfiguration": "production",
-      "readyWhen": {
-        "signal": true
-      },
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
       "options": {
-        "port": 4300
+        "port": 4300,
+        "proxyConfig": "apps/admin-dashboard/proxy.conf.json"
       },
       "configurations": {
-        "production": {
-          "buildTarget": "admin-dashboard:build:production"
-        },
-        "development": {
-          "buildTarget": "admin-dashboard:build:development"
-        }
+        "production": { "buildTarget": "admin-dashboard:build:production" },
+        "development": { "buildTarget": "admin-dashboard:build:development" }
       }
     },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "buildTarget": "admin-dashboard:build"
-      }
-    },
-    "lint": {
-      "inputs": [
-        "default",
-        "^default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        "{workspaceRoot}/tools/eslint-rules/**/*",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
+    "typecheck": {
+      "command": "ngc -p apps/admin-dashboard/tsconfig.app.json --noEmit"
     },
     "test": {
+      "executor": "@angular/build:unit-test",
       "options": {
-        "passWithNoTests": true,
-        "watchAll": true,
-        "collectCoverage": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "coverage": true
-        }
-      }
-    },
-    "serve-static": {
-      "continuous": true,
-      "executor": "@nx/web:file-server",
-      "options": {
-        "buildTarget": "admin-dashboard:build",
-        "port": 4200,
-        "staticFilePath": "dist/apps/admin-dashboard/browser",
-        "spa": true
-      },
-      "readyWhen": {
-        "signal": true
-      },
-      "dependsOn": ["build"]
-    },
-    "analyze": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "nx build admin-dashboard --stats-json --named-chunks && npx -y @angular-experts/hawkeye dist/apps/admin-dashboard/stats.json"
-      }
-    },
-    "build-clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "rm -rf dist && nx run-many -t build --skip-nx-cache"
+        "tsConfig": "apps/admin-dashboard/tsconfig.spec.json",
+        "buildTarget": "admin-dashboard:build:development",
+        "runner": "vitest",
+        "watch": false
       }
     }
   }

@@ -21,7 +21,8 @@
     "types": [],
     "paths": {
       "@dashboard/models": ["./libs/models/src/index.ts"],
-      "@dashboard/design-system": ["./libs/design-system/src/index.ts"]
+      "@dashboard/design-system": ["./libs/design-system/src/index.ts"],
+      "@dashboard/models/*": ["./libs/models/src/lib/*"]
     }
   },
   "exclude": ["node_modules", "tmp", "dist"]

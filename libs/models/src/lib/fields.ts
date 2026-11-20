@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod';
 
 /** An email address: trimmed and lower-cased before it is checked. */
 export const emailField = z

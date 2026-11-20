@@ -1,0 +1,9 @@
+/* Layer order: PrimeNG's styles sit between Tailwind's base and its utilities. */
+@layer theme, base, primeng, components, utilities;
+
+@import "tailwindcss";
+@import "@a.incantalupo/design-tokens";
+@import "@a.incantalupo/design-tokens/tailwind.css";
+@import "../../../libs/design-system/src/styles.css";
+
+@source "./app";
