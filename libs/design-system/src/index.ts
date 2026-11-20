@@ -1,2 +1,1 @@
-export * from './lib/chart-theme';
-export * from './lib/primeng-preset';
+export * from './lib/design-system';

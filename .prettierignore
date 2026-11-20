@@ -45,4 +45,3 @@ mocks/
 # ignore IDE/editor files
 .idea/
 .vscode/
-apps/api/drizzle/meta

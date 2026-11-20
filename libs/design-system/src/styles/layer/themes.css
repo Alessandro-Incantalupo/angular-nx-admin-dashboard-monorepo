@@ -1,0 +1,102 @@
+@layer base {
+  :root {
+    /* Light Theme Base */
+    --background: #ffffff;
+    --foreground: #0c1420;
+    --card: #f8fafc;
+    --card-foreground: #0f172a;
+    --primary: #e11d48;
+    --primary-foreground: #ffffff;
+    --secondary: #64748b;
+    --secondary-foreground: #ffffff;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --border: #e2e8f0;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --success: #16a34a;
+    --warning: #ea580c;
+    --info: #2563eb;
+
+    /* 🆕 IMPROVEMENT: Add missing variables your PrimeNG styles need */
+    --cell-editor-input: #ffffff;
+    --credentials: #5f5c5c;
+    --input-focus-border: var(--primary);
+    --input-focus-shadow: rgba(var(--primary), 0.3);
+  }
+
+  .dark {
+    /* Dark Theme Base */
+    --background: #0a0a0a;
+    --foreground: #fafafa;
+    --card: #171717;
+    --card-foreground: #fafafa;
+    --primary: #e11d48;
+    --primary-foreground: #ffffff;
+    --secondary: #404040;
+    --secondary-foreground: #fafafa;
+    --muted: #262626;
+    --muted-foreground: #a3a3a3;
+    --border: #404040;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --success: #16a34a;
+    --warning: #ea580c;
+    --info: #2563eb;
+
+    /* Dark theme specific variables */
+    --cell-editor-input: #0a0a0a;
+    --credentials: #a3a3a3;
+  }
+
+  /* Theme Variants - Your Existing System */
+  :root[data-theme="violet"] {
+    --primary: #6d28d9;
+  }
+
+  .dark[data-theme="violet"] {
+    --background: #0c0a15;
+    --card: #1a1625;
+    --border: #2d1b69;
+  }
+
+  :root[data-theme="blue"] {
+    --primary: #2563eb;
+  }
+
+  .dark[data-theme="blue"] {
+    --background: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+  }
+
+  :root[data-theme="green"] {
+    --primary: #16a34a;
+  }
+
+  .dark[data-theme="green"] {
+    --background: #0a0f0a;
+    --card: #1a251a;
+    --border: #166534;
+  }
+
+  :root[data-theme="orange"] {
+    --primary: #ea580c;
+  }
+
+  .dark[data-theme="orange"] {
+    --background: #0c0a09;
+    --card: #1c1917;
+    --border: #9a3412;
+  }
+
+  :root[data-theme="yellow"] {
+    --primary: #facc15;
+  }
+
+  .dark[data-theme="yellow"] {
+    --background: #0c0a09;
+    --card: #141110;
+    --border: #292524;
+  }
+}

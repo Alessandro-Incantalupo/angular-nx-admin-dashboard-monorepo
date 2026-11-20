@@ -1,0 +1,16 @@
+<div role="tablist" class="tabs tabs-border">
+  @for (tab of tabs(); track $index) {
+    <a
+      role="tab"
+      class="tab flex flex-col items-center"
+      [class]="{
+        'tab-active': activeTab() === tab.name,
+        'tab-disabled': tab.disabled,
+      }"
+      (click)="onTabClick(tab.name)"
+    >
+      <span>{{ tab.name }}</span>
+    </a>
+  }
+</div>
+<ng-content></ng-content>

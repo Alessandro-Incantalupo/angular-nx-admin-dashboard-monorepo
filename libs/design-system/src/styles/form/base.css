@@ -1,0 +1,22 @@
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="week"],
+select[multiple],
+textarea,
+select {
+  @apply border-border bg-background text-foreground placeholder-muted-foreground focus:border-primary focus:ring-primary/20 w-full rounded-md border text-sm transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  @apply border-border bg-background checked:border-primary checked:bg-primary indeterminate:border-primary indeterminate:bg-primary focus:ring-primary/20 h-4 w-4 rounded transition-colors focus:ring-2;
+}

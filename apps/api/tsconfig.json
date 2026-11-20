@@ -1,15 +1,20 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["es2023"],
-    "types": ["node"],
-    "noEmit": true
+    // Bun + Hono API build setup
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node", // ✅ override "bundler" (esbuild needs this)
+    "allowJs": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "types": ["bun"], // ✅ important: adds Bun global types
+    "outDir": "../../dist/out-tsc",
+    // Strictness
+    "strict": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
-  "include": [
-    "src/**/*.ts",
-    "scripts/**/*.ts",
-    "test/**/*.ts",
-    "drizzle.config.ts",
-    "vitest.config.ts"
-  ]
+  "include": ["src"]
 }

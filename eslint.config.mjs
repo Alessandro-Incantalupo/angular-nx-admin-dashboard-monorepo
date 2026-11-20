@@ -6,15 +6,10 @@ export default [
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   {
-    ignores: [
-      '**/dist',
-      '**/out-tsc',
-      '**/vitest.config.*.timestamp*',
-      '**/drizzle/meta',
-    ],
+    ignores: ['**/dist', '**/vitest.config.*.timestamp*'],
   },
   {
-    files: ['**/*.ts', '**/*.js', '**/*.mjs'],
+    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
       '@nx/enforce-module-boundaries': [
         'error',
@@ -22,27 +17,28 @@ export default [
           enforceBuildableLibDependency: true,
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$'],
           depConstraints: [
-            // The shared library can't reach into an app.
             {
-              sourceTag: 'scope:shared',
-              onlyDependOnLibsWithTags: ['scope:shared'],
-            },
-            {
-              sourceTag: 'scope:server',
-              onlyDependOnLibsWithTags: ['scope:shared'],
-            },
-            {
-              sourceTag: 'scope:client',
-              onlyDependOnLibsWithTags: ['scope:shared', 'scope:client'],
+              sourceTag: '*',
+              onlyDependOnLibsWithTags: ['*'],
             },
           ],
         },
       ],
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { argsIgnorePattern: '^_' },
-      ],
     },
+  },
+  {
+    files: [
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.cts',
+      '**/*.mts',
+      '**/*.js',
+      '**/*.jsx',
+      '**/*.cjs',
+      '**/*.mjs',
+    ],
+    // Override or add rules here
+    rules: {},
   },
   prettierConfig,
 ];

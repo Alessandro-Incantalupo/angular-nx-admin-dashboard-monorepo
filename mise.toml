@@ -1,4 +1,4 @@
-# Toolchain for this repo: `mise install`. CI reads the same file through jdx/mise-action.
+# Toolchain for this repo: `mise install`.
 [tools]
-node = "26.13.1"
-pnpm = "12.21.0"
+node = "24"
+pnpm = "10.27.0"

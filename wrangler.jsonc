@@ -1,0 +1,11 @@
+{
+  // An assets-only Worker: Cloudflare serves the Angular build, no server code.
+  "name": "angular-admin-dashboard",
+  "compatibility_date": "2026-11-20",
+  "assets": {
+    "directory": "./dist/apps/admin-dashboard/browser",
+    // Unknown paths get index.html with a 200, so the Angular router handles every route.
+    "not_found_handling": "single-page-application",
+  },
+  "workers_dev": true,
+}

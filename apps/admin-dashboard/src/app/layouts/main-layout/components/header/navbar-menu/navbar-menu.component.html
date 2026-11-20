@@ -1,0 +1,28 @@
+@for (menu of menuService.pagesMenu; track $index) {
+  <div
+    class="relative inline-block align-top"
+    (mouseenter)="open($index)"
+    (mouseleave)="close()"
+    (click)="toggleMenu(menu)"
+  >
+    <button
+      [class]="
+        openIndex() === $index || menu.active
+          ? 'bg-primary text-primary-foreground'
+          : 'text-color-muted-foreground/50 hover:bg-card hover:text-color-muted-foreground'
+      "
+      class="mr-2 inline-flex rounded-md px-3 py-2 text-sm font-medium"
+      type="button"
+    >
+      <span>{{ menu.group }}</span>
+    </button>
+    @if (openIndex() === $index) {
+      <div
+        class="bg-background absolute top-full left-0 z-20 mt-0 min-w-[220px] rounded-md shadow-lg"
+        style="pointer-events: auto"
+      >
+        <app-navbar-submenu [submenu]="menu.items" />
+      </div>
+    }
+  </div>
+}

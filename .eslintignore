@@ -1,0 +1,24 @@
+# node_modules always
+node_modules/
+
+# Build output
+dist/
+coverage/
+
+# Environment stuff
+.env
+.env.*
+
+# Cache folders
+.angular/
+.cache/
+tmp/
+temp/
+
+# JSON files generated from build or tooling
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Optional: if you use mocks or external data dumps
+mocks/

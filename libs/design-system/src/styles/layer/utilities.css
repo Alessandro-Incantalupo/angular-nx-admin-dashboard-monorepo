@@ -1,0 +1,103 @@
+@layer utilities {
+  /* Theme Bridge Utilities */
+  .bg-theme {
+    background-color: var(--color-background);
+  }
+
+  .text-theme {
+    color: var(--color-foreground);
+  }
+
+  .border-theme {
+    border-color: var(--color-border);
+  }
+
+  /* Animation Utilities */
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  .animate-slide-in-up {
+    animation: slide-in-up 0.3s ease-out;
+  }
+
+  /* Interaction Utilities */
+  .clickable {
+    @apply cursor-pointer transition-all duration-200 select-none hover:scale-105 active:scale-95;
+  }
+
+  .glass {
+    @apply border border-white/20 bg-white/10 backdrop-blur-md;
+  }
+
+  .glass-dark {
+    @apply border border-black/20 bg-black/10 backdrop-blur-md;
+  }
+
+  /* Text Utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Layout Utilities */
+  .center {
+    @apply flex items-center justify-center;
+  }
+
+  .center-x {
+    @apply flex justify-center;
+  }
+
+  .center-y {
+    @apply flex items-center;
+  }
+
+  /* Responsive Visibility */
+  .mobile-only {
+    @apply block md:hidden;
+  }
+
+  .desktop-only {
+    @apply hidden md:block;
+  }
+
+  /* Focus Utilities */
+  .focus-ring {
+    @apply focus:ring-primary focus:ring-2 focus:ring-offset-2 focus:outline-none;
+  }
+
+  /* Accessibility Utilities */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .reduced-motion:motion-reduce {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* 🆕 NEW: Component Utilities */
+  .btn-base {
+    @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .card-base {
+    @apply bg-card text-card-foreground border-border rounded-lg border shadow-sm;
+  }
+
+  .input-base {
+    @apply border-border bg-background text-foreground placeholder-muted-foreground focus:border-primary focus:ring-primary/20 w-full rounded-md border text-sm transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}

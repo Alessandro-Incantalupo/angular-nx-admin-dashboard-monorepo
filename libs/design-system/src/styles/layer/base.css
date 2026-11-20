@@ -1,0 +1,104 @@
+@layer base {
+  /* Modern CSS Reset */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: var(--color-border);
+  }
+
+  html {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    font-family: var(--font-poppins);
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    line-height: inherit;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Focus Management */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Typography Defaults */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-foreground);
+  }
+
+  /* Link Defaults */
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: var(--transition-colors);
+  }
+
+  a:hover {
+    color: color-mix(in srgb, var(--color-primary) 80%, transparent);
+  }
+
+  /* Button Defaults */
+  button {
+    background-color: transparent;
+    background-image: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Scrollbar Styling */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-muted) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--color-muted);
+    border-radius: var(--radius-full);
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-muted-foreground);
+  }
+}

@@ -1,0 +1,63 @@
+
+/* Cell Editor Styles */
+p-celleditor input[pinputtext] {
+  border: 1px solid var(--foreground) !important;
+  border-radius: 4px !important;
+  padding: 8px !important;
+  background-color: var(--cell-editor-input) !important;
+  box-shadow: inset 0 1px 3px var(--shadow-custom) !important;
+  width: 100% !important;
+  color: var(--foreground) !important;
+  font-family: var(--font-poppins) !important;
+}
+
+p-celleditor input[pinputtext]:focus {
+  border-color: var(--input-focus-border) !important;
+  outline: none !important;
+  box-shadow: 0 0 5px var(--input-focus-shadow) !important;
+}
+
+/* Dropdown Styles */
+p-celleditor p-select .p-select {
+  border: 1px solid var(--foreground) !important;
+  border-radius: 4px !important;
+  background-color: var(--background) !important;
+  width: 100% !important;
+  font-family: var(--font-nunito) !important;
+}
+
+p-celleditor p-select .p-select-label {
+  color: var(--foreground) !important;
+  padding: 8px !important;
+}
+
+p-celleditor p-select .p-select-dropdown {
+  color: var(--foreground) !important;
+}
+
+.p-select-overlay .p-select-list {
+  background-color: var(--background) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 4px !important;
+}
+
+.p-select-overlay .p-select-list .p-select-option {
+  color: var(--foreground) !important;
+  padding: 8px 12px !important;
+}
+
+.p-select-overlay .p-select-list .p-select-option:hover {
+  background-color: var(--muted) !important;
+}
+
+/* Output fields */
+p-celleditor span {
+  display: block;
+  padding: 8px;
+  background-color: var(--card-foreground);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--card-foreground);
+  font-family: var(--font-poppins);
+}
+

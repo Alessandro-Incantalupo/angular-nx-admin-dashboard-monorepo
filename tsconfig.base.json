@@ -1,29 +1,41 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "es2023",
+    "target": "es2022",
     "module": "esnext",
-    "lib": ["es2023", "dom", "dom.iterable"],
+    "lib": ["es2020", "dom"],
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "sourceMap": true,
     "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "importHelpers": true,
     "skipLibCheck": true,
-    "strict": true,
+    "skipDefaultLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "isolatedModules": true,
-    "types": [],
     "paths": {
-      "@dashboard/models": ["./libs/models/src/index.ts"],
-      "@dashboard/design-system": ["./libs/design-system/src/index.ts"],
-      "@dashboard/models/*": ["./libs/models/src/lib/*"]
+      "@admin-dashboard-nx-monorepo/models": ["libs/models/src/index.ts"],
+      "@app-info": ["libs/app-info/src/index.ts"],
+      "@core/*": ["apps/admin-dashboard/src/app/core/*"],
+      "@environments/*": ["apps/admin-dashboard/src/environments/*"],
+      "@features/*": ["apps/admin-dashboard/src/app/features/*"],
+      "@layouts/*": ["apps/admin-dashboard/src/app/layouts/*"],
+      "@models": ["libs/models/src/index.ts"],
+      "@shared/*": ["apps/admin-dashboard/src/app/shared/*"],
+      "@assets/*": ["apps/admin-dashboard/src/assets/*"],
+      "@test/*": ["apps/admin-dashboard/src/test/*"],
+      "@mocks/*": ["apps/admin-dashboard/src/mocks/*"],
+      "@admin-dashboard-nx-monorepo/design-system": [
+        "libs/design-system/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp", "dist"]
+  "exclude": ["tmp"]
 }

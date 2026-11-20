@@ -1,9 +1,60 @@
 {
+  // This configuration file extends the base TypeScript configuration file (tsconfig.json).
+  // It inherits common settings from the base file and overrides or adds settings specific to testing.
   "extends": "./tsconfig.json",
+  // Enables isolated module compilation, ensuring that each file is treated as an independent module.
+  // This is particularly useful for tools like `ts-jest` or Babel, which transpile files one at a time
+  // without performing a full TypeScript type-checking pass across the entire project.
+  //
+  // Benefits:
+  // - Ensures compatibility with modern module systems like `NodeNext` or `ESNext`.
+  // - Prevents errors during single-file transpilation by enforcing stricter rules.
+  //
+  // Limitations:
+  // - Disables certain TypeScript features that rely on cross-file information, such as `const enum`.
+  // - Requires explicit imports and exports in each file to avoid errors.
+  //
+  // Use this option when working with tools that process files independently, such as Jest with `ts-jest`.
+  "isolatedModules": true,
   "compilerOptions": {
+    // Specifies the directory where compiled TypeScript files will be output.
+    // In this case, the compiled files will be placed in a shared "dist/out-tsc" directory,
+    // which is commonly used in monorepo setups to centralize build artifacts.
     "outDir": "../../dist/out-tsc",
-    "types": ["vitest/globals"],
-    "rootDir": "../.."
+
+    // Specifies additional type definitions to include during compilation.
+    // - "jest": Includes type definitions for Jest, enabling TypeScript to recognize Jest-specific globals
+    //   like `describe`, `it`, `expect`, etc.
+    // - "node": Includes type definitions for Node.js, allowing the use of Node.js APIs (e.g., `process`, `fs`)
+    //   in test files or setup scripts.
+    "types": ["jest", "node"]
   },
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+
+  // Specifies individual files to include in the compilation.
+  // - "src/test-setup.ts": This file is typically used to configure global settings or mocks for tests.
+  //   For example, you might initialize Angular testing modules or mock certain services here.
+  "files": ["src/test-setup.ts"],
+
+  // Specifies patterns for files to include in the compilation.
+  // These patterns ensure that all relevant test files and type declarations are included.
+  "include": [
+    // Includes the Jest configuration file, allowing it to be type-checked if written in TypeScript.
+    "jest.config.ts",
+
+    // Includes all test files with the `.test.ts` extension in the `src` directory and its subdirectories.
+    // This is a common convention for naming test files.
+    "src/**/*.test.ts",
+
+    // Includes all test files with the `.spec.ts` extension in the `src` directory and its subdirectories.
+    // This is another common convention for naming test files, especially in Angular projects.
+    "src/**/*.spec.ts",
+
+    // Includes all TypeScript declaration files (`.d.ts`) in the `src` directory and its subdirectories.
+    // These files provide type information for JavaScript libraries or modules without TypeScript support.
+    "src/**/*.d.ts",
+
+    // Includes all TypeScript files in the `src/test` directory and its subdirectories.
+    // This is useful for including test utilities, helpers, or additional test-related files.
+    "src/test/**/*.ts"
+  ]
 }

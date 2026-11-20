@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+/* Configure source paths to scan application files for utility generation */
+@source "../../../../../apps/admin-dashboard/src/**/*.{html,ts}";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+}
+
+/* User-defined Plugins */
+@plugin "@tailwindcss/forms";
+@plugin "tailwind-scrollbar";
+
+/* ===== SHARED DESIGN SYSTEM IMPORTS ===== */
+
+/* Base Styles */
+@import "./design-system/base.css";
+@import "./layer/base.css";
+@import "./form/base.css";
+
+/* Animations */
+@import "./animation/keyframes.css";
+
+/* Utilities */
+@import "./utilities/container.css";
+@import "./layer/utilities.css";
+
+/* Themes & Layers */
+@import "./layer/themes.css";
+
+/* Components */
+@import "./components/prime-ng/primeng-dialog.css";
+@import "./components/prime-ng/table/base.css";
+@import "./components/prime-ng/table/cell-editor.css";
+@import "./components/prime-ng/table/pagination.css";
+@import "./components/swap.css";
+
+/* Third-party Component Styles */
+@import "./apexchart.css";
+@import "primeicons/primeicons.css";
+
+/* ===== CUSTOM VARIANTS ===== */
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant mobile (max-width: 768px);
+@custom-variant tablet (min-width: 769px) and (max-width: 1024px);
+@custom-variant desktop (min-width: 1025px);
+@custom-variant reduced-motion (@media (prefers-reduced-motion: reduce));
+@custom-variant high-contrast (@media (prefers-contrast: high));

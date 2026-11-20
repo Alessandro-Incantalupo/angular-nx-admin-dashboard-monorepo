@@ -1,22 +1,25 @@
-import type { Routes } from '@angular/router';
-import { guestOnly, signedIn } from './core/guards';
+import { Routes } from '@angular/router';
+import { PATHS } from './core/constants/routes';
+import { AuthGuard } from './core/guards';
 
 export const routes: Routes = [
-  {
-    path: 'login',
-    title: 'Sign in',
-    canMatch: [guestOnly],
-    loadComponent: () => import('./features/login/login-page'),
-  },
+  // { path: '', pathMatch: 'full', redirectTo: 'home' },
   {
     path: '',
-    canMatch: [signedIn],
-    // The signed-in pages, PrimeNG and its theme load after sign-in, not with the login page.
-    loadChildren: () => import('./layout/signed-in.routes'),
+    // pathMatch: 'full',
+    loadChildren: () => import('./layouts/main-layout/main-layout.routes'),
+  },
+  {
+    path: PATHS.AUTH,
+    loadChildren: () => import('./features/auth/auth.routes'),
+  },
+  {
+    path: PATHS.PROFILE + '/:id',
+    loadComponent: () => import('./features/profile/profile.component'),
+    canActivate: [AuthGuard],
   },
   {
     path: '**',
-    title: 'Page not found',
-    loadComponent: () => import('./features/not-found-page'),
+    loadComponent: () => import('./features/error-page/error-page.component'),
   },
 ];

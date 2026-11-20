@@ -53,8 +53,6 @@ Thumbs.db
 .vercel
 
 vitest.config.*.timestamp*
+# Nx local state
 .nx/migrate-runs
-.claude/worktrees
-.claude/settings.local.json
-.nx/polygraph
-.nx/self-healing
+.wrangler

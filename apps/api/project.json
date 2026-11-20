@@ -3,53 +3,61 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/api/src",
-  "tags": ["scope:server"],
   "targets": {
     "serve": {
-      "continuous": true,
-      "command": "tsx watch --tsconfig apps/api/tsconfig.json --env-file-if-exists=apps/api/.env apps/api/src/main.ts"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun --env-file=.env run apps/api/src/server.ts",
+        "cwd": "."
+      }
     },
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/api",
-        "main": "apps/api/src/main.ts",
+        "main": "apps/api/src/server.ts",
         "tsConfig": "apps/api/tsconfig.json",
-        "platform": "node",
-        "target": "node24",
-        "format": ["esm"],
         "bundle": true,
-        "thirdParty": true,
-        "generatePackageJson": false,
-        "esbuildOptions": {
-          "outExtension": {
-            ".js": ".mjs"
-          },
-          "banner": {
-            "js": "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);"
-          }
-        },
-        "skipTypeCheck": true
+        "platform": "node",
+        "target": "node18",
+        "external": ["hono"]
       }
     },
-    "typecheck": {
-      "command": "tsc -p apps/api/tsconfig.json"
-    },
-    "db-generate": {
-      "command": "drizzle-kit generate",
+    "docker-build": {
+      "executor": "nx:run-commands",
       "options": {
-        "cwd": "apps/api"
+        "command": "docker build -t registry.digitalocean.com/admin-api-registry-v1/admin-api:latest -f apps/api/Dockerfile .",
+        "cwd": "."
       }
     },
-    "db-migrate": {
-      "command": "tsx --tsconfig apps/api/tsconfig.json --env-file-if-exists=apps/api/.env apps/api/scripts/migrate.ts"
+    "docker-push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker push registry.digitalocean.com/admin-api-registry-v1/admin-api:latest",
+        "cwd": "."
+      }
     },
-    "db-seed": {
-      "command": "tsx --tsconfig apps/api/tsconfig.json --env-file-if-exists=apps/api/.env apps/api/scripts/seed.ts"
+    "docker-deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run api:docker-build && nx run api:docker-push",
+        "cwd": "."
+      }
     },
-    "db-app-role": {
-      "command": "tsx --tsconfig apps/api/tsconfig.json --env-file-if-exists=apps/api/.env apps/api/scripts/app-role.ts"
+    "docker-run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker run --rm -d -p 3100:3100 --env-file .env --name api-container registry.digitalocean.com/admin-api-registry-v1/admin-api:latest",
+        "cwd": "."
+      }
+    },
+    "docker-stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker stop api-container && docker rm api-container",
+        "cwd": "."
+      }
     }
-  }
+  },
+  "tags": ["type:api", "scope:server"]
 }

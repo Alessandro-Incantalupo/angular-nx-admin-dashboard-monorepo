@@ -1,0 +1,30 @@
+{
+  "title": "Lista Utenti",
+  "loading": "Caricamento utenti...",
+  "error": "Errore nel caricamento degli utenti",
+  "empty": "Nessun utente trovato.",
+  "addUser": "Aggiungi Utente",
+  "hideForm": "Nascondi Form",
+  "addUserForm": "Modulo Aggiungi Utente",
+  "reset-demo": "Reimposta Dati Demo",
+  "abilitiesTitle": "Abilità Utente",
+  "form": {
+    "name-placeholder": "Nome",
+    "email-placeholder": "esempio@esempio.com",
+    "status-active": "Attivo",
+    "status-inactive": "Inattivo",
+    "signal": "Signals (Sperimentale)",
+    "reactive": "Reattivo",
+    "add-user": "Aggiungi Utente"
+  },
+  "role-selector": {
+      "guest": "👁️ Guest {{mobile}}",
+      "user": "👤 Utente {{mobile}}",
+      "admin": "👑 Admin {{mobile}}"
+    },
+    "stats": {
+      "user-roles-distribution": "Distribuzione Ruoli Utente",
+      "view-stats": "Vedi Statistiche",
+      "title": "Statistiche Utente"
+    }
+  }
