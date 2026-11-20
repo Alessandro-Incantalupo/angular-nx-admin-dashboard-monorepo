@@ -1,41 +1,43 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { pages } from '@core/constants/menu';
 import { CustomMenuItem, SubMenuItem } from '@core/models/menu.model';
-import { Subscription } from 'rxjs';
+import { filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MenuService implements OnDestroy {
+export class MenuService {
+  private readonly router = inject(Router);
   private _showSidebar = signal(true);
   private _showMobileMenu = signal(false);
-  private _pagesMenu = signal<CustomMenuItem[]>([]);
-  private _subscription = new Subscription();
+  private _pagesMenu = signal<CustomMenuItem[]>(pages);
 
-  constructor(private router: Router) {
-    /** Set dynamic menu */
-    this._pagesMenu.set(pages);
+  // The last finished navigation. toSignal subscribes once and unsubscribes
+  // when the service is destroyed, so no Subscription or ngOnDestroy is needed.
+  private readonly navigationEnd = toSignal(
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+  );
 
-    let sub = this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        /** Expand menu base on active route */
-        this._pagesMenu().forEach(menu => {
-          let activeGroup = false;
-          menu.items.forEach(subMenu => {
-            const active = this.isActive(subMenu.route);
-            subMenu.expanded = active;
-            subMenu.active = active;
-            if (active) activeGroup = true;
-            if (subMenu.children) {
-              this.expand(subMenu.children);
-            }
-          });
-          menu.active = activeGroup;
+  constructor() {
+    /** Expand the menu entry of the active route after each navigation */
+    effect(() => {
+      if (!this.navigationEnd()) return;
+      this._pagesMenu().forEach(menu => {
+        let activeGroup = false;
+        menu.items.forEach(subMenu => {
+          const active = this.isActive(subMenu.route);
+          subMenu.expanded = active;
+          subMenu.active = active;
+          if (active) activeGroup = true;
+          if (subMenu.children) {
+            this.expand(subMenu.children);
+          }
         });
-      }
+        menu.active = activeGroup;
+      });
     });
-    this._subscription.add(sub);
   }
 
   get showSideBar() {
@@ -82,9 +84,5 @@ export class MenuService implements OnDestroy {
       fragment: 'ignored',
       matrixParams: 'ignored',
     });
-  }
-
-  ngOnDestroy(): void {
-    this._subscription.unsubscribe();
   }
 }
