@@ -21,7 +21,7 @@ services:
     envs:
       - { key: PORT, value: '3000' }
       - { key: NODE_ENV, value: production }
-      # The app's own role through Supabase's transaction pooler (port 6543).
+      # The app's own role through Neon's pooled endpoint (host ends in -pooler).
       - { key: DATABASE_URL, type: SECRET, value: '<set in the console>' }
       - { key: DATABASE_POOL_MAX, value: '5' }
       - { key: BETTER_AUTH_SECRET, type: SECRET, value: '<set in the console>' }

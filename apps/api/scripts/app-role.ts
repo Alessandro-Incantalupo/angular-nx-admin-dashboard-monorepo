@@ -65,7 +65,11 @@ try {
     const tables = TABLES.map(t => `public.${q(t)}`).join(', ');
     const rowRights = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'].join(', ');
     await sql.begin(async tx => {
-      const pw = `PASSWORD '${scramVerifier(password)}'`;
+      // Neon forwards role changes to its control plane, which refuses a
+      // SCRAM verifier ("Neon only supports being given plaintext passwords").
+      const pw = new URL(ownerUrl).hostname.endsWith('.neon.tech')
+        ? `PASSWORD '${password.replace(/'/g, "''")}'`
+        : `PASSWORD '${scramVerifier(password)}'`;
       await tx.unsafe(
         exists
           ? `ALTER ROLE ${q(ROLE)} WITH LOGIN ${pw}`

@@ -105,7 +105,7 @@ pnpm test        # Vitest: shared schemas, API on an in-memory Postgres (PGlite)
 pnpm build
 ```
 
-CI runs the same on every push. Deploys run from `main` only: Vercel builds the front end, and `.github/workflows/deploy.yml` migrates the database, ships the API image to DigitalOcean and resets the demo data.
+CI runs the same on every push. Deploys run from `main` only: Vercel builds the front end, and `.github/workflows/deploy.yml` migrates the database (Neon, Frankfurt), ships the API image to DigitalOcean and resets the demo data.
 
 ## Licence
 
