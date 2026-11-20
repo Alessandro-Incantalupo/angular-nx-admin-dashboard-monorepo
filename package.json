@@ -109,9 +109,5 @@
     "vite": "^7.0.0",
     "vitest": "^4.0.8"
   },
-  "volta": {
-    "node": "24.11.1",
-    "pnpm": "10.27.0"
-  },
-  "packageManager": "pnpm@10.27.0"
+  "packageManager": "pnpm@12.21.0"
 }
