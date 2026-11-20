@@ -6,7 +6,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { email, Field, form, required } from '@angular/forms/signals';
+import { email, form, FormField, required } from '@angular/forms/signals';
 import { UsersStore } from '@features/users/state/user.store';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { toast } from 'ngx-sonner';
@@ -20,7 +20,7 @@ interface UserFormData {
 
 @Component({
   selector: 'app-user-form-signal',
-  imports: [Field, TranslocoDirective],
+  imports: [FormField, TranslocoDirective],
   templateUrl: './user-form-signal.component.html',
   styles: `
     :host {

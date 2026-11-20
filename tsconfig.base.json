@@ -35,7 +35,12 @@
       "@admin-dashboard-nx-monorepo/design-system": [
         "libs/design-system/src/index.ts"
       ]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false,
+    "ignoreDeprecations": "6.0"
   },
   "exclude": ["tmp"]
 }

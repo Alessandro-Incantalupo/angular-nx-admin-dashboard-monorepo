@@ -55,4 +55,8 @@ Thumbs.db
 vitest.config.*.timestamp*
 # Nx local state
 .nx/migrate-runs
+.nx/polygraph
+.nx/self-healing
 .wrangler
+.claude/worktrees
+.claude/settings.local.json
