@@ -11,6 +11,9 @@ const PUBLIC = new Set([
   'POST /api/auth/logout',
 ]);
 
+/** Routes anyone may call, that still need to know who is signed in (answer: maybe nobody). */
+const SESSION_OPTIONAL = new Set(['GET /api/auth/session']);
+
 /** Writes any signed-in account may make about itself (the handler adds its own checks). */
 const SELF_SERVICE = new Set(['POST /api/auth/password']);
 
@@ -18,7 +21,7 @@ const READ = new Set(['GET', 'HEAD']);
 
 /**
  * The one place that decides who may call what, for every route:
- * - public routes: anyone;
+ * - public routes: anyone (the session check answers null when signed out);
  * - reads: any signed-in account (admin or viewer);
  * - writes: admins only, unless listed in SELF_SERVICE.
  * A new write route is admin-only until someone decides otherwise. The
@@ -31,7 +34,7 @@ export function access(auth: Auth): MiddlewareHandler<AppEnv> {
     if (PUBLIC.has(route)) return next();
 
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
-    if (!session) return problem(c, 401);
+    if (!session) return SESSION_OPTIONAL.has(route) ? next() : problem(c, 401);
     const u = session.user as typeof session.user & {
       role?: string;
       demo?: boolean;

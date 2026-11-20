@@ -36,7 +36,9 @@ export const SessionStore = signalStore(
       /** Asks the server once; later calls reuse the answer. */
       ensureLoaded(): Promise<SessionUser | null> {
         if (store.checked()) return Promise.resolve(store.user());
-        pending ??= firstValueFrom(http.get<SessionUser>('/api/auth/session'))
+        pending ??= firstValueFrom(
+          http.get<SessionUser | null>('/api/auth/session')
+        )
           .catch(() => null)
           .then(user => {
             patchState(store, { user, checked: true });

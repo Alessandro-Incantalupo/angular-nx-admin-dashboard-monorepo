@@ -84,15 +84,13 @@ describe('who may call what', () => {
     await t.login(VIEWER);
   });
 
-  it('refuses every route but login, logout and health without a session', async () => {
-    for (const path of [
-      '/api/members',
-      '/api/stats',
-      '/api/settings',
-      '/api/auth/session',
-    ]) {
+  it('refuses every route but login, logout, health and the session check without a session', async () => {
+    for (const path of ['/api/members', '/api/stats', '/api/settings']) {
       expect((await t.call('GET', path)).status, path).toBe(401);
     }
+    const session = await t.call('GET', '/api/auth/session');
+    expect(session.status).toBe(200);
+    expect(await json(session)).toBeNull();
     for (const w of writes()) {
       expect(
         (await t.call(w.method, w.path, { body: w.body })).status,

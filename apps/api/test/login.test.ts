@@ -94,9 +94,10 @@ describe('login', () => {
     expect((await t.call('POST', '/api/auth/logout', { cookie })).status).toBe(
       204
     );
-    expect((await t.call('GET', '/api/auth/session', { cookie })).status).toBe(
-      401
-    );
+    // Signed out: the session check answers null, not an error.
+    expect(
+      await json(await t.call('GET', '/api/auth/session', { cookie }))
+    ).toBeNull();
   });
 });
 
@@ -149,8 +150,8 @@ describe('password change, happy path', () => {
     });
     expect(res.status).toBe(204);
     expect(
-      (await t.call('GET', '/api/auth/session', { cookie: second })).status
-    ).toBe(401);
+      await json(await t.call('GET', '/api/auth/session', { cookie: second }))
+    ).toBeNull();
     await t.login({ email: ADMIN.email, password: 'a-new-admin-password' });
     await t.close();
   });
