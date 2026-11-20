@@ -1,4 +1,4 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import {
   ApplicationConfig,
   isDevMode,
@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
 
     // Adds HttpClient so we can make HTTP requests in services
-    provideHttpClient(
+    provideHttpClient(withXhr(), 
       withInterceptors([
         LoadingInterceptor,
         authInterceptor,
