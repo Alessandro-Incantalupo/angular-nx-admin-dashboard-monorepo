@@ -16,3 +16,4 @@ allowBuilds:
 # The design tokens package is ours: install new releases without waiting out the release age.
 minimumReleaseAgeExclude:
   - '@a.incantalupo/*'
+  - '@hono/node-server@2.1.11'
