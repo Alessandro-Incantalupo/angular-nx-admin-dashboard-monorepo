@@ -3,23 +3,21 @@ import { User } from '@admin-dashboard-nx-monorepo/models';
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
-  inject,
   input,
+  linkedSignal,
   output,
 } from '@angular/core';
 import {
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-
-import { AuthService } from '@core/services/auth.service';
+  email,
+  form,
+  FormField,
+  FormRoot,
+  required,
+} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-edit-form',
-  standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [FormField, FormRoot],
   templateUrl: './edit-form.component.html',
   styles: `
     :host {
@@ -33,35 +31,25 @@ export class EditFormComponent {
   readonly save = output<User>();
   readonly cancel = output<void>();
 
-  private readonly fb = inject(NonNullableFormBuilder);
-  private readonly auth = inject(AuthService);
+  // The form's model follows the `user` input: a new user resets it, and
+  // typing writes to it. linkedSignal replaces the effect() + patchValue pair.
+  readonly model = linkedSignal(() => ({ ...this.user() }));
 
-  readonly form = this.fb.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    role: ['user'],
-    status: ['active'],
-  });
-
-  constructor() {
-    effect(() => {
-      if (this.user()) {
-        this.form.patchValue(this.user());
-      }
-    });
-  }
-
-  onSubmit() {
-    if (this.form.invalid) return;
-    const value = this.form.value;
-
-    this.save.emit({
-      ...this.user(),
-      ...value,
-      role: value.role as 'admin' | 'user' | 'guest',
-      status: value.status as 'active' | 'inactive',
-    });
-  }
+  readonly form = form(
+    this.model,
+    path => {
+      required(path.name, { message: 'Name is required' });
+      required(path.email, { message: 'Email is required' });
+      email(path.email, { message: 'Enter a valid email address' });
+    },
+    {
+      submission: {
+        action: async () => {
+          this.save.emit(this.model());
+        },
+      },
+    }
+  );
 
   onCancel() {
     this.cancel.emit();
