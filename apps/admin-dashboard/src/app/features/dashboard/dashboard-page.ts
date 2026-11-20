@@ -51,7 +51,9 @@ const sum = (rows: ChartRow[]) => rows.reduce((n, r) => n + r.value, 0);
         </button>
       </div>
     } @else if (stats.value(); as s) {
-      <dl class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <dl
+        class="mt-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-3"
+      >
         @for (tile of tiles(); track tile.label) {
           <div class="card p-4">
             <dt class="text-muted">{{ tile.label }}</dt>

@@ -133,6 +133,15 @@ export const dashboardPreset = definePreset(Aura, {
         paddingX: '1rem',
         borderRadius: 'var(--control-radius)',
       },
+      // Text buttons are read as text: use the text roles, not the fills.
+      text: {
+        primary: { color: 'var(--link)' },
+        secondary: { color: 'var(--text-muted)' },
+        danger: { color: 'var(--danger-text)' },
+      },
+    },
+    toast: {
+      root: { width: 'min(22rem, calc(100vw - 2rem))' },
     },
     // Status tags read as text: 16px, and colours from the status roles.
     tag: {

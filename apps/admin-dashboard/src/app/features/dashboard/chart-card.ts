@@ -97,6 +97,7 @@ let nextId = 0;
       </div>
     </figure>
   `,
+  host: { class: 'block min-w-0' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartCard {

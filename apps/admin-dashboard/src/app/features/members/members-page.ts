@@ -15,7 +15,8 @@ import { memberRoles, memberStatuses } from '@dashboard/models';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
-import { type TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { TableModule } from 'primeng/table';
+import { Paginator } from 'primeng/paginator';
 import { Tag } from 'primeng/tag';
 import { toProblem } from '../../core/http';
 import { SessionStore } from '../../core/session-store';
@@ -30,7 +31,7 @@ const tone: Record<MemberStatus, 'success' | 'info' | 'secondary'> = {
 
 @Component({
   selector: 'app-members-page',
-  imports: [TableModule, Button, Dialog, Tag, DatePipe, MemberForm],
+  imports: [TableModule, Paginator, Button, Dialog, Tag, DatePipe, MemberForm],
   providers: [MembersStore],
   template: `
     <div class="flex flex-wrap items-end justify-between gap-3">
@@ -101,7 +102,59 @@ const tone: Record<MemberStatus, 'success' | 'info' | 'secondary'> = {
         </button>
       </div>
     } @else {
-      <div class="card mt-4 overflow-hidden">
+      <!-- Phones: one card per member instead of a wide table. -->
+      <div class="mt-4 sm:hidden">
+        <ul class="m-0 grid list-none gap-3 p-0" aria-label="Members">
+          @for (m of store.items(); track m.id) {
+            <li class="card p-4">
+              <p class="m-0 font-semibold">{{ m.name }}</p>
+              <p class="text-muted m-0 break-all">{{ m.email }}</p>
+              <p class="m-0 mt-2 flex flex-wrap items-center gap-2">
+                {{ roleLabel[m.role] }}
+                <p-tag
+                  [value]="statusLabel[m.status]"
+                  [severity]="tone[m.status]"
+                />
+                <span class="text-muted"
+                  >joined {{ m.createdAt | date: 'd MMM y' }}</span
+                >
+              </p>
+              @if (session.isAdmin()) {
+                <p class="m-0 mt-2 flex flex-wrap gap-2">
+                  <p-button
+                    label="Edit"
+                    [text]="true"
+                    [ariaLabel]="'Edit ' + m.name"
+                    (onClick)="openEdit(m)"
+                  />
+                  <p-button
+                    label="Archive"
+                    severity="danger"
+                    [text]="true"
+                    [ariaLabel]="'Archive ' + m.name"
+                    (onClick)="confirmArchive(m)"
+                  />
+                </p>
+              }
+            </li>
+          } @empty {
+            @if (!store.list.isLoading()) {
+              <li class="text-muted py-6 text-center">
+                No members match these filters.
+              </li>
+            }
+          }
+        </ul>
+        <p-paginator
+          [rows]="store.size()"
+          [first]="(store.page() - 1) * store.size()"
+          [totalRecords]="store.total()"
+          [pageLinkSize]="3"
+          (onPageChange)="onPage($event)"
+        />
+      </div>
+
+      <div class="card mt-4 hidden overflow-hidden sm:block">
         <p-table
           [value]="store.items()"
           [lazy]="true"
@@ -235,7 +288,7 @@ export default class MembersPage {
     );
   }
 
-  protected onPage(e: TableLazyLoadEvent) {
+  protected onPage(e: { first?: number | null; rows?: number | null }) {
     const size = e.rows ?? this.store.size();
     this.store.goTo(Math.floor((e.first ?? 0) / size) + 1, size);
   }

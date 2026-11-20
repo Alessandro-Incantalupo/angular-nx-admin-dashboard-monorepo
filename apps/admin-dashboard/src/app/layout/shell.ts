@@ -39,7 +39,7 @@ interface NavItem {
   template: `
     <a
       href="#main"
-      class="sr-only-focusable rounded-control bg-accent text-on-accent absolute top-2 left-2 z-50 px-4 py-2"
+      class="rounded-control bg-accent text-on-accent fixed top-2 left-2 z-50 inline-flex min-h-11 -translate-y-[200%] items-center px-4 focus:translate-y-0"
     >
       Skip to content
     </a>
@@ -53,7 +53,7 @@ interface NavItem {
         >
           <a
             routerLink="/dashboard"
-            class="text-default text-lg font-semibold no-underline"
+            class="text-default inline-flex min-h-11 items-center text-lg font-semibold no-underline"
             >Admin Dashboard</a
           >
           <button
@@ -67,7 +67,7 @@ interface NavItem {
         </div>
 
         <nav aria-label="Main" class="px-2 pb-2 md:px-3">
-          <ul class="flex gap-1 md:flex-col">
+          <ul class="m-0 flex list-none flex-wrap gap-1 p-0 md:flex-col">
             @for (item of nav; track item.path) {
               <li>
                 <a
