@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
-  OnInit,
-  output,
 } from '@angular/core';
 import { ButtonProps } from './model/button.model';
 
@@ -11,15 +10,11 @@ import { ButtonProps } from './model/button.model';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'button[app-button]',
   imports: [],
-  templateUrl: './button.component.html',
-  styles: ``,
-  // host: {
-  //   class: 'button',
-  //   '(click)': 'onButtonClick()',
-  // },
+  template: '<ng-content />',
+  host: { '[class]': 'classes()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ButtonComponent implements OnInit {
+export class ButtonComponent {
   impact = input<ButtonProps['impact']>('none');
   size = input<ButtonProps['size']>('medium');
   shape = input<ButtonProps['shape']>('rounded');
@@ -29,10 +24,6 @@ export class ButtonComponent implements OnInit {
     transform: (value: boolean | string) =>
       typeof value === 'string' ? value === '' : value,
   });
-
-  buttonClick = output();
-
-  public classes: string = '';
 
   baseClasses =
     'font-semibold focus-visible:outline-none flex items-center justify-center focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-px disabled:pointer-events-none disabled:opacity-50';
@@ -98,20 +89,18 @@ export class ButtonComponent implements OnInit {
     large: 'shadow-lg',
   };
 
-  ngOnInit(): void {
-    this.classes = this.cx(
+  // Recomputed whenever an input changes. The old ngOnInit version read the
+  // inputs once, so a button whose tone or size changed later kept its first look.
+  readonly classes = computed(() =>
+    this.cx(
       this.baseClasses,
       this.impactClasses[this.tone()][this.impact()],
       this.sizeClasses[this.size()],
       this.shapeClasses[this.shape()],
       this.shadowClasses[this.shadow()],
       this.full() ? 'w-full' : ''
-    );
-  }
-
-  onButtonClick() {
-    this.buttonClick.emit();
-  }
+    )
+  );
 
   private cx(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
