@@ -1,83 +1,72 @@
-name: Build and Deploy to DigitalOcean
+name: deploy
 
+# Runs only on main. The front end is deployed by Vercel's Git integration;
+# this workflow ships the API to DigitalOcean App Platform:
+#   1. apply the database migrations (owner role),
+#   2. build the bundle and push the image the App Platform app pulls,
+#   3. reset the public demo workspace (members, activity, demo login).
+#
+# Secrets: DIGITALOCEAN_ACCESS_TOKEN, MIGRATION_DATABASE_URL,
+# BETTER_AUTH_SECRET, FRONTEND_ORIGIN, SEED_ADMIN_PASSWORD.
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
-      - "apps/api/**"
-      - "libs/**"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "apps/api/**"
-      - "libs/**"
+      - 'apps/api/**'
+      - 'libs/models/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-api
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  IMAGE: registry.digitalocean.com/admin-api-registry-v1/admin-api
 
 jobs:
-  deploy:
-    name: Build & Push Docker Image
+  api:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
+    environment: production
+    env:
+      NX_DAEMON: 'false'
+      NX_NO_CLOUD: 'true'
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v7
+      - uses: jdx/mise-action@v5
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec nx test api
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "22.17.0"
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build API with Nx
-        run: pnpm exec nx run api:build
+      - name: Apply migrations
+        run: pnpm exec nx run api:db-migrate
         env:
-          NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+          MIGRATION_DATABASE_URL: ${{ secrets.MIGRATION_DATABASE_URL }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Build the bundle and the image
+        run: |
+          pnpm exec nx build api
+          docker build -f apps/api/Dockerfile -t "$IMAGE:${GITHUB_SHA::12}" -t "$IMAGE:latest" .
 
-      - name: Log in to DigitalOcean Registry
-        uses: docker/login-action@v2
+      - uses: digitalocean/action-doctl@v2
         with:
-          registry: registry.digitalocean.com
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
+      # App Platform redeploys when the `latest` tag changes.
+      - name: Push the image
         run: |
-          sudo snap install doctl
-          doctl auth init -t ${{ secrets.DOCKER_PASSWORD }}
+          doctl registry login --expiry-seconds 600
+          docker push "$IMAGE:${GITHUB_SHA::12}"
+          docker push "$IMAGE:latest"
 
-      - name: Clean Up DigitalOcean Registry
-        run: |
-          REPO="admin-api"
-          DIGESTS=$(doctl registry repository list-manifests $REPO --format Digest --no-header)
-          if [ -z "$DIGESTS" ]; then
-            echo "No digests found to delete."
-            exit 0
-          fi
-          for DIGEST in $DIGESTS; do
-            if [[ $DIGEST != sha256:* ]]; then
-              echo "Invalid digest format: $DIGEST"
-              continue
-            fi
-            echo "Deleting digest: $DIGEST"
-            doctl registry repository delete-manifest $REPO $DIGEST --force || echo "Failed to delete digest: $DIGEST"
-          done
-
-      - name: Build Docker Image
-        run: |
-          docker build \
-            --build-arg NX_CLOUD_ACCESS_TOKEN=${{ secrets.NX_CLOUD_ACCESS_TOKEN }} \
-            -t registry.digitalocean.com/admin-api-registry-v1/admin-api:latest \
-            -f apps/api/Dockerfile .
-
-      - name: Push Docker Image
-        run: docker push registry.digitalocean.com/admin-api-registry-v1/admin-api:latest
+      - name: Reset the demo workspace
+        run: pnpm exec nx run api:db-seed
+        env:
+          MIGRATION_DATABASE_URL: ${{ secrets.MIGRATION_DATABASE_URL }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          FRONTEND_ORIGIN: ${{ secrets.FRONTEND_ORIGIN }}
+          SEED_ADMIN_PASSWORD: ${{ secrets.SEED_ADMIN_PASSWORD }}
