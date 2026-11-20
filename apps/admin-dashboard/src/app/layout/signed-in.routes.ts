@@ -1,7 +1,7 @@
 import { inject, provideEnvironmentInitializer } from '@angular/core';
 import type { Routes } from '@angular/router';
 import { primeNgTheme } from '@dashboard/design-system';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { PrimeNG } from 'primeng/config';
 import Shell from './shell';
 
@@ -16,7 +16,6 @@ export default [
         inject(PrimeNG).setConfig({ theme: primeNgTheme, ripple: false })
       ),
       MessageService,
-      ConfirmationService,
     ],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },

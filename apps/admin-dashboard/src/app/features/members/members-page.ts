@@ -12,7 +12,7 @@ import type {
   MemberStatus,
 } from '@dashboard/models';
 import { memberRoles, memberStatuses } from '@dashboard/models';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
@@ -253,6 +253,38 @@ const tone: Record<MemberStatus, 'success' | 'info' | 'secondary'> = {
         />
       }
     </p-dialog>
+
+    <!-- A plain dialog rather than PrimeNG's ConfirmDialog, which leaves an
+         unnamed alertdialog in the page while closed. -->
+    <p-dialog
+      header="Archive this member?"
+      [visible]="archiving() !== null"
+      (visibleChange)="!$event && archiving.set(null)"
+      [modal]="true"
+      [draggable]="false"
+      closeAriaLabel="Close"
+      [style]="{ width: 'min(30rem, calc(100vw - 2rem))' }"
+    >
+      @if (archiving(); as m) {
+        <p class="m-0">
+          {{ m.name }} will leave the list and the charts. Their history stays.
+        </p>
+        <div class="mt-6 flex flex-wrap justify-end gap-2">
+          <p-button
+            label="Keep"
+            severity="secondary"
+            [text]="true"
+            (onClick)="archiving.set(null)"
+          />
+          <p-button
+            label="Archive"
+            severity="danger"
+            [loading]="archivingNow()"
+            (onClick)="archive(m)"
+          />
+        </div>
+      }
+    </p-dialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -260,7 +292,6 @@ export default class MembersPage {
   protected readonly store = inject(MembersStore);
   protected readonly session = inject(SessionStore);
   private readonly messages = inject(MessageService);
-  private readonly confirm = inject(ConfirmationService);
 
   protected readonly roles = memberRoles;
   protected readonly statuses = memberStatuses;
@@ -320,30 +351,31 @@ export default class MembersPage {
     });
   }
 
+  protected readonly archiving = signal<Member | null>(null);
+  protected readonly archivingNow = signal(false);
+
   protected confirmArchive(m: Member) {
-    this.confirm.confirm({
-      header: 'Archive this member?',
-      message: `${m.name} will leave the list and the charts. Their history stays.`,
-      acceptLabel: 'Archive',
-      rejectLabel: 'Keep',
-      acceptButtonProps: { severity: 'danger' },
-      rejectButtonProps: { severity: 'secondary', text: true },
-      accept: async () => {
-        try {
-          await this.store.archive(m.id);
-          this.messages.add({
-            severity: 'success',
-            summary: `${m.name} archived`,
-            life: 4000,
-          });
-        } catch (err) {
-          this.messages.add({
-            severity: 'error',
-            summary: toProblem(err).title,
-            life: 6000,
-          });
-        }
-      },
-    });
+    this.archiving.set(m);
+  }
+
+  protected async archive(m: Member) {
+    this.archivingNow.set(true);
+    try {
+      await this.store.archive(m.id);
+      this.archiving.set(null);
+      this.messages.add({
+        severity: 'success',
+        summary: `${m.name} archived`,
+        life: 4000,
+      });
+    } catch (err) {
+      this.messages.add({
+        severity: 'error',
+        summary: toProblem(err).title,
+        life: 6000,
+      });
+    } finally {
+      this.archivingNow.set(false);
+    }
   }
 }

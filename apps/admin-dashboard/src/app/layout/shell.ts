@@ -13,7 +13,6 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Toast } from 'primeng/toast';
 import { filter, skip } from 'rxjs';
 import { SessionStore } from '../core/session-store';
@@ -28,14 +27,7 @@ interface NavItem {
 
 @Component({
   selector: 'app-shell',
-  imports: [
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
-    Icon,
-    Toast,
-    ConfirmDialog,
-  ],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Icon, Toast],
   template: `
     <a
       href="#main"
@@ -133,7 +125,6 @@ interface NavItem {
       </div>
     </div>
     <p-toast position="bottom-right" />
-    <p-confirmdialog />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
