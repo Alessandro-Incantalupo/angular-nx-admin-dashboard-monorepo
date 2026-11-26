@@ -1,23 +1,23 @@
 # Admin Dashboard NX Monorepo
 
-A production-ready enterprise admin dashboard built with Angular 21, Nx monorepo, and NgRx Signals demonstrating the patterns I consider non-negotiable in a well-structured Angular codebase.
+A production-ready enterprise admin dashboard built with Angular 22, Nx monorepo, and NgRx Signals demonstrating the patterns I consider non-negotiable in a well-structured Angular codebase.
 
-## Live Demo
-
-- **Frontend**: [angular-admin-dashboard.alessandro-incantalupo.workers.dev](https://angular-admin-dashboard.alessandro-incantalupo.workers.dev) (Cloudflare Workers)
-- **Backend API**: [nx-angular-admin-vu22n.ondigitalocean.app](https://nx-angular-admin-vu22n.ondigitalocean.app/)
-
-The frontend consumes data from the deployed backend API, both are live and connected.
-
-## Demo
-
-![Adding a user with reactive form validation, toast notification, signal-driven state updates, and pagination](./docs/demo.gif)
-
-## AI Assistant (Hashbrown)
+## AI assistant (Hashbrown)
 
 ![The chat opening from the round button in the corner, then answering "Which admins do we have?" with the user table, a count per role as text, and Bob as a user card, in the recorded demo](./docs/assistant-demo.gif)
 
-A chat panel, opened from the round button in the bottom-right corner of every page, answers questions about the dashboard's users with [Hashbrown](https://hashbrown.dev) 0.8 on Angular 22:
+A chat panel, opened from the round button in the bottom-right corner of every page, answers questions about the dashboard's users with [Hashbrown](https://hashbrown.dev) 0.8 on Angular 22. [Try it live](https://angular-admin-dashboard.alessandro-incantalupo.workers.dev/users?chat=open).
+
+What happens in the GIF, for "Which admins do we have?":
+
+1. **The question goes to the model** with two tool definitions and the schema of the components it may answer with.
+2. **The model asks for a tool**, `listUsers` with role `admin` ("Looked up users: role admin" in the chat). Hashbrown runs the handler **in the browser**: it calls the dashboard's own API, with the visitor's own access.
+3. **The tool result goes back to the model**, which answers with UI JSON instead of prose: `UserTable` with the ids of the three admins.
+4. **Hashbrown renders that JSON as the app's own Angular components** while it streams in. The table fetches each user by id, so names, roles and statuses come from the API, not from the model.
+
+"How many users are there per role?" works the same way with `countUsers` and a Markdown sentence, and "Show me Bob." with a `UserCard`. In the deployed demo, the model's side (steps 1 and 3) is replayed from a recording; the tool call and the components (steps 2 and 4) run live.
+
+How it's built:
 
 - **Tools run in the browser.** The model calls `listUsers` and `countUsers`; their handlers fetch from the app's own API, so the model never touches data the user can't see.
 - **Answers use the app's components.** The model streams UI JSON that Hashbrown renders as the app's `UserTable`, `UserCard` and Markdown. The components load their records by id, so a card always shows the real data.
@@ -35,6 +35,17 @@ pnpm exec nx serve admin-dashboard --configuration=development --port 4300
 ```
 
 Recordings: `node tools/assistant/record-conversations.mjs` against the live stack. GIF: `node tools/assistant/capture-demo.mjs`.
+
+## Live Demo
+
+- **Frontend**: [angular-admin-dashboard.alessandro-incantalupo.workers.dev](https://angular-admin-dashboard.alessandro-incantalupo.workers.dev) (Cloudflare Workers)
+- **Backend API**: [nx-angular-admin-vu22n.ondigitalocean.app](https://nx-angular-admin-vu22n.ondigitalocean.app/)
+
+The frontend consumes data from the deployed backend API, both are live and connected.
+
+## Demo
+
+![Adding a user with reactive form validation, toast notification, signal-driven state updates, and pagination](./docs/demo.gif)
 
 ## Why I Built It
 
