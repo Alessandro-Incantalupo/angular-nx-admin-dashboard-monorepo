@@ -1,7 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { PaginatorState } from 'primeng/paginator';
 import { pipe, tap } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators'; // Explicit imports might help? No.
+import { concatMap, debounceTime, switchMap } from 'rxjs/operators'; // Explicit imports might help? No.
 
 import { tapResponse } from '@ngrx/operators';
 import {
@@ -131,8 +131,8 @@ export const UsersStore = signalStore(
     const updateUser = rxMethod<User>(
       pipe(
         tap(() => setUsersUpdateLoading()),
-        debounceTime(500),
-        switchMap(updatedUser =>
+        // concatMap: every request is sent, in order (a debounce dropped the first of two)
+        concatMap(updatedUser =>
           userService.updateUser(updatedUser).pipe(
             tapResponse({
               next: user => {
@@ -165,8 +165,8 @@ export const UsersStore = signalStore(
     const deleteUser = rxMethod<string>(
       pipe(
         tap(() => setUsersDeleteLoading()),
-        debounceTime(500),
-        switchMap(userId => {
+        // concatMap: every request is sent, in order (a debounce dropped the first of two)
+        concatMap(userId => {
           const user = state.users().find(u => u.id === userId);
           return userService.deleteUser(userId).pipe(
             tapResponse({
