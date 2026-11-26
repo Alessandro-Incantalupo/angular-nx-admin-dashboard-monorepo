@@ -5,7 +5,7 @@
 - **The design stays exactly as it is.** Any change goes through a screenshot diff (`stack-tools snap` before and after, then `stack-tools diff`). The Angular 22 upgrade passed it: 24 of 24 identical. PrimeNG stays 21.0.2 for now (22.1.5 exists); moving to it is a separate step with the same diff.
 - **No API keys.** The public demo plays recorded conversations. Development and evals use a local model through Ollama. To check before building: a live demo with a hard free limit through Cloudflare Workers AI (the front end already runs on Workers) or GitHub Models, through Hashbrown's OpenAI adapter. The "Anthropic workspace with caps" recommendation is dropped.
 - **Tests:** Vitest for unit tests (replace the broken Jest target with Angular's Vitest runner; it also runs in watch mode, so `nx test` never ends) and Playwright for e2e (`@nx/playwright` is already in the e2e app).
-- **Base:** branch `chore/angular-22-licence-ci` (`83a0fa9` licence, `ba42c7d` deploy only from main, `c01c243` Angular 22 / Nx 24). Build passes. Lint (Prettier plugin missing in the ESLint config) and the Jest test fail the same way on main. Not merged: pushing main deploys.
+- **Base:** main, from branch `chore/angular-22-licence-ci` (`6359a4a` deploy only from main, `dea5715` Angular 22 / Nx 24; no licence: all rights reserved, decided 2026-11-26). Build passes. Lint (Prettier plugin missing in the ESLint config) and the Jest test fail the same way on main. Merged and deployed 2026-11-26.
 - **Still open:** hours per week, conversation text in traces, the sandbox chart (out of the first release).
 
 # 41 · Hashbrown AI feature in the Angular dashboard: plan
