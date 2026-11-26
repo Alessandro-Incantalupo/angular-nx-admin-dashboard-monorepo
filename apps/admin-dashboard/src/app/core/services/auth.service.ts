@@ -1,9 +1,9 @@
 import { User } from '@admin-dashboard-nx-monorepo/models';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { injectBaseUrl } from '@core/CIF/inject-base-url';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly createUrlRemote = injectBaseUrl();

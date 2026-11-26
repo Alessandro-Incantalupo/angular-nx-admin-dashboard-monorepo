@@ -1,19 +1,19 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
+import { OnDestroy, signal, inject, Service } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { pages } from '@core/constants/menu';
 import { CustomMenuItem, SubMenuItem } from '@core/models/menu.model';
 import { Subscription } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class MenuService implements OnDestroy {
+  private router = inject(Router);
+
   private _showSidebar = signal(true);
   private _showMobileMenu = signal(false);
   private _pagesMenu = signal<CustomMenuItem[]>([]);
   private _subscription = new Subscription();
 
-  constructor(private router: Router) {
+  constructor() {
     /** Set dynamic menu */
     this._pagesMenu.set(pages);
 

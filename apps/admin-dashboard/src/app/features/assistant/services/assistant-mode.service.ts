@@ -6,7 +6,7 @@ import {
   type Recording,
 } from '@admin-dashboard-nx-monorepo/assistant-contract/replay';
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { Injectable, inject, isDevMode, signal } from '@angular/core';
+import { inject, isDevMode, signal, Service } from '@angular/core';
 import { BASE_URL } from '@core/providers/base-url';
 import { BYPASS_LOADING_SPINNER } from '@core/interceptors/loading.interceptor';
 import { WHITELISTED_API } from '@core/interceptors/base-response.interceptor';
@@ -30,7 +30,7 @@ const FORCE_RECORDED_PARAM = 'assistant';
  * runs with AI_PROVIDER=ollama; the deployed API answers 404, so visitors get
  * the recorded conversations.
  */
-@Injectable()
+@Service({ autoProvided: false })
 export class AssistantModeService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = inject(BASE_URL);

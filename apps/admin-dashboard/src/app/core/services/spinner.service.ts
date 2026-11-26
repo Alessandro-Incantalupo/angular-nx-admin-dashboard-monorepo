@@ -1,6 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { signal, Service } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class SpinnerService {
   readonly isLoading = signal(false);
   private timeout: ReturnType<typeof setTimeout> | null = null;

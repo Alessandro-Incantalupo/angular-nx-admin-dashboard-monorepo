@@ -1,6 +1,6 @@
 import { PaginatedResponse, User } from '@admin-dashboard-nx-monorepo/models';
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { injectBaseUrl } from '@core/CIF/inject-base-url';
 import { BYPASS_LOADING_SPINNER } from '@core/interceptors/loading.interceptor';
 import { firstValueFrom } from 'rxjs';
@@ -16,7 +16,7 @@ const ALL_USERS = 100;
  * the components reuse the last fetch, so a card or table never shows a
  * user the tool didn't see.
  */
-@Injectable()
+@Service({ autoProvided: false })
 export class AssistantUsersService {
   private readonly http = inject(HttpClient);
   private readonly usersUrl = injectBaseUrl()('/users', '/users');
