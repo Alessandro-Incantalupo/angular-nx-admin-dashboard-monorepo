@@ -8,6 +8,31 @@
 - **Base:** main, from branch `chore/angular-22-licence-ci` (`6359a4a` deploy only from main, `dea5715` Angular 22 / Nx 24; no licence: all rights reserved, decided 2026-11-26). Build passes. Lint (Prettier plugin missing in the ESLint config) and the Jest test fail the same way on main. Merged and deployed 2026-11-26.
 - **Still open:** hours per week, conversation text in traces, the sandbox chart (out of the first release).
 
+## Found and done (2026-11-26, branch `feat/hashbrown-step-1`)
+
+**Live demo without a key: neither option works as planned.**
+
+- **GitHub Models is gone.** Fully retired on 2026-07-30: playground, catalog, inference API and BYOK. Sources: [GitHub docs](https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models), [changelog 2026-07-30](https://github.blog/changelog/2026-07-30-github-models-is-now-retired/).
+- **Hashbrown's OpenAI adapter can't talk to Workers AI.** `@hashbrownai/openai` 0.8.3 calls only the Responses API with `stream: true` (read in `text.fn.js`); its docs say Chat Completions-only servers are "no longer supported" ([hashbrown.dev OpenAI page](https://hashbrown.dev/docs/angular/platform/openai)). Workers AI's `/v1/responses` serves only `gpt-oss-120b`/`20b` and "only `stream: false`" ([OpenAI compatibility](https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/), page modified 2026-09-18).
+- **Workers AI limits** ([pricing](https://developers.cloudflare.com/workers-ai/platform/pricing/), modified 2026-11-18): 10,000 neurons a day free. On the Workers **Free** plan, usage past that fails with an error (a hard cap, resets 00:00 UTC). On Workers **Paid** it bills 0.011 USD per 1,000 neurons, with no cap in the docs. Rate limit 300 requests a minute for text models ([limits](https://developers.cloudflare.com/workers-ai/platform/limits/)).
+- **Browser or server.** Every Hashbrown provider adapter runs on the server ("Credentials stay on the server"). From Cloudflare, the clean route is a Worker script (today the front end is assets-only) with the `ai` binding ([bindings](https://developers.cloudflare.com/workers-ai/configuration/bindings/)): the binding needs no API token, so there is no key to keep secret. CORS isn't an issue on the same origin.
+- **So a Workers AI demo needs our own adapter** (AG-UI in, Workers AI chat with tools and JSON schema out, AG-UI events back), about the size of Hashbrown's Ollama adapter. Until then: recorded conversations on the site, Ollama for development and evals.
+
+**Hashbrown 0.8.x collects telemetry.**
+
+- Each package's `postinstall` posts an install event to `hashbrown.dev/_/growth/collect/v1/install` with the git `user.name`, `user.email` and the origin's owner (not in CI; off with `DO_NOT_TRACK=1` or `HASHBROWN_TELEMETRY_DISABLED=1`). pnpm 10 doesn't run dependency build scripts; `package.json` now lists the three packages in `pnpm.ignoredBuiltDependencies`. npm runs them.
+- In the browser, dev builds only, it sends milestones to `.../collect/v1/runtime`. Turn it off with `provideHashbrown({ ..., telemetry: false })` when the panel is wired.
+
+**Done on the branch.**
+
+- `4d37e60` `@hashbrownai/core`, `angular`, `ollama` 0.8.3, `ollama` 0.6.4, `@ag-ui/core` and `@ag-ui/encoder` 1.0.3 (exact; one `@ag-ui/core`). No Anthropic packages.
+- `a583bfd` `libs/assistant-contract` (system prompt, `UserCard` definition, `assistantUiSchema()`), `POST /ai/run` on the Hono API with `HashbrownOllama`, mounted only with `AI_PROVIDER=ollama` (404 otherwise). It drops browser system messages and pins the UI schema. `Bun.serve` `idleTimeout: 120`: Bun's 10 s default cut the stream while the model was thinking.
+- Spike result (curl, local Bun): `gemma4:12b` streamed a valid `UserCard` for "show user 2" in 6 of 6 runs, 6 to 21 s; `qwen3.5:9b` got the id wrong or broke the JSON in 4 of 4. Default model: `gemma4:12b`.
+- Try it: `AI_PROVIDER=ollama PORT=3199 bun run apps/api/src/server.ts`, then `curl -N -X POST localhost:3199/ai/run -H 'content-type: application/json' -d '{"threadId":"t","runId":"r","state":{},"tools":[],"context":[],"forwardedProps":{},"messages":[{"id":"u","role":"user","content":"Show user 2 as a card."}]}'`.
+- `nx build admin-dashboard` green. Not done: the Angular side (panel, `uiChatResource`), the Vitest runner, any test. Not pushed.
+
+**Next.** Swap Jest for `@angular/build:unit-test` (Vitest) and add a test for `lockInput`; then the panel behind `environment.assistant` with `telemetry: false`, through the screenshot diff.
+
 # 41 · Hashbrown AI feature in the Angular dashboard: plan
 
 Status: done (plan only)
