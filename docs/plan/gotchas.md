@@ -21,3 +21,9 @@ The app's `text-color-foreground` and `text-color-muted-foreground` (117 uses) a
 ## A wrapped Hashbrown transport never sees the end of its stream (2026-11-26)
 
 Hashbrown stops reading a transport's `events` once the run has finished, so code after a `for await` over them never runs. The recording transport hands each run over in `finally`.
+
+## A `@defer` block loads eagerly, or only looks lazy in dev (2026-11-26)
+
+A `viewChild` (or `viewChildren`) query that names a component inside a `@defer` block puts that component in the parent's chunk, so the block loads with the page and the defer does nothing. The chat launcher has no query on the chat for this reason: it shows the chat with `@defer (when loaded())`.
+
+The other way around, `nx serve` with HMR loads `@defer` chunks up front, so the dev server can't show whether a block is lazy. Check on a production build: `nx build admin-dashboard`, then look for the component's code in the initial chunks, or watch the network tab on `nx serve --configuration production`.
