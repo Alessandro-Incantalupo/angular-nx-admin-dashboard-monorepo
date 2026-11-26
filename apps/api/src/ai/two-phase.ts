@@ -22,7 +22,7 @@ const TEXT_CONTENT_EVENTS = new Set([
 
 /** True when the model should get a chance to call a tool before answering. */
 export function isToolPhase(input: RunAgentInput): boolean {
-  const last = input.messages.at(-1);
+  const last = input.messages[input.messages.length - 1];
   return input.tools.length > 0 && last?.role === 'user';
 }
 
