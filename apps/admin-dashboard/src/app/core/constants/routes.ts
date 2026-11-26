@@ -16,6 +16,7 @@ export const PATHS = {
   DOWNLOAD: 'download',
   GIFT: 'gift',
   USERS: 'users',
+  ASSISTANT: 'assistant',
   SETTINGS: 'settings',
   NOTIFICATIONS: 'gift',
   FOLDERS: 'folders',

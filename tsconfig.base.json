@@ -25,6 +25,9 @@
       "@admin-dashboard-nx-monorepo/assistant-contract": [
         "libs/assistant-contract/src/index.ts"
       ],
+      "@admin-dashboard-nx-monorepo/assistant-contract/replay": [
+        "libs/assistant-contract/src/replay/index.ts"
+      ],
       "@app-info": ["libs/app-info/src/index.ts"],
       "@core/*": ["apps/admin-dashboard/src/app/core/*"],
       "@environments/*": ["apps/admin-dashboard/src/environments/*"],

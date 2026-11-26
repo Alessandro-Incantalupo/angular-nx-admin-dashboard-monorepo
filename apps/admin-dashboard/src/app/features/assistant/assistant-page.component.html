@@ -1,0 +1,140 @@
+<div class="mx-auto flex max-w-[48rem] flex-col gap-6">
+  <header class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <h1 class="text-primary text-2xl font-bold">Assistant</h1>
+      <p class="text-muted-foreground mt-1 max-w-[36rem] text-sm">
+        Ask about the dashboard's users. The model calls tools that run in your
+        browser and answers with the dashboard's own components.
+      </p>
+    </div>
+    @if (chat.value().length > 0) {
+      <button
+        type="button"
+        class="border-border text-foreground hover:bg-muted/30 rounded-md border px-3 py-1.5 text-sm"
+        (click)="restart()"
+      >
+        New chat
+      </button>
+    }
+  </header>
+
+  @switch (mode().kind) {
+    @case ('recorded') {
+      <section
+        class="flex gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm"
+        data-testid="recorded-banner"
+      >
+        <span
+          class="h-fit shrink-0 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-semibold tracking-wide text-white uppercase"
+          >Recorded demo</span
+        >
+        <p class="text-foreground">
+          The model's replies were recorded from {{ recordedModel }} running
+          locally on Ollama{{ recordedOn ? ' on ' + recordedOn : '' }}. The tool
+          calls and the components still run live in your browser, on this
+          dashboard's data. Pick a question below.
+        </p>
+      </section>
+    }
+    @case ('live') {
+      <p
+        class="text-muted-foreground flex items-center gap-2 text-sm"
+        data-testid="live-banner"
+      >
+        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+        Live: {{ liveModel() }} on a local Ollama
+      </p>
+    }
+  }
+
+  <section class="flex flex-col gap-4" aria-live="polite">
+    @for (message of chat.value(); track $index) {
+      @switch (message.role) {
+        @case ('user') {
+          <div class="flex justify-end">
+            <p
+              class="bg-primary text-primary-foreground max-w-[80%] rounded-2xl rounded-br-sm px-4 py-2"
+            >
+              {{ message.content }}
+            </p>
+          </div>
+        }
+        @case ('assistant') {
+          <div class="flex flex-col gap-3">
+            @for (call of message.toolCalls; track call.toolCallId) {
+              <p
+                class="text-muted-foreground flex items-center gap-2 text-xs"
+                data-testid="tool-call"
+              >
+                <i
+                  class="pi text-primary"
+                  [class]="
+                    call.status === 'pending'
+                      ? 'pi-spin pi-spinner'
+                      : 'pi-wrench'
+                  "
+                ></i>
+                {{ toolLabel(call) }}
+              </p>
+            }
+            @if (message.content) {
+              <div class="text-foreground assistant-answer">
+                <hb-render-message [message]="message" />
+              </div>
+            }
+          </div>
+        }
+        @case ('error') {
+          <p class="text-sm text-red-600" role="alert">
+            The assistant failed: {{ message.content }}
+          </p>
+        }
+      }
+    }
+    @if (chat.isLoading()) {
+      <p class="text-muted-foreground flex items-center gap-2 text-sm">
+        <i class="pi pi-spin pi-spinner"></i> Thinking…
+      </p>
+    }
+    <div #end></div>
+  </section>
+
+  @if (recordings.length > 0 && mode().kind !== 'checking') {
+    <section class="flex flex-wrap gap-2" aria-label="Suggested questions">
+      @for (recording of recordings; track recording.prompt) {
+        <button
+          type="button"
+          class="border-border text-foreground hover:border-primary hover:text-primary rounded-full border px-3 py-1.5 text-sm disabled:opacity-50"
+          [disabled]="chat.isLoading() || askedPrompts().has(recording.prompt)"
+          (click)="ask(recording.prompt)"
+        >
+          {{ recording.prompt }}
+        </button>
+      }
+    </section>
+  }
+
+  <form class="flex gap-2" (submit)="send($event)">
+    <label for="assistant-input" class="sr-only">Your question</label>
+    <input
+      id="assistant-input"
+      class="border-border bg-background text-foreground grow rounded-md border px-3 py-2 text-base disabled:opacity-60"
+      [placeholder]="
+        isRecorded()
+          ? 'Recorded demo: pick a question above'
+          : 'Ask about the users, e.g. Who is inactive?'
+      "
+      [disabled]="mode().kind !== 'live'"
+      [value]="draft()"
+      (input)="draft.set($any($event.target).value)"
+      autocomplete="off"
+    />
+    <button
+      type="submit"
+      class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 font-medium disabled:opacity-50"
+      [disabled]="!canSend()"
+    >
+      Send
+    </button>
+  </form>
+</div>

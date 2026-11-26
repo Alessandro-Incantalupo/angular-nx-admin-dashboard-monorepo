@@ -13,6 +13,28 @@ The frontend consumes data from the deployed backend API, both are live and conn
 
 ![Adding a user with reactive form validation, toast notification, signal-driven state updates, and pagination](./docs/demo.gif)
 
+## AI Assistant (Hashbrown)
+
+![The assistant answering "Which admins do we have?" with the user table, a count per role as text, and Bob as a user card, in the recorded demo](./docs/assistant-demo.gif)
+
+The Assistant page answers questions about the dashboard's users with [Hashbrown](https://hashbrown.dev) 0.8 on Angular 22:
+
+- **Tools run in the browser.** The model calls `listUsers` and `countUsers`; their handlers fetch from the app's own API, so the model never touches data the user can't see.
+- **Answers use the app's components.** The model streams UI JSON that Hashbrown renders as the app's `UserTable`, `UserCard` and Markdown. The components load their records by id, so a card always shows the real data.
+- **One contract.** `libs/assistant-contract` holds the system prompt, the component definitions and the tool schemas. The browser and the API build the same JSON schema from it, and the API pins its own copy.
+- **Recorded demo in production.** The deployed API has no model, so the page replays conversations recorded from `gemma4:12b` on a local Ollama, through Hashbrown's own client (a replay transport). The recorded tool calls still run against the live API. The page says it's a recorded demo.
+
+Live, on your machine (needs [Ollama](https://ollama.com) with `gemma4:12b`):
+
+```sh
+AI_PROVIDER=ollama PORT=3100 bun run apps/api/src/server.ts
+pnpm exec nx run design-system:build-styles
+pnpm exec nx serve admin-dashboard --configuration=development --port 4300
+# open http://localhost:4300/assistant (add ?assistant=recorded for the replay)
+```
+
+Recordings: `node tools/assistant/record-conversations.mjs` against the live stack. GIF: `node tools/assistant/capture-demo.mjs`.
+
 ## Why I Built It
 
 The decisions here are the ones I'd make on any production codebase:
@@ -34,13 +56,13 @@ The decisions here are the ones I'd make on any production codebase:
 
 ## What This Demonstrates
 
-| Pattern | Where |
-|---|---|
-| HTTP interceptors: global auth injection, error normalisation, response transformation | `apps/admin-dashboard/src/app/core/interceptors/` |
-| NgRx Signal Store: per-feature state slices, computed state, effect isolation | `apps/admin-dashboard/src/app/` |
-| `OnPush` change detection + zoneless signals | Component files in `apps/admin-dashboard/src/app/` |
-| Feature-based lazy loading with self-contained route chunks | `app.routes.ts` |
-| Nx shared library boundary: compiler-enforced type safety across apps | `libs/models/`, `libs/app-info/` |
-| CI/CD: GitHub Actions + Docker build + DigitalOcean App Platform | `.github/workflows/`, `api/Dockerfile` |
-| Full-stack TypeScript: shared models between Angular and Hono.js API | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
-| Cloudflare Workers frontend + DigitalOcean backend (both live, CORS configured) | Live demo links above, `wrangler.jsonc` |
+| Pattern                                                                                | Where                                                                   |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| HTTP interceptors: global auth injection, error normalisation, response transformation | `apps/admin-dashboard/src/app/core/interceptors/`                       |
+| NgRx Signal Store: per-feature state slices, computed state, effect isolation          | `apps/admin-dashboard/src/app/`                                         |
+| `OnPush` change detection + zoneless signals                                           | Component files in `apps/admin-dashboard/src/app/`                      |
+| Feature-based lazy loading with self-contained route chunks                            | `app.routes.ts`                                                         |
+| Nx shared library boundary: compiler-enforced type safety across apps                  | `libs/models/`, `libs/app-info/`                                        |
+| CI/CD: GitHub Actions + Docker build + DigitalOcean App Platform                       | `.github/workflows/`, `api/Dockerfile`                                  |
+| Full-stack TypeScript: shared models between Angular and Hono.js API                   | `libs/models/` consumed in both `apps/api/` and `apps/admin-dashboard/` |
+| Cloudflare Workers frontend + DigitalOcean backend (both live, CORS configured)        | Live demo links above, `wrangler.jsonc`                                 |

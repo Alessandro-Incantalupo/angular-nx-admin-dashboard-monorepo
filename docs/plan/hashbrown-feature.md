@@ -33,6 +33,22 @@
 
 **Next.** Swap Jest for `@angular/build:unit-test` (Vitest) and add a test for `lockInput`; then the panel behind `environment.assistant` with `telemetry: false`, through the screenshot diff.
 
+## Found and done (2026-11-26, branch `feat/hashbrown-chat`)
+
+Goal: a pitch showcase for Angular contract givers. Decided: the public demo replays recorded conversations; live chat runs on a local Ollama; a GIF in the README.
+
+- **The chat.** An Assistant page (sidebar entry, lazy route `/assistant`; no `environment.assistant` flag, since the recorded demo is safe in production). `uiChatResource` with two browser tools (`listUsers` by role and status, `countUsers`) and three components (`Markdown`, `UserCard`, `UserTable`; the cards load records by id). Contract in `libs/assistant-contract`; the API pins the same schema.
+- **Ollama can't call tools under a JSON schema** (gotcha below). `/ai/run` now runs each turn in two phases: the model gets the tools without the schema right after the user's message, then the schema after the tool result. One tool round per question.
+- **Mode.** `GET /ai/status` answers only with `AI_PROVIDER=ollama` → live chat. Otherwise (production: 404) the page replays recordings, with an amber "Recorded demo" banner, the questions as buttons and the text input off. `?assistant=recorded` forces the replay.
+- **Replay.** A Hashbrown `Transport` that answers each request with the recorded AG-UI events (thread, run and ids rebased), so replay goes through Hashbrown's own client: the recorded tool calls run the real handlers against the API, and the components load live data. Four conversations captured from `gemma4:12b` with `tools/assistant/record-conversations.mjs` (Playwright on the live dev stack). Each answer was right against the seed data on the first try.
+- **Prompt.** `gemma4:12b` writes the Markdown sentence for counts but not next to a table or a card (0 of 9 tries, also with the rule in the component descriptions). The recordings keep the answers as the model gave them.
+- **Tests.** `nx test assistant-contract` (new Vitest target): the recordings replay through `createChatRuntime` from `@hashbrownai/core` to a valid UI answer, and the recorded `listUsers` call reaches the handler with the recorded arguments. The app's own Jest target was not used (see the base notes).
+- **Design.** Screenshot diff of `/users`, `/users/stats`, `/features/ui/table`, `/auth/sign-in` before and after (`stack-tools snap`/`diff`): only the sidebar changed (the new entry). Mobile and sign-in identical.
+- **Bundle.** Initial 566.4 kB on main, 575.8 kB here (+2.7 kB gzipped: Angular code Hashbrown uses, hoisted to the shared chunk, plus new utility classes). The 500 kB warning was already there.
+- **GIF.** `docs/assistant-demo.gif`, made by `tools/assistant/capture-demo.mjs` with Playwright alone.
+
+**Not done.** Guards from milestone 2 (rate limit, budget, tool check), `ChangeProposal`/approval, `RoleChart`, Italian strings for the page (English only), a Playwright e2e for the page (the e2e app serves the production build on port 4200). Not pushed.
+
 # 41 · Hashbrown AI feature in the Angular dashboard: plan
 
 Status: done (plan only)
