@@ -30,10 +30,9 @@
         >
         <p class="text-foreground">
           The model's replies were recorded from {{ recordedModel }} running
-          locally on Ollama{{
-            recordedAt ? ' on ' + (recordedAt | date: 'd MMM y') : ''
-          }}. The tool calls and the components still run live in your browser,
-          on this dashboard's data. Pick a question below.
+          locally on Ollama{{ recordedOn ? ' on ' + recordedOn : '' }}. The tool
+          calls and the components still run live in your browser, on this
+          dashboard's data. Pick a question below.
         </p>
       </section>
     }

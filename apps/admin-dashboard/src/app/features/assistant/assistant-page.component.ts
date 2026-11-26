@@ -5,7 +5,6 @@ import {
   userCardDefinition,
   userTableDefinition,
 } from '@admin-dashboard-nx-monorepo/assistant-contract';
-import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -43,7 +42,7 @@ const TOOL_LABELS: Record<string, { pending: string; done: string }> = {
 
 @Component({
   selector: 'app-assistant-page',
-  imports: [RenderMessageComponent, DatePipe],
+  imports: [RenderMessageComponent],
   templateUrl: './assistant-page.component.html',
   host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,7 +54,12 @@ export default class AssistantPageComponent {
   protected readonly recordings = this.modeService.recordings;
   protected readonly recordedModel =
     this.recordings[0]?.model ?? 'a local model';
-  protected readonly recordedAt = this.recordings[0]?.recordedAt;
+  // Intl, not DatePipe: the pipe's formatting code would land in the eager bundle.
+  protected readonly recordedOn = this.recordings[0]
+    ? new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium' }).format(
+        new Date(this.recordings[0].recordedAt)
+      )
+    : undefined;
 
   protected readonly chat = uiChatResource({
     debugName: 'assistant',
