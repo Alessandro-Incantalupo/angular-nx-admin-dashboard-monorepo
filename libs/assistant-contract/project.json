@@ -1,0 +1,8 @@
+{
+  "name": "assistant-contract",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/assistant-contract/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {}
+}

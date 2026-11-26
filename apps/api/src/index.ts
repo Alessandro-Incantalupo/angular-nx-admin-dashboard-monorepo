@@ -2,6 +2,7 @@
 import { Hono } from 'hono';
 import { rateLimiter } from 'hono-rate-limiter';
 import { cors } from 'hono/cors';
+import ai from './ai/run';
 import auth from './routes/auth';
 import usersRoute from './routes/users';
 
@@ -67,5 +68,7 @@ app.get('/', c => c.text('🟢 API is alive'));
 // Mount the users sub-app
 app.route('/users', users);
 app.route('/auth', auth);
+// The assistant runs on a local model only for now (docs/plan/hashbrown-feature.md).
+if (Bun.env['AI_PROVIDER'] === 'ollama') app.route('/ai', ai);
 
 export default app;
