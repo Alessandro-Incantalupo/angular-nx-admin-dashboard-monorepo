@@ -1,12 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AssistantLauncherComponent } from '../../features/assistant/assistant-launcher.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, HeaderComponent, SidebarComponent, FooterComponent],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    SidebarComponent,
+    FooterComponent,
+    AssistantLauncherComponent,
+  ],
   templateUrl: './main-layout.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,

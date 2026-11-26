@@ -148,3 +148,43 @@ describe('rebaseEvent', () => {
     });
   });
 });
+
+describe('replay pacing', () => {
+  it('waits at least minGapMs and at most maxGapMs between events, and caps the first wait', async () => {
+    const at = [5000, 5010, 5020, 9000];
+    const recording: Recording = {
+      prompt: 'q',
+      model: 'm',
+      recordedAt: '2026-01-01T00:00:00Z',
+      runs: [
+        {
+          events: at.map(ms => ({
+            at: ms,
+            event: { type: 'RUN_STARTED', threadId: '', runId: '' },
+          })),
+        },
+      ],
+    };
+    const waits: number[] = [];
+    const transport = createReplayTransport({
+      recordings: [recording],
+      minGapMs: 45,
+      maxGapMs: 90,
+      maxFirstGapMs: 1400,
+      sleep: async ms => void waits.push(ms),
+    });
+    const request = {
+      input: {
+        threadId: 'T',
+        runId: 'R',
+        messages: [{ role: 'user', content: 'q' }],
+      },
+      signal: new AbortController().signal,
+    } as unknown as Parameters<typeof transport.send>[0];
+    const { events } = await transport.send(request);
+    const played = [];
+    for await (const event of events) played.push(event);
+    expect(played).toHaveLength(4);
+    expect(waits).toEqual([1400, 45, 45, 90]);
+  });
+});

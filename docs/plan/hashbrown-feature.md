@@ -33,6 +33,14 @@
 
 **Next.** Swap Jest for `@angular/build:unit-test` (Vitest) and add a test for `lockInput`; then the panel behind `environment.assistant` with `telemetry: false`, through the screenshot diff.
 
+## Chat panel instead of a page (2026-11-26)
+
+- **Launcher.** A round button fixed bottom-right on every page of the main layout (`assistant-launcher.component.ts`) opens a 26rem panel (full width minus 1rem on phones). The chat (`assistant-chat.component.ts`, with `provideHashbrown` in its own `providers`) is a `@defer (when loaded())` block: it loads on first open and stays mounted after close. No `viewChild` of the chat in the launcher: a query on a deferred component makes it eager. The sidebar entry is gone; `/assistant` redirects to `/users?chat=open`, keeping its query (so `?assistant=recorded` still works).
+- **Conversation feel.** The assistant greets first; avatar on the first message of each turn; three typing dots until the model writes; a picked question is typed into the box at 38 ms per character, then sent; bubbles slide in (off with reduced motion). The replay now waits 45 to 90 ms between events and up to 1.4 s before a run (was 0 to 40 ms and 600 ms): about 6 s per turn.
+- **Narrow table.** `UserTable` hides the email column below a 28rem container (`@md:`), so role and status fit in the panel; the card still shows it.
+- **GIF.** `capture-demo.mjs` starts on `/users`, draws a pointer (screenshots leave out the real one), opens the chat from the button and pauses to read each answer: 31 s, 584 kB.
+- **Bundle.** Initial 578.0 kB (575.8 kB with the page): no Hashbrown code in any initial chunk.
+
 ## Found and done (2026-11-26, branch `feat/hashbrown-chat`)
 
 Goal: a pitch showcase for Angular contract givers. Decided: the public demo replays recorded conversations; live chat runs on a local Ollama; a GIF in the README.

@@ -12,11 +12,6 @@ export const pages: CustomMenuItem[] = [
         route: PATHS.USERS,
       },
       {
-        icon: 'assets/icons/hugeicons/ai-chat-02.svg',
-        label: 'Assistant',
-        route: PATHS.ASSISTANT,
-      },
-      {
         icon: 'assets/icons/heroicons/outline/lock-closed.svg',
         label: 'Auth',
         route: `${PATHS.AUTH}/${PATHS.SIGN_UP}`, // Concatenated route

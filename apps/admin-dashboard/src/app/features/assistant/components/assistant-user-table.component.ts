@@ -22,12 +22,15 @@ import {
       <table class="min-w-full text-left text-sm">
         <thead class="text-muted-foreground text-xs">
           <tr>
-            <th class="border-border border-b px-4 py-2 font-semibold">Name</th>
-            <th class="border-border border-b px-4 py-2 font-semibold">
+            <th class="border-border border-b px-3 py-2 font-semibold">Name</th>
+            <!-- In the chat panel (narrower than 28rem) the email gives way to role and status. -->
+            <th
+              class="border-border hidden border-b px-3 py-2 font-semibold @md:table-cell"
+            >
               Email
             </th>
-            <th class="border-border border-b px-4 py-2 font-semibold">Role</th>
-            <th class="border-border border-b px-4 py-2 font-semibold">
+            <th class="border-border border-b px-3 py-2 font-semibold">Role</th>
+            <th class="border-border border-b px-3 py-2 font-semibold">
               Status
             </th>
           </tr>
@@ -35,18 +38,18 @@ import {
         <tbody>
           @for (user of users.value() ?? []; track user.id) {
             <tr>
-              <td class="text-foreground border-border border-b px-4 py-2">
+              <td class="text-foreground border-border border-b px-3 py-2">
                 {{ user.name }}
               </td>
               <td
-                class="text-muted-foreground border-border border-b px-4 py-2"
+                class="text-muted-foreground border-border hidden border-b px-3 py-2 @md:table-cell"
               >
                 {{ user.email }}
               </td>
-              <td class="border-border border-b px-4 py-2">
+              <td class="border-border border-b px-3 py-2">
                 <app-role-badge [role]="user.role" />
               </td>
-              <td class="border-border border-b px-4 py-2 text-xs">
+              <td class="border-border border-b px-3 py-2 text-xs">
                 <app-status-dot [status]="user.status" />
               </td>
             </tr>

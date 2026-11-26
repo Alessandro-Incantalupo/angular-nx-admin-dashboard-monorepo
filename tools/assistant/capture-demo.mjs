@@ -5,6 +5,9 @@
 // 1. API: PORT=3100 bun run apps/api/src/server.ts
 // 2. Dashboard: nx serve admin-dashboard --configuration=development --port 4300
 // 3. node tools/assistant/capture-demo.mjs [docs/assistant-demo.gif]
+//
+// The GIF opens the chat from the corner button and asks three questions, at
+// a pace a viewer can read.
 import { chromium } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -26,10 +29,35 @@ const QUESTIONS = [
 
 // --- Capture ---------------------------------------------------------------
 
+// Paced like a person: open the chat, pick a question, read the answer.
+const READ_GREETING_MS = 1800;
+const READ_ANSWER_MS = 3200;
+
+/** A pointer drawn into the page, since screenshots leave out the real one. */
+function drawCursor() {
+  const cursor = document.createElement('div');
+  cursor.innerHTML =
+    '<svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#fff" stroke="#111" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+  Object.assign(cursor.style, {
+    position: 'fixed',
+    left: '0',
+    top: '0',
+    zIndex: '2147483647',
+    pointerEvents: 'none',
+    transform: 'translate(-100px, -100px)',
+  });
+  document.addEventListener('mousemove', e => {
+    cursor.style.transform = `translate(${e.clientX - 3}px, ${e.clientY - 2}px)`;
+  });
+  addEventListener('DOMContentLoaded', () => document.body.append(cursor));
+}
+
 const browser = await chromium.launch({ executablePath: CHROME });
 const page = await browser.newPage({ viewport: VIEWPORT });
-await page.goto(`${BASE_URL}/assistant?assistant=recorded`);
-await page.getByTestId('recorded-banner').waitFor();
+await page.addInitScript(drawCursor);
+await page.goto(`${BASE_URL}/users?assistant=recorded`);
+await page.getByTestId('assistant-launcher').waitFor();
+await page.mouse.move(VIEWPORT.width * 0.55, VIEWPORT.height * 0.55);
 await page.waitForTimeout(1500); // fonts, icons, the global spinner
 
 const shots = [];
@@ -40,17 +68,28 @@ const recorder = (async () => {
   }
 })();
 
-const answers = () => page.locator('.assistant-answer').count();
+/** Moves the pointer to the element over a few frames, then clicks it. */
+async function clickLikeAPerson(locator) {
+  const box = await locator.boundingBox();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {
+    steps: 18,
+  });
+  await page.waitForTimeout(250);
+  await page.mouse.down();
+  await page.mouse.up();
+}
+
+const suggestions = page.getByRole('group', { name: 'Suggested questions' });
 await page.waitForTimeout(1200);
+await clickLikeAPerson(page.getByTestId('assistant-launcher'));
+await page.getByTestId('recorded-banner').waitFor();
+await page.waitForTimeout(READ_GREETING_MS);
 for (const question of QUESTIONS) {
-  const before = await answers();
-  await page.getByRole('button', { name: question }).click();
-  await page.waitForFunction(
-    n => document.querySelectorAll('.assistant-answer').length > n,
-    before,
-    { timeout: 20_000 }
-  );
-  await page.waitForTimeout(2500);
+  await clickLikeAPerson(page.getByRole('button', { name: question }));
+  // The question is typed, sent and answered; the suggestions come back when the turn ends.
+  await suggestions.waitFor({ state: 'hidden', timeout: 5_000 });
+  await suggestions.waitFor({ state: 'visible', timeout: 30_000 });
+  await page.waitForTimeout(READ_ANSWER_MS);
 }
 playing = false;
 await recorder;
@@ -81,12 +120,14 @@ async function toRgba(png) {
   return new Uint8Array(Buffer.from(b64, 'base64'));
 }
 const frames = [];
-for (const shot of shots) frames.push({ at: shot.at, rgba: await toRgba(shot.png) });
+for (const shot of shots)
+  frames.push({ at: shot.at, rgba: await toRgba(shot.png) });
 await browser.close();
 
 // --- Palette: the 256 most common colours, 5 bits per channel --------------
 
-const key = (d, i) => ((d[i] >> 3) << 10) | ((d[i + 1] >> 3) << 5) | (d[i + 2] >> 3);
+const key = (d, i) =>
+  ((d[i] >> 3) << 10) | ((d[i + 1] >> 3) << 5) | (d[i + 2] >> 3);
 const counts = new Uint32Array(1 << 15);
 for (const { rgba } of frames) {
   for (let i = 0; i < rgba.length; i += 4) counts[key(rgba, i)]++;
@@ -95,13 +136,20 @@ const palette = [...counts.keys()]
   .filter(k => counts[k] > 0)
   .sort((a, b) => counts[b] - counts[a])
   .slice(0, 256)
-  .map(k => [((k >> 10) & 31) * 8 + 4, ((k >> 5) & 31) * 8 + 4, (k & 31) * 8 + 4]);
+  .map(k => [
+    ((k >> 10) & 31) * 8 + 4,
+    ((k >> 5) & 31) * 8 + 4,
+    (k & 31) * 8 + 4,
+  ]);
 while (palette.length < 256) palette.push([0, 0, 0]);
 const nearest = new Int16Array(1 << 15).fill(-1);
 function indexOf(k) {
   if (nearest[k] >= 0) return nearest[k];
-  const r = ((k >> 10) & 31) * 8 + 4, g = ((k >> 5) & 31) * 8 + 4, b = (k & 31) * 8 + 4;
-  let best = 0, bestDistance = Infinity;
+  const r = ((k >> 10) & 31) * 8 + 4,
+    g = ((k >> 5) & 31) * 8 + 4,
+    b = (k & 31) * 8 + 4;
+  let best = 0,
+    bestDistance = Infinity;
   for (const [i, [pr, pg, pb]] of palette.entries()) {
     const d = (r - pr) ** 2 + (g - pg) ** 2 + (b - pb) ** 2;
     if (d < bestDistance) [best, bestDistance] = [i, d];
@@ -118,10 +166,14 @@ const indexed = frames.map(({ at, rgba }) => {
 
 /** GIF's variable-width LZW, 8-bit minimum code size. */
 function lzw(indices) {
-  const clear = 256, eoi = 257;
-  let size = 9, next = 258, table = new Map();
+  const clear = 256,
+    eoi = 257;
+  let size = 9,
+    next = 258,
+    table = new Map();
   const bytes = [];
-  let bits = 0, nbits = 0;
+  let bits = 0,
+    nbits = 0;
   const emit = code => {
     bits |= code << nbits;
     nbits += size;
@@ -191,12 +243,23 @@ for (let f = 0; f < indexed.length; f++) {
   }
   // A frame lasts until the next frame that differs.
   let end = f + 1;
-  while (end < indexed.length - 1 && indexed[end].px.every((v, i) => v === px[i])) end++;
+  while (
+    end < indexed.length - 1 &&
+    indexed[end].px.every((v, i) => v === px[i])
+  )
+    end++;
   const isLast = end >= indexed.length - 1;
-  const delay = isLast ? 400 : Math.max(2, Math.round((indexed[end].at - at) / 10));
-  const w = x1 - x0 + 1, h = y1 - y0 + 1;
+  const delay = isLast
+    ? 400
+    : Math.max(2, Math.round((indexed[end].at - at) / 10));
+  const w = x1 - x0 + 1,
+    h = y1 - y0 + 1;
   const sub = new Uint8Array(w * h);
-  for (let y = 0; y < h; y++) sub.set(px.subarray((y0 + y) * WIDTH + x0, (y0 + y) * WIDTH + x0 + w), y * w);
+  for (let y = 0; y < h; y++)
+    sub.set(
+      px.subarray((y0 + y) * WIDTH + x0, (y0 + y) * WIDTH + x0 + w),
+      y * w
+    );
   out.push(0x21, 0xf9, 4, 0x04);
   u16(delay);
   out.push(0, 0);
@@ -217,4 +280,6 @@ for (let f = 0; f < indexed.length; f++) {
 }
 out.push(0x3b);
 writeFileSync(OUT, Buffer.from(out));
-console.log(`${OUT}: ${written} frames from ${shots.length} shots, ${WIDTH}x${HEIGHT}, ${(out.length / 1024).toFixed(0)} kB`);
+console.log(
+  `${OUT}: ${written} frames from ${shots.length} shots, ${WIDTH}x${HEIGHT}, ${(out.length / 1024).toFixed(0)} kB`
+);

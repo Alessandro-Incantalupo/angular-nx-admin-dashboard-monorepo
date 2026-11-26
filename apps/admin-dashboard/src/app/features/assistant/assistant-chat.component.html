@@ -1,0 +1,207 @@
+<header class="border-border flex items-center gap-3 border-b px-4 py-3">
+  <span
+    class="bg-primary text-primary-foreground flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+    aria-hidden="true"
+  >
+    <i class="pi pi-sparkles"></i>
+  </span>
+  <div class="min-w-0 grow">
+    <h2
+      id="assistant-title"
+      class="text-foreground leading-tight font-semibold"
+    >
+      Assistant
+    </h2>
+    @switch (mode().kind) {
+      @case ('recorded') {
+        <p
+          class="flex items-center gap-1.5 text-xs text-amber-600"
+          data-testid="recorded-banner"
+        >
+          <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+          Recorded demo
+        </p>
+      }
+      @case ('live') {
+        <p
+          class="text-muted-foreground flex items-center gap-1.5 text-xs"
+          data-testid="live-banner"
+        >
+          <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+          Live: {{ liveModel() }}
+        </p>
+      }
+      @default {
+        <p class="text-muted-foreground text-xs">Connecting…</p>
+      }
+    }
+  </div>
+  @if (chat.value().length > 0) {
+    <button
+      type="button"
+      class="text-muted-foreground hover:bg-muted/40 hover:text-foreground flex h-9 w-9 items-center justify-center rounded-full"
+      title="New chat"
+      aria-label="New chat"
+      (click)="restart()"
+    >
+      <i class="pi pi-refresh"></i>
+    </button>
+  }
+  <button
+    type="button"
+    class="text-muted-foreground hover:bg-muted/40 hover:text-foreground flex h-9 w-9 items-center justify-center rounded-full"
+    aria-label="Close the assistant"
+    (click)="closed.emit()"
+  >
+    <i class="pi pi-times"></i>
+  </button>
+</header>
+
+<section
+  class="@container flex min-h-0 grow flex-col gap-4 overflow-y-auto px-4 py-4"
+  aria-live="polite"
+>
+  <!-- The assistant speaks first, so the panel opens on a conversation. -->
+  <div class="assistant-turn flex items-end gap-2">
+    <span class="assistant-avatar" aria-hidden="true">
+      <i class="pi pi-sparkles"></i>
+    </span>
+    <div
+      class="bg-muted/40 text-foreground max-w-[85%] rounded-2xl rounded-bl-sm px-4 py-2 text-sm"
+    >
+      <p>
+        Hi! Ask me about the dashboard's users: who's an admin, who's inactive,
+        how many per role.
+      </p>
+      @if (isRecorded()) {
+        <p class="text-muted-foreground mt-2 text-xs">
+          This is a recorded demo: my replies come from {{ recordedModel }} on a
+          local Ollama{{ recordedOn ? ', ' + recordedOn : '' }}. The tool calls
+          and the cards still run live on this dashboard's data. Pick a question
+          below.
+        </p>
+      }
+    </div>
+  </div>
+
+  @for (message of chat.value(); track $index) {
+    @switch (message.role) {
+      @case ('user') {
+        <div class="assistant-turn flex justify-end">
+          <p
+            class="bg-primary text-primary-foreground max-w-[85%] rounded-2xl rounded-br-sm px-4 py-2 text-sm"
+          >
+            {{ message.content }}
+          </p>
+        </div>
+      }
+      @case ('assistant') {
+        @if (message.toolCalls.length > 0 || message.content) {
+          <div class="assistant-turn flex items-start gap-2">
+            <!-- One avatar per turn: a tool run and its answer are two messages. -->
+            <span
+              class="assistant-avatar"
+              [class.invisible]="chat.value()[$index - 1]?.role === 'assistant'"
+              aria-hidden="true"
+            >
+              <i class="pi pi-sparkles"></i>
+            </span>
+            <div class="flex min-w-0 grow flex-col gap-2">
+              @for (call of message.toolCalls; track call.toolCallId) {
+                <p
+                  class="text-muted-foreground flex items-center gap-2 text-xs"
+                  data-testid="tool-call"
+                >
+                  <i
+                    class="pi text-primary"
+                    [class]="
+                      call.status === 'pending'
+                        ? 'pi-spin pi-spinner'
+                        : 'pi-wrench'
+                    "
+                  ></i>
+                  {{ toolLabel(call) }}
+                </p>
+              }
+              @if (message.content) {
+                <div class="text-foreground assistant-answer text-sm">
+                  <hb-render-message [message]="message" />
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+      @case ('error') {
+        <p class="text-sm text-red-600" role="alert">
+          The assistant failed: {{ message.content }}
+        </p>
+      }
+    }
+  }
+
+  @if (showTypingDots()) {
+    <div class="assistant-turn flex items-end gap-2" data-testid="typing">
+      <span class="assistant-avatar" aria-hidden="true">
+        <i class="pi pi-sparkles"></i>
+      </span>
+      <span
+        class="bg-muted/40 flex gap-1 rounded-2xl rounded-bl-sm px-4 py-3"
+        role="status"
+        aria-label="The assistant is typing"
+      >
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </span>
+    </div>
+  }
+
+  @if (mode().kind !== 'checking' && !busy() && suggestions().length > 0) {
+    <div
+      class="assistant-turn flex flex-wrap justify-end gap-2"
+      aria-label="Suggested questions"
+      role="group"
+    >
+      @for (prompt of suggestions(); track prompt) {
+        <button
+          type="button"
+          class="border-primary/40 text-primary hover:bg-primary/10 rounded-full border px-3 py-1 text-sm"
+          (click)="pick(prompt)"
+        >
+          {{ prompt }}
+        </button>
+      }
+    </div>
+  }
+  <div #end></div>
+</section>
+
+<form
+  class="border-border flex items-center gap-2 border-t px-3 py-3"
+  (submit)="send($event)"
+>
+  <label for="assistant-input" class="sr-only">Your question</label>
+  <input
+    #input
+    id="assistant-input"
+    class="border-border bg-background text-foreground min-w-0 grow rounded-full border px-4 py-2 text-base disabled:opacity-100"
+    [placeholder]="
+      isRecorded()
+        ? 'Pick a question above'
+        : 'Ask about the users, e.g. Who is inactive?'
+    "
+    [disabled]="mode().kind !== 'live' || typing()"
+    [value]="draft()"
+    (input)="draft.set($any($event.target).value)"
+    autocomplete="off"
+  />
+  <button
+    type="submit"
+    class="bg-primary text-primary-foreground hover:bg-primary/90 flex h-10 w-10 shrink-0 items-center justify-center rounded-full disabled:opacity-50"
+    aria-label="Send"
+    [disabled]="!canSend()"
+  >
+    <i class="pi pi-send"></i>
+  </button>
+</form>

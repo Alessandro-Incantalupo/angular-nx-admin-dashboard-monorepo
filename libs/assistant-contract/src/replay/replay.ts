@@ -78,9 +78,14 @@ export function findReplayRun(
 
 export interface ReplayTransportOptions {
   recordings: readonly Recording[];
-  /** Longest pause between two events, so a slow local model replays quickly. Default 40 ms. */
+  /**
+   * Shortest pause between two events, so an answer streams in at reading
+   * pace instead of in a burst. Default 45 ms.
+   */
+  minGapMs?: number;
+  /** Longest pause between two events, so a slow local model replays quickly. Default 90 ms. */
   maxGapMs?: number;
-  /** Longest pause before the first event (the model "thinking"). Default 600 ms. */
+  /** Longest pause before the first event (the model "thinking"). Default 1400 ms. */
   maxFirstGapMs?: number;
   /** Waits; replaced in tests. */
   sleep?: (ms: number, signal: AbortSignal) => Promise<void>;
@@ -155,13 +160,17 @@ async function* replay(
   run: RecordedRun,
   request: TransportRequest,
   options: Required<
-    Pick<ReplayTransportOptions, 'maxGapMs' | 'maxFirstGapMs' | 'sleep'>
+    Pick<
+      ReplayTransportOptions,
+      'minGapMs' | 'maxGapMs' | 'maxFirstGapMs' | 'sleep'
+    >
   >
 ): AsyncGenerator<AGUIEvent> {
   let previous = 0;
   for (const [index, { at, event }] of run.events.entries()) {
     const cap = index === 0 ? options.maxFirstGapMs : options.maxGapMs;
-    const wait = Math.min(Math.max(at - previous, 0), cap);
+    const floor = index === 0 ? 0 : options.minGapMs;
+    const wait = Math.min(Math.max(at - previous, floor), cap);
     previous = at;
     if (wait > 0) await options.sleep(wait, request.signal);
     yield rebaseEvent(event, request.input);
@@ -173,8 +182,9 @@ export function createReplayTransport(
   options: ReplayTransportOptions
 ): Transport {
   const timing = {
-    maxGapMs: options.maxGapMs ?? 40,
-    maxFirstGapMs: options.maxFirstGapMs ?? 600,
+    minGapMs: options.minGapMs ?? 45,
+    maxGapMs: options.maxGapMs ?? 90,
+    maxFirstGapMs: options.maxFirstGapMs ?? 1400,
     sleep: options.sleep ?? defaultSleep,
   };
   const fallback = textOnlyRun(options.fallbackText ?? DEFAULT_FALLBACK);

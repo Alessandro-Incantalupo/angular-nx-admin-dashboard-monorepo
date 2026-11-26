@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 import { PATHS } from '../../core/constants/routes';
 import { MainLayoutComponent } from './main-layout.component';
 import { MenuService } from './services/menu.service';
@@ -23,8 +24,12 @@ export default [
         loadChildren: () => import('../../features/users/users.routes'),
       },
       {
+        // The assistant is a chat panel on every page now; old links open it.
         path: PATHS.ASSISTANT,
-        loadChildren: () => import('../../features/assistant/assistant.routes'),
+        redirectTo: ({ queryParams }) =>
+          inject(Router).createUrlTree([PATHS.USERS], {
+            queryParams: { ...queryParams, chat: 'open' },
+          }),
       },
     ],
   },
