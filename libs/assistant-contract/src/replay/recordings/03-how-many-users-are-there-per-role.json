@@ -1,0 +1,344 @@
+{
+  "prompt": "How many users are there per role?",
+  "model": "gemma4:12b",
+  "recordedAt": "2026-11-26T16:08:03.402Z",
+  "runs": [
+    {
+      "events": [
+        {
+          "at": 1284,
+          "event": {
+            "type": "RUN_STARTED",
+            "threadId": "4797d07c-0698-40f4-9973-0e9bb1ad0240",
+            "runId": "34bee77b-6674-4fae-bf1a-12ea82f4670c"
+          }
+        },
+        {
+          "at": 1289,
+          "event": {
+            "type": "TOOL_CALL_START",
+            "toolCallId": "34bee77b-6674-4fae-bf1a-12ea82f4670c:assistant:tool:0",
+            "toolCallName": "countUsers",
+            "parentMessageId": "34bee77b-6674-4fae-bf1a-12ea82f4670c:assistant"
+          }
+        },
+        {
+          "at": 1290,
+          "event": {
+            "type": "TOOL_CALL_ARGS",
+            "toolCallId": "34bee77b-6674-4fae-bf1a-12ea82f4670c:assistant:tool:0",
+            "delta": "{}"
+          }
+        },
+        {
+          "at": 1291,
+          "event": {
+            "type": "TOOL_CALL_END",
+            "toolCallId": "34bee77b-6674-4fae-bf1a-12ea82f4670c:assistant:tool:0"
+          }
+        },
+        {
+          "at": 1292,
+          "event": {
+            "type": "RUN_FINISHED",
+            "metadata": {
+              "hashbrown": {
+                "finishReason": "tool_calls"
+              },
+              "ollama": {
+                "doneReason": "stop"
+              }
+            },
+            "threadId": "4797d07c-0698-40f4-9973-0e9bb1ad0240",
+            "runId": "34bee77b-6674-4fae-bf1a-12ea82f4670c",
+            "usage": [
+              {
+                "provider": "ollama",
+                "model": "gemma4:12b",
+                "inputTokens": 329,
+                "outputTokens": 100,
+                "totalTokens": 429
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "events": [
+        {
+          "at": 2,
+          "event": {
+            "type": "RUN_STARTED",
+            "threadId": "4797d07c-0698-40f4-9973-0e9bb1ad0240",
+            "runId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b"
+          }
+        },
+        {
+          "at": 1106,
+          "event": {
+            "type": "TEXT_MESSAGE_START",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "role": "assistant"
+          }
+        },
+        {
+          "at": 1107,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "{\""
+          }
+        },
+        {
+          "at": 1147,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "ui"
+          }
+        },
+        {
+          "at": 1192,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "\":"
+          }
+        },
+        {
+          "at": 1193,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " [{\""
+          }
+        },
+        {
+          "at": 1233,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "Markdown"
+          }
+        },
+        {
+          "at": 1280,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "\":"
+          }
+        },
+        {
+          "at": 1281,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " {\""
+          }
+        },
+        {
+          "at": 1320,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "p"
+          }
+        },
+        {
+          "at": 1359,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "ro"
+          }
+        },
+        {
+          "at": 1398,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "p"
+          }
+        },
+        {
+          "at": 1439,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "s"
+          }
+        },
+        {
+          "at": 1462,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "\":"
+          }
+        },
+        {
+          "at": 1462,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " {\""
+          }
+        },
+        {
+          "at": 1501,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "children"
+          }
+        },
+        {
+          "at": 1524,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "\":"
+          }
+        },
+        {
+          "at": 1525,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " \""
+          }
+        },
+        {
+          "at": 1548,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "There"
+          }
+        },
+        {
+          "at": 1548,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " are"
+          }
+        },
+        {
+          "at": 1549,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " "
+          }
+        },
+        {
+          "at": 1549,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "3"
+          }
+        },
+        {
+          "at": 1572,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " admins"
+          }
+        },
+        {
+          "at": 1573,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " and"
+          }
+        },
+        {
+          "at": 1573,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " "
+          }
+        },
+        {
+          "at": 1573,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "7"
+          }
+        },
+        {
+          "at": 1596,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": " users"
+          }
+        },
+        {
+          "at": 1596,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": ".\""
+          }
+        },
+        {
+          "at": 1597,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "}}"
+          }
+        },
+        {
+          "at": 1619,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant",
+            "delta": "}]}"
+          }
+        },
+        {
+          "at": 1643,
+          "event": {
+            "type": "TEXT_MESSAGE_END",
+            "messageId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b:assistant"
+          }
+        },
+        {
+          "at": 1643,
+          "event": {
+            "type": "RUN_FINISHED",
+            "metadata": {
+              "hashbrown": {
+                "finishReason": "stop"
+              },
+              "ollama": {
+                "doneReason": "stop"
+              }
+            },
+            "threadId": "4797d07c-0698-40f4-9973-0e9bb1ad0240",
+            "runId": "f77a64d3-9fb0-4fdf-a828-5d00b5cd7a1b",
+            "usage": [
+              {
+                "provider": "ollama",
+                "model": "gemma4:12b",
+                "inputTokens": 472,
+                "outputTokens": 131,
+                "totalTokens": 603
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

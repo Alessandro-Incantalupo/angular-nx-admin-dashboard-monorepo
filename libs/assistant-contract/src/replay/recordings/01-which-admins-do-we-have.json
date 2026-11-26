@@ -1,0 +1,616 @@
+{
+  "prompt": "Which admins do we have?",
+  "model": "gemma4:12b",
+  "recordedAt": "2026-11-26T16:07:54.919Z",
+  "runs": [
+    {
+      "events": [
+        {
+          "at": 2098,
+          "event": {
+            "type": "RUN_STARTED",
+            "threadId": "b3cdb666-86f3-4976-896c-68583cb31623",
+            "runId": "7a9dd92c-b8a4-4721-b87e-1f0bf0c92db3"
+          }
+        },
+        {
+          "at": 2108,
+          "event": {
+            "type": "TOOL_CALL_START",
+            "toolCallId": "7a9dd92c-b8a4-4721-b87e-1f0bf0c92db3:assistant:tool:0",
+            "toolCallName": "listUsers",
+            "parentMessageId": "7a9dd92c-b8a4-4721-b87e-1f0bf0c92db3:assistant"
+          }
+        },
+        {
+          "at": 2109,
+          "event": {
+            "type": "TOOL_CALL_ARGS",
+            "toolCallId": "7a9dd92c-b8a4-4721-b87e-1f0bf0c92db3:assistant:tool:0",
+            "delta": "{\"role\":\"admin\",\"status\":\"any\"}"
+          }
+        },
+        {
+          "at": 2110,
+          "event": {
+            "type": "TOOL_CALL_END",
+            "toolCallId": "7a9dd92c-b8a4-4721-b87e-1f0bf0c92db3:assistant:tool:0"
+          }
+        },
+        {
+          "at": 2111,
+          "event": {
+            "type": "RUN_FINISHED",
+            "metadata": {
+              "hashbrown": {
+                "finishReason": "tool_calls"
+              },
+              "ollama": {
+                "doneReason": "stop"
+              }
+            },
+            "threadId": "b3cdb666-86f3-4976-896c-68583cb31623",
+            "runId": "7a9dd92c-b8a4-4721-b87e-1f0bf0c92db3",
+            "usage": [
+              {
+                "provider": "ollama",
+                "model": "gemma4:12b",
+                "inputTokens": 327,
+                "outputTokens": 207,
+                "totalTokens": 534
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "events": [
+        {
+          "at": 4,
+          "event": {
+            "type": "RUN_STARTED",
+            "threadId": "b3cdb666-86f3-4976-896c-68583cb31623",
+            "runId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42"
+          }
+        },
+        {
+          "at": 944,
+          "event": {
+            "type": "TEXT_MESSAGE_START",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "role": "assistant"
+          }
+        },
+        {
+          "at": 944,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "{"
+          }
+        },
+        {
+          "at": 985,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 985,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "  "
+          }
+        },
+        {
+          "at": 985,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\""
+          }
+        },
+        {
+          "at": 985,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "ui"
+          }
+        },
+        {
+          "at": 1025,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\":"
+          }
+        },
+        {
+          "at": 1069,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": " ["
+          }
+        },
+        {
+          "at": 1092,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1092,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "    "
+          }
+        },
+        {
+          "at": 1092,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "{"
+          }
+        },
+        {
+          "at": 1092,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1136,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "      "
+          }
+        },
+        {
+          "at": 1137,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\""
+          }
+        },
+        {
+          "at": 1137,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "User"
+          }
+        },
+        {
+          "at": 1158,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "Table"
+          }
+        },
+        {
+          "at": 1159,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\":"
+          }
+        },
+        {
+          "at": 1159,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": " {"
+          }
+        },
+        {
+          "at": 1159,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1199,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "        "
+          }
+        },
+        {
+          "at": 1200,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\""
+          }
+        },
+        {
+          "at": 1200,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "props"
+          }
+        },
+        {
+          "at": 1221,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\":"
+          }
+        },
+        {
+          "at": 1222,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": " {"
+          }
+        },
+        {
+          "at": 1263,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1263,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "          "
+          }
+        },
+        {
+          "at": 1263,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\""
+          }
+        },
+        {
+          "at": 1264,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "userId"
+          }
+        },
+        {
+          "at": 1285,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "s"
+          }
+        },
+        {
+          "at": 1309,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\":"
+          }
+        },
+        {
+          "at": 1310,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": " ["
+          }
+        },
+        {
+          "at": 1310,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1310,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "            "
+          }
+        },
+        {
+          "at": 1333,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\""
+          }
+        },
+        {
+          "at": 1333,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "1"
+          }
+        },
+        {
+          "at": 1333,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\","
+          }
+        },
+        {
+          "at": 1333,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1357,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "            "
+          }
+        },
+        {
+          "at": 1357,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\""
+          }
+        },
+        {
+          "at": 1357,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "3"
+          }
+        },
+        {
+          "at": 1357,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\","
+          }
+        },
+        {
+          "at": 1380,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1380,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "            "
+          }
+        },
+        {
+          "at": 1380,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\""
+          }
+        },
+        {
+          "at": 1380,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "7"
+          }
+        },
+        {
+          "at": 1404,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\""
+          }
+        },
+        {
+          "at": 1405,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1405,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "          "
+          }
+        },
+        {
+          "at": 1405,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "]"
+          }
+        },
+        {
+          "at": 1428,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1428,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "        "
+          }
+        },
+        {
+          "at": 1428,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "}"
+          }
+        },
+        {
+          "at": 1429,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1452,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "      "
+          }
+        },
+        {
+          "at": 1453,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "}"
+          }
+        },
+        {
+          "at": 1453,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1453,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "    "
+          }
+        },
+        {
+          "at": 1483,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "}"
+          }
+        },
+        {
+          "at": 1483,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1483,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "  "
+          }
+        },
+        {
+          "at": 1483,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "]"
+          }
+        },
+        {
+          "at": 1527,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "\n"
+          }
+        },
+        {
+          "at": 1527,
+          "event": {
+            "type": "TEXT_MESSAGE_CONTENT",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant",
+            "delta": "}"
+          }
+        },
+        {
+          "at": 1528,
+          "event": {
+            "type": "TEXT_MESSAGE_END",
+            "messageId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42:assistant"
+          }
+        },
+        {
+          "at": 1528,
+          "event": {
+            "type": "RUN_FINISHED",
+            "metadata": {
+              "hashbrown": {
+                "finishReason": "stop"
+              },
+              "ollama": {
+                "doneReason": "stop"
+              }
+            },
+            "threadId": "b3cdb666-86f3-4976-896c-68583cb31623",
+            "runId": "6d7bc4ef-9bd6-448d-bda2-e3a61818dc42",
+            "usage": [
+              {
+                "provider": "ollama",
+                "model": "gemma4:12b",
+                "inputTokens": 634,
+                "outputTokens": 140,
+                "totalTokens": 774
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
