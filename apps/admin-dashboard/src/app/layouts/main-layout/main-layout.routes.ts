@@ -22,6 +22,10 @@ export default [
         path: PATHS.USERS,
         loadChildren: () => import('../../features/users/users.routes'),
       },
+      {
+        path: PATHS.ASSISTANT,
+        loadChildren: () => import('../../features/assistant/assistant.routes'),
+      },
     ],
   },
 ] satisfies Routes;
