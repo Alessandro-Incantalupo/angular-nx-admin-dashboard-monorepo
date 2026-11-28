@@ -101,8 +101,8 @@
             <!-- One avatar per turn: a tool run and its answer are two messages. -->
             <span
               class="assistant-avatar"
-              [class.invisible]="chat.value()[$index - 1]?.role === 'assistant'"
               aria-hidden="true"
+              [class.invisible]="chat.value()[$index - 1]?.role === 'assistant'"
             >
               <i class="pi pi-sparkles"></i>
             </span>
@@ -186,6 +186,7 @@
     #input
     id="assistant-input"
     class="border-border bg-background text-foreground min-w-0 grow rounded-full border px-4 py-2 text-base disabled:opacity-100"
+    autocomplete="off"
     [placeholder]="
       isRecorded()
         ? 'Pick a question above'
@@ -194,7 +195,6 @@
     [disabled]="mode().kind !== 'live' || typing()"
     [value]="draft()"
     (input)="draft.set($any($event.target).value)"
-    autocomplete="off"
   />
   <button
     type="submit"

@@ -31,7 +31,7 @@
         <svg-icon
           src="assets/icons/google-logo.svg"
           [svgClass]="'h-6 w-6 mr-2'"
-        ></svg-icon>
+        />
         Log in with Google
       </button>
     </div>
@@ -49,23 +49,23 @@
         <input
           type="text"
           id="email"
+          class="peer block"
+          placeholder=" "
+          formControlName="email"
           [class]="{
             'is__invalid-input':
               (submitted && hasError('email', 'required')) ||
               hasError('email', 'email'),
           }"
-          class="peer block"
-          placeholder=" "
-          formControlName="email"
         />
         <label
           for="email"
+          class="bg-background text-color-muted-foreground peer-focus:text-primary absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-95 transform px-2 text-sm duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-95 peer-focus:px-2"
           [class]="{
             'peer-focus:text-destructive!':
               (submitted && hasError('email', 'required')) ||
               hasError('email', 'email'),
           }"
-          class="bg-background text-color-muted-foreground peer-focus:text-primary absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-95 transform px-2 text-sm duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-95 peer-focus:px-2"
         >
           Email address
         </label>
@@ -83,22 +83,22 @@
 
       <div class="relative">
         <input
-          [type]="passwordTextType ? 'text' : 'password'"
           id="password"
-          [class]="{
-            'is__invalid-input': submitted && hasError('password', 'required'),
-          }"
           class="peer block"
           placeholder=" "
           formControlName="password"
+          [type]="passwordTextType ? 'text' : 'password'"
+          [class]="{
+            'is__invalid-input': submitted && hasError('password', 'required'),
+          }"
         />
         <label
           for="password"
+          class="bg-background text-color-muted-foreground peer-focus:text-primary absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-95 transform px-2 text-sm duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-95 peer-focus:px-2"
           [class]="{
             'peer-focus:text-destructive!':
               submitted && hasError('password', 'required'),
           }"
-          class="bg-background text-color-muted-foreground peer-focus:text-primary absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-95 transform px-2 text-sm duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-95 peer-focus:px-2"
         >
           Password
         </label>
@@ -113,8 +113,7 @@
                 : 'assets/icons/heroicons/outline/eye.svg'
             "
             [svgClass]="'h-5 w-5'"
-          >
-          </svg-icon>
+          />
         </span>
       </div>
       @if (submitted && hasError('password', 'required')) {
@@ -137,11 +136,11 @@
 
       <button
         app-button
-        [routerLink]="PATHS.FORGOT_PASSWORD"
         impact="none"
         tone="primary"
         shape="rounded"
         size="small"
+        [routerLink]="PATHS.FORGOT_PASSWORD"
       >
         Forgot your password?
       </button>
@@ -167,11 +166,11 @@
       Not a Member yet?
       <button
         app-button
-        [routerLink]="PATHS.SIGN_UP"
         impact="none"
         tone="primary"
         shape="rounded"
         size="small"
+        [routerLink]="PATHS.SIGN_UP"
       >
         Sign up
       </button>

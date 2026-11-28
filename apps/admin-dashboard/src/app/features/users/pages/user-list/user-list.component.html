@@ -6,8 +6,8 @@
     <div class="flex items-center gap-3">
       <button
         class="bg-primary hover:bg-primary/90 focus:ring-primary/50 text-color-foreground transform rounded px-6 py-3 font-medium shadow-md transition-transform hover:scale-105 focus:ring-2"
-        (click)="userStore.resetDemoData()"
         type="button"
+        (click)="userStore.resetDemoData()"
       >
         ♻️ {{ t('users.reset-demo') }}
       </button>
@@ -38,7 +38,7 @@
     [roleDescription]="authStore.roleDescription()"
     [isAuthenticated]="authStore.isAuthenticated()"
     (whatIsMyRole)="quickLogin($event)"
-  ></app-user-abilities>
+  />
 
   <app-role-selector
     [isAuthenticated]="authStore.isAuthenticated()"
@@ -46,7 +46,7 @@
     [isUser]="authStore.isUser()"
     [isAdmin]="authStore.isAdmin()"
     (whatIsMyRole)="authStore.setRole($event)"
-  ></app-role-selector>
+  />
 
   @if (userStore.usersLoading()) {
     <p>{{ t('users.loading') }}</p>
@@ -68,7 +68,7 @@
             (saveAction)="onRowEditSave($event)"
             (saveActionCancel)="onRowEditCancel($event)"
             (pageChangeAction)="onPageChange($event)"
-          ></app-prime-ng-table>
+          />
         } @placeholder {
           <div class="space-y-4">
             <div class="h-10 w-full animate-pulse rounded bg-gray-200"></div>
@@ -91,30 +91,30 @@
           <p-dialog
             [header]="t('users.addUserForm')"
             [visible]="showForm()"
-            (visibleChange)="showForm.set($event)"
             [modal]="true"
             [style]="{ 'max-width': '600px', width: '90vw' }"
             [draggable]="false"
             [resizable]="false"
             [closable]="true"
+            (visibleChange)="showForm.set($event)"
           >
             <!-- Toggle Form Type -->
             <div class="mb-4 flex gap-2">
               <button
-                (click)="useSignalForm.set(true)"
+                class="focus:ring-primary/50 transform rounded px-4 py-2 text-sm font-medium shadow-sm transition-all hover:scale-105 hover:shadow-md focus:ring-2 focus:outline-none"
                 [class.bg-primary]="useSignalForm()"
                 [class.text-white]="useSignalForm()"
                 [class.bg-muted]="!useSignalForm()"
-                class="focus:ring-primary/50 transform rounded px-4 py-2 text-sm font-medium shadow-sm transition-all hover:scale-105 hover:shadow-md focus:ring-2 focus:outline-none"
+                (click)="useSignalForm.set(true)"
               >
                 {{ t('users.form.signal') }}
               </button>
               <button
-                (click)="useSignalForm.set(false)"
+                class="focus:ring-primary/50 transform rounded px-4 py-2 text-sm font-medium shadow-sm transition-all hover:scale-105 hover:shadow-md focus:ring-2 focus:outline-none"
                 [class.bg-primary]="!useSignalForm()"
                 [class.text-white]="!useSignalForm()"
                 [class.bg-muted]="useSignalForm()"
-                class="focus:ring-primary/50 transform rounded px-4 py-2 text-sm font-medium shadow-sm transition-all hover:scale-105 hover:shadow-md focus:ring-2 focus:outline-none"
+                (click)="useSignalForm.set(false)"
               >
                 {{ t('users.form.reactive') }}
               </button>
@@ -124,12 +124,12 @@
               <app-user-form-signal
                 class="block"
                 (isSubmitted)="showForm.set(false)"
-              ></app-user-form-signal>
+              />
             } @else {
               <app-user-form
                 class="block"
                 (isSubmitted)="showForm.set(false)"
-              ></app-user-form>
+              />
             }
           </p-dialog>
         }

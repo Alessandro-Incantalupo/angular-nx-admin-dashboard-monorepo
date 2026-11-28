@@ -19,8 +19,8 @@ export class RoleBadgeComponent {
     class="text-muted-foreground inline-flex items-center gap-1.5 capitalize"
     ><span
       class="h-2 w-2 rounded-full"
-      [class]="status() === 'active' ? 'bg-emerald-500' : 'bg-zinc-400'"
       aria-hidden="true"
+      [class]="status() === 'active' ? 'bg-emerald-500' : 'bg-zinc-400'"
     ></span
     >{{ status() }}</span
   >`,

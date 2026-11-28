@@ -45,10 +45,10 @@ const OPEN_PARAM = 'chat';
     <button
       type="button"
       class="bg-primary text-primary-foreground hover:bg-primary/90 fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-200 hover:scale-105 motion-reduce:transition-none"
-      [attr.aria-label]="open() ? 'Close the assistant' : 'Open the assistant'"
-      [attr.aria-expanded]="open()"
       aria-controls="assistant-panel"
       data-testid="assistant-launcher"
+      [attr.aria-label]="open() ? 'Close the assistant' : 'Open the assistant'"
+      [attr.aria-expanded]="open()"
       (click)="toggle()"
     >
       <i

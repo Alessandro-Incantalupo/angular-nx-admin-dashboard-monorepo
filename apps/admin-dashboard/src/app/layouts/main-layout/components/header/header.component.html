@@ -4,18 +4,17 @@
       <!-- Mobile Navigation Menu Button-->
       <div class="sm:order-1 md:hidden">
         <button
-          (click)="toggleMobileMenu()"
           type="button"
           class="bg-muted text-color-muted-foreground focus:ring-primary hover:bg-muted-foreground hover:text-muted inline-flex items-center justify-center rounded-md p-2 focus:ring-2 focus:outline-hidden focus:ring-inset"
           aria-expanded="false"
+          (click)="toggleMobileMenu()"
         >
           <span class="sr-only">Open menu</span>
           <!-- Heroicon name: outline/menu -->
           <svg-icon
             src="assets/icons/heroicons/outline/menu.svg"
             [svgClass]="'h-6 w-6'"
-          >
-          </svg-icon>
+          />
         </button>
       </div>
 
@@ -26,7 +25,7 @@
         <a
           class="bg-primary flex items-center justify-center rounded-sm p-2 focus:ring-1 focus:outline-hidden"
         >
-          <svg-icon src="assets/icons/logo.svg"></svg-icon>
+          <svg-icon src="assets/icons/logo.svg" />
         </a>
         <b class="text-color-foreground hidden pl-3 text-sm font-bold sm:block">
           Admin Dashboard NX Monorepo
@@ -47,9 +46,9 @@
           <input
             type="checkbox"
             class="sr-only"
+            aria-label="Toggle dark mode"
             [checked]="themeStore.mode() === 'dark'"
             (change)="themeStore.toggleMode()"
-            aria-label="Toggle dark mode"
           />
           <!-- Sun icon -->
           <svg

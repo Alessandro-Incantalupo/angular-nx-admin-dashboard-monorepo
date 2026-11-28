@@ -22,16 +22,16 @@
               <button
                 type="button"
                 class="text-color-foreground transform rounded bg-green-600 px-4 py-2 font-semibold transition-transform hover:scale-105 hover:bg-green-700 hover:shadow-lg"
-                (click)="whatIsMyRole.emit('user')"
                 aria-label="Login as User"
+                (click)="whatIsMyRole.emit('user')"
               >
                 {{ t('users.login-button.user') }}
               </button>
               <button
                 type="button"
                 class="text-color-foreground transform rounded bg-red-600 px-4 py-2 font-semibold transition-transform hover:scale-105 hover:bg-red-700 hover:shadow-lg"
-                (click)="whatIsMyRole.emit('admin')"
                 aria-label="Login as Admin"
+                (click)="whatIsMyRole.emit('admin')"
               >
                 {{ t('users.login-button.admin') }}
               </button>

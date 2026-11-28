@@ -57,7 +57,7 @@ export type ChartOptions = {
             [colors]="chartColors"
             [legend]="chartLegend"
             [stroke]="{ show: false }"
-          ></apx-chart>
+          />
         }
       </div>
     </div>

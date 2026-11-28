@@ -11,28 +11,26 @@
         <li>
           <!-- Menu List -->
           <div
-            (click)="toggleMenu(item)"
             class="text-color-muted-foreground hover:text-color-foreground group relative"
+            (click)="toggleMenu(item)"
           >
             <!-- Icon -->
             <div
+              class="pointer-events-none absolute m-2"
               [class]="
                 item.active && !menuService.showSideBar
                   ? 'text-primary'
                   : 'text-color-muted-foreground/50'
               "
-              class="pointer-events-none absolute m-2"
             >
-              <svg-icon src="{{ item.icon }}" [svgClass]="'h-5 w-5'">
-              </svg-icon>
+              <svg-icon [src]="item.icon" [svgClass]="'h-5 w-5'" />
             </div>
 
             <!-- Condition -->
             <ng-container
               [ngTemplateOutlet]="item.children ? childMenu : parentMenu"
               [ngTemplateOutletContext]="{ item: item }"
-            >
-            </ng-container>
+            />
 
             <!-- Workaround:: Enable routerLink -->
             <ng-template #parentMenu let-item="item">
@@ -40,8 +38,8 @@
                 class="hover:bg-card flex h-9 cursor-pointer items-center justify-start rounded-sm"
               >
                 <a
-                  (click)="closeMenu(item)"
                   class="ml-10 truncate text-xs font-semibold tracking-wide focus:outline-hidden"
+                  (click)="closeMenu(item)"
                 >
                   {{ item.label }}
                   @if (item.disabled) {
@@ -86,25 +84,22 @@
             <!-- Arrow Icon -->
             @if (item.children) {
               <button
+                class="text-color-muted-foreground/50 pointer-events-none absolute top-1 right-0 flex items-center p-1 transition-all duration-500"
                 [class]="{
                   hidden: !menuService.showSideBar,
                   'rotate-90': item.expanded,
                 }"
-                class="text-color-muted-foreground/50 pointer-events-none absolute top-1 right-0 flex items-center p-1 transition-all duration-500"
               >
                 <svg-icon
                   src="assets/icons/heroicons/solid/chevron-right.svg"
                   [svgClass]="'h-5 w-5'"
-                >
-                </svg-icon>
+                />
               </button>
             }
           </div>
 
           <!-- Submenu items -->
-          <app-navbar-mobile-submenu
-            [submenu]="item"
-          ></app-navbar-mobile-submenu>
+          <app-navbar-mobile-submenu [submenu]="item" />
         </li>
       }
     </ul>

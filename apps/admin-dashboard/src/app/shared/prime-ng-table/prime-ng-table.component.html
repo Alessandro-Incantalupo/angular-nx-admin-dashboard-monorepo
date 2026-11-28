@@ -1,15 +1,15 @@
 <div class="card">
-  <p-toast></p-toast>
+  <p-toast />
   <p-table
-    [value]="users()"
     dataKey="id"
     editMode="row"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [value]="users()"
     [tableStyle]="{ 'min-width': '50rem' }"
     [rows]="5"
     [paginator]="false"
     [showCurrentPageReport]="false"
     [totalRecords]="totalUsers()"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   >
     <ng-template #header>
       <tr>
@@ -24,7 +24,7 @@
         <td>
           <p-cellEditor>
             <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="user.name" required />
+              <input pInputText type="text" required [(ngModel)]="user.name" />
             </ng-template>
             <ng-template #output>
               {{ user.name }}
@@ -37,8 +37,8 @@
               <input
                 pInputText
                 type="email"
-                [(ngModel)]="user.email"
                 required
+                [(ngModel)]="user.email"
               />
             </ng-template>
             <ng-template #output>
@@ -50,11 +50,11 @@
           <p-cellEditor>
             <ng-template #input>
               <p-select
-                [options]="roles()"
                 appendTo="body"
-                [(ngModel)]="user.role"
+                [options]="roles()"
                 [style]="{ width: '100%' }"
-              ></p-select>
+                [(ngModel)]="user.role"
+              />
             </ng-template>
             <ng-template #output>
               {{ user.role | titlecase }}
@@ -70,22 +70,22 @@
                 type="button"
                 pInitEditableRow
                 icon="pi pi-pencil"
-                (click)="editAction.emit(user)"
                 text
                 rounded
                 severity="secondary"
+                (click)="editAction.emit(user)"
               ></button>
               <button
                 pButton
                 pRipple
                 type="button"
                 icon="pi pi-trash"
-                (click)="deleteAction.emit({ user: user, index: ri })"
                 text
                 rounded
                 severity="danger"
                 pTooltip="Delete user"
                 tooltipPosition="top"
+                (click)="deleteAction.emit({ user: user, index: ri })"
               ></button>
             }
 
@@ -96,10 +96,10 @@
                 type="button"
                 pSaveEditableRow
                 icon="pi pi-check"
-                (click)="saveAction.emit(user)"
                 text
                 rounded
                 severity="secondary"
+                (click)="saveAction.emit(user)"
               ></button>
             }
 
@@ -110,10 +110,10 @@
                 type="button"
                 pCancelEditableRow
                 icon="pi pi-times"
-                (click)="saveActionCancel.emit({ user: user, index: ri })"
                 text
                 rounded
                 severity="secondary"
+                (click)="saveActionCancel.emit({ user: user, index: ri })"
               ></button>
             }
           </div>
@@ -135,5 +135,5 @@
     [totalRecords]="totalUsers()"
     [rowsPerPageOptions]="[5, 10]"
     (onPageChange)="onPage($event)"
-  ></p-paginator>
+  />
 </div>

@@ -1,8 +1,8 @@
 <div class="flex min-h-screen items-center justify-center">
   <form
+    class="bg-card my-10 w-full max-w-md space-y-6 rounded-lg p-6 shadow-lg"
     [formGroup]="form"
     (ngSubmit)="register()"
-    class="bg-card my-10 w-full max-w-md space-y-6 rounded-lg p-6 shadow-lg"
   >
     <div class="text-center">
       <h2 class="text-color-foreground mb-1 text-3xl font-semibold">
@@ -25,7 +25,7 @@
         <svg-icon
           src="assets/icons/google-logo.svg"
           [svgClass]="'h-6 w-6 mr-2'"
-        ></svg-icon>
+        />
         Sign Up with Google
       </button>
     </div>
@@ -81,13 +81,11 @@
           <svg-icon
             src="assets/icons/heroicons/outline/eye-off.svg"
             [svgClass]="'h-5 w-5'"
-          >
-          </svg-icon>
+          />
           <svg-icon
             src="assets/icons/heroicons/outline/eye.svg"
             [svgClass]="'h-5 w-5 hidden'"
-          >
-          </svg-icon>
+          />
         </span>
         @if (hasError('password', 'required')) {
           <p class="text-xs text-red-500">Password is required</p>
@@ -140,13 +138,13 @@
       </div>
       <button
         type="submit"
-        [disabled]="form.invalid"
         app-button
         full
         impact="bold"
         tone="primary"
         shape="rounded"
         size="medium"
+        [disabled]="form.invalid"
       >
         Sign up
       </button>

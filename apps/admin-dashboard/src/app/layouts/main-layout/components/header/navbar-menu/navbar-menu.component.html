@@ -6,13 +6,13 @@
     (click)="toggleMenu(menu)"
   >
     <button
+      class="mr-2 inline-flex rounded-md px-3 py-2 text-sm font-medium"
+      type="button"
       [class]="
         openIndex() === $index || menu.active
           ? 'bg-primary text-primary-foreground'
           : 'text-color-muted-foreground/50 hover:bg-card hover:text-color-muted-foreground'
       "
-      class="mr-2 inline-flex rounded-md px-3 py-2 text-sm font-medium"
-      type="button"
     >
       <span>{{ menu.group }}</span>
     </button>

@@ -1,7 +1,7 @@
 <div class="flex min-h-screen items-center justify-center">
   <form
-    class="bg-card my-10 w-full max-w-md space-y-6 rounded-lg p-6 shadow-lg"
     #form="ngForm"
+    class="bg-card my-10 w-full max-w-md space-y-6 rounded-lg p-6 shadow-lg"
     (ngSubmit)="onSubmit(form)"
   >
     <div class="text-center">
@@ -72,7 +72,6 @@
     <div class="flex w-full justify-center">
       <button
         type="submit"
-        [disabled]="form.invalid"
         app-button
         full
         impact="bold"
@@ -80,6 +79,7 @@
         shape="rounded"
         size="medium"
         class="w-full"
+        [disabled]="form.invalid"
       >
         Submit
       </button>

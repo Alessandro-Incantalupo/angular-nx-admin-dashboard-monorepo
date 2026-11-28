@@ -15,7 +15,11 @@ export default [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$'],
+          // The app's own path aliases (tsconfig.base.json) stay: no rewrite to relative imports.
+          allow: [
+            '^.*/eslint(\\.base)?\\.config\\.[cm]?js$',
+            '^@(core|environments|features|layouts|shared|assets|test|mocks)/',
+          ],
           depConstraints: [
             {
               sourceTag: '*',

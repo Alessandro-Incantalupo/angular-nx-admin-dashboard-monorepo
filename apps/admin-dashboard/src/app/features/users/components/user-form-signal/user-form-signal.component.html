@@ -1,19 +1,19 @@
 <ng-container *transloco="let t; prefix: 'users'">
-  <form (submit)="onSubmit($event)" class="space-y-4">
+  <form class="space-y-4" (submit)="onSubmit($event)">
     <input
       class="w-full rounded border px-3 py-2"
+      type="text"
       [formField]="userForm.name"
       [placeholder]="t('form.name-placeholder')"
-      type="text"
       [class.border-red-500]="
         userForm.name().touched() && userForm.name().invalid()
       "
     />
     <input
       class="w-full rounded border px-3 py-2"
+      type="email"
       [formField]="userForm.email"
       [placeholder]="t('form.email-placeholder')"
-      type="email"
       [class.border-red-500]="
         userForm.email().touched() && userForm.email().invalid()
       "
