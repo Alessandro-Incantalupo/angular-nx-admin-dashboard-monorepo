@@ -13,10 +13,9 @@ import { ButtonProps } from './model/button.model';
   imports: [],
   templateUrl: './button.component.html',
   styles: ``,
-  // host: {
-  //   class: 'button',
-  //   '(click)': 'onButtonClick()',
-  // },
+  host: {
+    '(click)': 'onButtonClick()',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent implements OnInit {

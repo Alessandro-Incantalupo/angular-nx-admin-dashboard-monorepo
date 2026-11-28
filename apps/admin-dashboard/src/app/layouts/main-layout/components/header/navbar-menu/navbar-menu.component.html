@@ -3,16 +3,17 @@
     class="relative inline-block align-top"
     (mouseenter)="open($index)"
     (mouseleave)="close()"
-    (click)="toggleMenu(menu)"
   >
     <button
       class="mr-2 inline-flex rounded-md px-3 py-2 text-sm font-medium"
       type="button"
+      [attr.aria-expanded]="openIndex() === $index"
       [class]="
         openIndex() === $index || menu.active
           ? 'bg-primary text-primary-foreground'
           : 'text-color-muted-foreground/50 hover:bg-card hover:text-color-muted-foreground'
       "
+      (click)="toggleMenu(menu)"
     >
       <span>{{ menu.group }}</span>
     </button>

@@ -1,8 +1,10 @@
 <div role="tablist" class="tabs tabs-border">
   @for (tab of tabs(); track $index) {
-    <a
+    <button
+      type="button"
       role="tab"
       class="tab flex flex-col items-center"
+      [attr.aria-selected]="activeTab() === tab.name"
       [class]="{
         'tab-active': activeTab() === tab.name,
         'tab-disabled': tab.disabled,
@@ -10,7 +12,7 @@
       (click)="onTabClick(tab.name)"
     >
       <span>{{ tab.name }}</span>
-    </a>
+    </button>
   }
 </div>
 <ng-content />

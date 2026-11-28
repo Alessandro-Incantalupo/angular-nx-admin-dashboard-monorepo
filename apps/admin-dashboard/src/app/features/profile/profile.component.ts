@@ -41,7 +41,7 @@ export default class ProfileComponent {
     // Get user data from state
     this.userData = this.state?.['userData'];
     // Get username from route parameters
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe(() => {
       const currentUsername = this.userData?.['name'] || 'Name Not Found';
       // ✅ Update breadcrumbs dynamically
       this.breadcrumbItems.set([

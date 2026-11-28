@@ -1,8 +1,9 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-profile-info',
-  imports: [],
+  imports: [NgOptimizedImage],
   templateUrl: './profile-info.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,

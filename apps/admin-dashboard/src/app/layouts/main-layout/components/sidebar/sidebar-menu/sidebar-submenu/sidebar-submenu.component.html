@@ -12,7 +12,6 @@
       <li>
         <div
           class="text-color-muted-foreground hover:bg-card hover:text-color-foreground flex rounded-sm"
-          (click)="toggleMenu(sub)"
         >
           <!-- Condition -->
           <ng-container
@@ -27,6 +26,7 @@
               class="inline-block w-full px-4 py-2 text-xs font-semibold"
               [routerLink]="sub.route"
               [routerLinkActiveOptions]="{ exact: true }"
+              (click)="toggleMenu(sub)"
             >
               {{ sub.label }}
             </a>
@@ -34,17 +34,24 @@
 
           <!-- Child Menu -->
           <ng-template #childMenu let-sub="sub">
-            <a
-              class="inline-block w-full cursor-pointer px-4 py-2 text-xs font-semibold"
+            <button
+              type="button"
+              class="text-primary hover:text-primary/80 inline-block w-full cursor-pointer px-4 py-2 text-left text-xs font-semibold transition-colors"
+              [attr.aria-expanded]="sub.expanded"
+              (click)="toggleMenu(sub)"
             >
               {{ sub.label }}
-            </a>
+            </button>
             <button
+              type="button"
+              tabindex="-1"
+              aria-hidden="true"
               class="text-color-muted-foreground flex items-center p-1 transition-all duration-500"
               [class]="{
                 hidden: !menuService.showSideBar,
                 'rotate-90': sub.expanded,
               }"
+              (click)="toggleMenu(sub)"
             >
               <svg-icon
                 src="assets/icons/heroicons/solid/chevron-right.svg"

@@ -23,7 +23,7 @@ export const BaseResponseInterceptor: HttpInterceptorFn = (req, next) => {
     map(resp => {
       // Throw if the response body is missing
       if (!resp.body) throw new Error('No body in response');
-      const { data, code, message } = resp.body;
+      const { code, message } = resp.body;
 
       // Throw if backend signals an error (code -1 or >0 with a message)
       if (

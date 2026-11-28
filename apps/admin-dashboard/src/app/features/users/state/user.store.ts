@@ -105,7 +105,7 @@ export const UsersStore = signalStore(
         switchMap(newUser =>
           userService.addUser(newUser).pipe(
             tapResponse({
-              next: user => {
+              next: () => {
                 setUsersAddLoaded();
                 toast.success('User created!', {
                   description: 'The user has been added to the system.',

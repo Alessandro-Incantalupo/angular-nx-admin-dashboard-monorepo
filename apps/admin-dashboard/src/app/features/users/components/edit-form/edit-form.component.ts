@@ -31,7 +31,7 @@ import { AuthService } from '@core/services/auth.service';
 export class EditFormComponent {
   readonly user = input.required<User>();
   readonly save = output<User>();
-  readonly cancel = output<void>();
+  readonly cancelled = output<void>();
 
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthService);
@@ -64,6 +64,6 @@ export class EditFormComponent {
   }
 
   onCancel() {
-    this.cancel.emit();
+    this.cancelled.emit();
   }
 }

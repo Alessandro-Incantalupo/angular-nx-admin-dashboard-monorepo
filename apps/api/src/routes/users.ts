@@ -38,7 +38,7 @@ usersRoute.get('/', c => {
       message: null,
       code: null,
     });
-  } catch (err) {
+  } catch {
     return c.json(
       {
         data: null,
@@ -61,7 +61,7 @@ usersRoute.get('/stats', c => {
     );
 
     return c.json(stats);
-  } catch (err) {
+  } catch {
     return c.json({ error: 'Failed to fetch user stats' }, 500);
   }
 });
@@ -72,7 +72,7 @@ usersRoute.post('/', async c => {
     const newUser = { id: crypto.randomUUID(), ...body };
     users.unshift(newUser);
     return c.json(newUser, 201);
-  } catch (err) {
+  } catch {
     return c.json({ error: 'Failed to add user' }, 500);
   }
 });
@@ -87,7 +87,7 @@ usersRoute.put('/:id', async c => {
     }
     users[index] = { ...users[index], ...updatedUser };
     return c.json(users[index]);
-  } catch (err) {
+  } catch {
     return c.json({ error: 'Failed to update user' }, 500);
   }
 });
@@ -101,7 +101,7 @@ usersRoute.delete('/:id', c => {
     }
     users.splice(index, 1);
     return c.json({ deleted: true });
-  } catch (err) {
+  } catch {
     return c.json({ error: 'Failed to delete user' }, 500);
   }
 });
@@ -110,7 +110,7 @@ usersRoute.post('/reset', c => {
   try {
     users = JSON.parse(JSON.stringify(initialUsers));
     return c.json({ reset: true, users });
-  } catch (err) {
+  } catch {
     return c.json({ error: 'Failed to reset users' }, 500);
   }
 });

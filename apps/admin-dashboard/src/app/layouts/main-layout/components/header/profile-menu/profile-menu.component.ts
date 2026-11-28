@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,7 +13,7 @@ import { ClickOutsideRxjsDirective } from '@shared/directives/click-outside-rxjs
 import { SvgIconComponent } from 'angular-svg-icon';
 @Component({
   selector: 'app-profile-menu',
-  imports: [SvgIconComponent, ClickOutsideRxjsDirective],
+  imports: [SvgIconComponent, ClickOutsideRxjsDirective, NgOptimizedImage],
   templateUrl: './profile-menu.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,7 +57,7 @@ export class ProfileMenuComponent {
   //   this.router.navigate([PATHS.AUTH, PATHS.SIGN_IN]);
   // }
 
-  toProfile(link: string) {
+  toProfile() {
     const userData = this.authStore.userData(); // Get the user object
     if (!userData) return;
     this.router.navigate([PATHS.PROFILE, userData.id], {

@@ -41,18 +41,17 @@ export class MenuService implements OnDestroy {
   get showSideBar() {
     return this._showSidebar();
   }
-  get showMobileMenu() {
-    return this._showMobileMenu();
-  }
-  get pagesMenu() {
-    return this._pagesMenu();
-  }
-
   set showSideBar(value: boolean) {
     this._showSidebar.set(value);
   }
+  get showMobileMenu() {
+    return this._showMobileMenu();
+  }
   set showMobileMenu(value: boolean) {
     this._showMobileMenu.set(value);
+  }
+  get pagesMenu() {
+    return this._pagesMenu();
   }
 
   public toggleSidebar() {

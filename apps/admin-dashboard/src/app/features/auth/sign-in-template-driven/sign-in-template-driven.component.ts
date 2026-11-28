@@ -2,11 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../shared/button/button.component';
 
-interface SignInForm {
-  email: string;
-  password: string;
-}
-
 @Component({
   selector: 'app-sign-in-template-driven',
   imports: [FormsModule, ButtonComponent],
@@ -15,5 +10,7 @@ interface SignInForm {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class SignInTemplateDrivenComponent {
-  onSubmit(form: { value: SignInForm }) {}
+  onSubmit() {
+    // A demo of the template-driven form: nothing is sent.
+  }
 }

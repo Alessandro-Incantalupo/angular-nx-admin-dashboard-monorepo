@@ -8,12 +8,14 @@
     <div class="relative h-10">
       @if (menuService.showSideBar) {
         <div class="flex items-center">
-          <a
+          <button
+            type="button"
             class="bg-primary flex cursor-pointer items-center justify-center rounded-sm p-2 focus:ring-1 focus:outline-hidden"
+            aria-label="Collapse the sidebar"
             (click)="toggleSidebar()"
           >
             <svg-icon src="assets/icons/logo.svg" />
-          </a>
+          </button>
           <b class="text-color-foreground ml-1 pl-2 text-sm font-bold">
             {{ appJson.name }}
           </b>

@@ -102,8 +102,12 @@
         >
           Password
         </label>
-        <span
+        <button
+          type="button"
           class="text-color-muted-foreground absolute top-2.5 right-5 cursor-pointer"
+          [attr.aria-label]="
+            passwordTextType ? 'Hide the password' : 'Show the password'
+          "
           (click)="togglePasswordTextType()"
         >
           <svg-icon
@@ -114,7 +118,7 @@
             "
             [svgClass]="'h-5 w-5'"
           />
-        </span>
+        </button>
       </div>
       @if (submitted && hasError('password', 'required')) {
         <div class="is__invalid-error">

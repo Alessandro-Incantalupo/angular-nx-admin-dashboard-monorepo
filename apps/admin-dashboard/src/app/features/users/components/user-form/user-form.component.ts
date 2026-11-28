@@ -2,13 +2,10 @@ import { User } from '@admin-dashboard-nx-monorepo/models';
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
   inject,
-  OnInit,
   output,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -17,7 +14,6 @@ import {
 import { UsersStore } from '@features/users/state/user.store';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { toast } from 'ngx-sonner';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'app-user-form',
@@ -30,10 +26,9 @@ import { map } from 'rxjs';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent {
   private fb = inject(NonNullableFormBuilder);
   private userStore = inject(UsersStore);
-  private readonly destroyRef = inject(DestroyRef);
   isSubmitted = output<boolean>();
   readonly submitted = signal(false);
 
@@ -43,16 +38,6 @@ export class UserFormComponent implements OnInit {
     role: ['user', Validators.required],
     status: ['active'],
   });
-
-  ngOnInit() {
-    this.form
-      .get('name')!
-      .valueChanges.pipe(
-        takeUntilDestroyed(this.destroyRef),
-        map(value => value.toUpperCase())
-      )
-      .subscribe(val => {});
-  }
 
   onSubmit() {
     this.submitted.set(true);
