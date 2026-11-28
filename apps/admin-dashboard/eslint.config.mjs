@@ -1,4 +1,5 @@
 import nx from '@nx/eslint-plugin';
+import prettier from 'eslint-plugin-prettier';
 import baseConfig from '../../eslint.config.mjs';
 
 export default [
@@ -8,6 +9,7 @@ export default [
 
   {
     files: ['**/*.ts'],
+    plugins: { prettier },
     rules: {
       // Angular selector rules
       '@angular-eslint/directive-selector': [
@@ -37,6 +39,7 @@ export default [
 
   {
     files: ['**/*.html'],
+    plugins: { prettier },
     rules: {
       // Prettier + Angular template best practices
       'prettier/prettier': ['error', { parser: 'angular' }],

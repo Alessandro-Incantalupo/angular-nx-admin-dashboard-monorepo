@@ -3,7 +3,7 @@ import type { Config } from 'jest';
 // List of ES modules that need to be transformed by Jest.
 // These libraries are shipped with modern JavaScript (e.g., ES modules or uncompiled code)
 // and need to be processed to work in Jest's Node.js environment.
-const esModules = ['@angular', '@jsverse/transloco'];
+const esModules = ['@angular', '@jsverse'];
 
 export default {
   // Display name for the Jest project. Useful when running multiple Jest projects in a monorepo.
@@ -64,7 +64,8 @@ export default {
     // Ignore all files in `node_modules`, except:
     // - `.mjs` files (modern JavaScript modules).
     // - Libraries listed in the `esModules` array.
-    `node_modules/(?!.*\\.mjs$|${esModules.join('|')})`,
+    // - `.pnpm/`, so the package's own folder below it decides (pnpm installs).
+    `node_modules/(?!.*\\.mjs$|\\.pnpm/|${esModules.join('|')})`,
   ],
 
   // Maps module paths to specific directories or files.
