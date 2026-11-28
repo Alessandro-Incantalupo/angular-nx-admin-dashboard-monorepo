@@ -1,0 +1,67 @@
+name: Build and Deploy the web app to Cloudflare
+
+# Every push to main that touches the front end deploys it; the Actions tab can also run it by hand.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/admin-dashboard/**"
+      - "libs/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".npmrc"
+      - "wrangler.jsonc"
+      - ".github/workflows/deploy-web.yml"
+
+# One deploy at a time; a newer push replaces a queued one.
+concurrency:
+  group: deploy-web
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & deploy to Cloudflare Workers
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          package-manager-cache: false
+          node-version: "22.17.0"
+
+      - name: Install pnpm
+        run: npm install -g pnpm@10.27.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the web app
+        run: pnpm exec nx build admin-dashboard --prod
+        env:
+          NX_DAEMON: "false"
+          NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
+      # Uploads dist/apps/admin-dashboard/browser, as wrangler.jsonc says.
+      - name: Deploy with wrangler
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4"
+          command: deploy
+
+      - name: Check the live site serves this build
+        run: |
+          BUILT=$(grep -oE 'main-[A-Z0-9]+\.js' dist/apps/admin-dashboard/browser/index.html | head -1)
+          for i in 1 2 3 4 5 6; do
+            LIVE=$(curl -s "https://angular-admin-dashboard.alessandro-incantalupo.workers.dev/?v=$GITHUB_SHA" | grep -oE 'main-[A-Z0-9]+\.js' | head -1)
+            [ "$LIVE" = "$BUILT" ] && { echo "live serves $LIVE"; exit 0; }
+            sleep 10
+          done
+          echo "live serves $LIVE, expected $BUILT"; exit 1
