@@ -1,22 +1,22 @@
-import { setupZonelessTestEnv } from 'jest-preset-angular/setup-env/zoneless';
+// Runs before each test file; Angular's unit-test builder has already set up TestBed (zoneless).
+import { getTestBed } from '@angular/core/testing';
 
-setupZonelessTestEnv({
+getTestBed().configureTestingModule({
   errorOnUnknownElements: true,
   errorOnUnknownProperties: true,
 });
 
-// jest.mock('random-global-dependency-example', () => ({}));
-// Mock `window.matchMedia` to prevent errors in tests (ngx-sonner related)
+// `window.matchMedia` is missing in jsdom (ngx-sonner needs it).
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
   })),
 });

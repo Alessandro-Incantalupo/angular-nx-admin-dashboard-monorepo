@@ -8,14 +8,13 @@
       "!{projectRoot}/eslint.config.mjs",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/jest.config.[jt]s",
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s"
     ],
     "sharedGlobals": []
   },
   "targetDefaults": {
-    "@angular-devkit/build-angular:application": {
+    "@angular/build:application": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
@@ -46,20 +45,13 @@
         "ciTargetName": "test-ci",
         "testMode": "watch"
       }
-    },
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
-      }
     }
   ],
   "generators": {
     "@nx/angular:application": {
       "e2eTestRunner": "playwright",
       "linter": "eslint",
-      "style": "css",
-      "unitTestRunner": "jest"
+      "style": "css"
     },
     "@nx/angular:component": {
       "style": "css",

@@ -31,7 +31,7 @@
 - Try it: `AI_PROVIDER=ollama PORT=3199 bun run apps/api/src/server.ts`, then `curl -N -X POST localhost:3199/ai/run -H 'content-type: application/json' -d '{"threadId":"t","runId":"r","state":{},"tools":[],"context":[],"forwardedProps":{},"messages":[{"id":"u","role":"user","content":"Show user 2 as a card."}]}'`.
 - `nx build admin-dashboard` green. Not done: the Angular side (panel, `uiChatResource`), the Vitest runner, any test. Not pushed.
 
-**Next.** Swap Jest for `@angular/build:unit-test` (Vitest) and add a test for `lockInput`; then the panel behind `environment.assistant` with `telemetry: false`, through the screenshot diff.
+**Next.** ~~Swap Jest for `@angular/build:unit-test` (Vitest)~~ (done 2026-11-28: Jest removed, `nx test admin-dashboard` runs once on Vitest; `@angular/build` replaces `@angular-devkit/build-angular` for build, serve and i18n) and add a test for `lockInput`; then the panel behind `environment.assistant` with `telemetry: false`, through the screenshot diff.
 
 ## Chat panel instead of a page (2026-11-26)
 
